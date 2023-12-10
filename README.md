@@ -1,16 +1,14 @@
-# upoint_app
+# UPoint's frontend-only Branch Development Guide
 
-A new Flutter project.
+UPoint is a platform dedicated to university use. This branch is open for frontend app developers of UPoint.
 
-## Getting Started
+## Initial Setup
+Before you run `flutter run`, you must complete the following steps:
 
-This project is a starting point for a Flutter application.
+1. Request the `assets` folder from the developer (contact developer's email).
+2. Place the `assets` folder in the root directory.
+3. Execute `flutter run`.
 
-A few resources to get you started if this is your first Flutter project:
+## Need Additional Help?
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+For further assistance, feel free to contact the developer at jarrenpoh@gmail.com.
