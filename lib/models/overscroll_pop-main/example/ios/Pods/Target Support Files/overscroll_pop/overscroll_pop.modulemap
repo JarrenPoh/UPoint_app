@@ -1,0 +1,6 @@
+framework module overscroll_pop {
+  umbrella header "overscroll_pop-umbrella.h"
+
+  export *
+  module * { export * }
+}
