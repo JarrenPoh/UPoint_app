@@ -1,10 +1,13 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:upoint/hidden_drawer_screen.dart';
 import 'package:upoint/theme/dark_theme.dart';
 import 'package:upoint/theme/light_theme.dart';
 
-void main() {
+Future<void> main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -21,4 +24,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-//hgjg
