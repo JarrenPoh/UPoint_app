@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:upoint/pages/home_page.dart';
+import 'package:upoint/widgets/custom_bottom_naviagation_bar.dart';
 
 class NavigationContainer extends StatefulWidget {
   const NavigationContainer({super.key});
@@ -9,8 +10,40 @@ class NavigationContainer extends StatefulWidget {
 }
 
 class _NavigationContainerState extends State<NavigationContainer> {
+  List<Widget> _pages = [];
+  final PageController _pageController = PageController();
+  int _selectedPageIndex = 0;
+  void onIconTapped(int index) {
+    _pageController.jumpToPage(index);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return HomePage();
+    _pages = [
+      HomePage(),
+      Container(),
+      Container(),
+      Container(),
+      Container(),
+    ];
+    return Scaffold(
+      body: PageView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        controller: _pageController,
+        itemCount: _pages.length,
+        itemBuilder: (context, index) {
+          return _pages[index];
+        },
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        onIconTap: onIconTapped,
+        selectedPageIndex: _selectedPageIndex,
+      ),
+    );
   }
 }
