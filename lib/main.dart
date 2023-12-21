@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:upoint/hidden_drawer_screen.dart';
+import 'package:upoint/navigation_container.dart';
 import 'package:upoint/theme/dark_theme.dart';
 import 'package:upoint/theme/light_theme.dart';
 
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: lightTheme,
       darkTheme: darkTheme,
-      home: const HiddenDrawerScreen(),
+      home: const NavigationContainer(),
     );
   }
 }
