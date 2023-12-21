@@ -104,7 +104,7 @@ class _ActivityPageState extends State<ActivityPage> {
                 ],
                 background: Hero(
                   transitionOnUserGestures: true,
-                  tag: widget.imageUrl,
+                  tag: widget.title,
                   child: Image.network(
                     widget.imageUrl,
                     fit: BoxFit.cover,

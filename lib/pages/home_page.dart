@@ -3,7 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:upoint/bloc/home_page_bloc.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/scroll_things_provider.dart';
-import 'package:upoint/widgets/home/home_body.dart';
+import 'package:upoint/widgets/home/activity_body.dart';
+import 'package:upoint/widgets/home/shop_body.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -34,7 +35,7 @@ class _HomePageState extends State<HomePage>
     Color appBarColor = Theme.of(context).appBarTheme.backgroundColor!;
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     Color scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
-        Color hintColor = Theme.of(context).hintColor;
+    Color hintColor = Theme.of(context).hintColor;
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -58,8 +59,8 @@ class _HomePageState extends State<HomePage>
                           child: TabBar(
                             overlayColor: null,
                             labelColor: onSecondary,
-                            labelStyle: const TextStyle(
-                                fontWeight: FontWeight.w600),
+                            labelStyle:
+                                const TextStyle(fontWeight: FontWeight.w600),
                             unselectedLabelColor: Colors.grey,
                             indicatorSize: TabBarIndicatorSize.label,
                             indicator: BoxDecoration(
@@ -80,8 +81,7 @@ class _HomePageState extends State<HomePage>
                             tabs: List.generate(
                               _homePageBloc.tabList.length,
                               (index) => Tab(
-                                  child:
-                                      Text(_homePageBloc.tabList[index])),
+                                  child: Text(_homePageBloc.tabList[index])),
                             ),
                           ),
                         ),
@@ -185,12 +185,16 @@ class _HomePageState extends State<HomePage>
                       parent: PrimaryScrollController.of(context),
                       child: TabBarView(
                         controller: _homePageBloc.tabController,
-                        children: List.generate(_homePageBloc.tabList.length,
-                            (index) {
-                          return HomeBody(
-                            index: index,
-                          );
-                        }),
+                        children: [
+                          ActivityBody(
+                            index: 0,
+                            bloc: _homePageBloc.activityBodyBloc,
+                          ),
+                          ShopBody(
+                            index: 1,
+                            bloc: _homePageBloc.shopBodyBloc,
+                          ),
+                        ],
                       ),
                     );
                   },

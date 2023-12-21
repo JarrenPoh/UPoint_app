@@ -1,13 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:upoint/globals/dimension.dart';
+import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/pages/activity_page.dart';
 
-class ActCard extends StatefulWidget {
+class PostCard extends StatefulWidget {
   final String imageUrl;
   final String title;
   final String organizer;
-  const ActCard({
+  const PostCard({
     super.key,
     required this.imageUrl,
     required this.organizer,
@@ -15,10 +16,10 @@ class ActCard extends StatefulWidget {
   });
 
   @override
-  State<ActCard> createState() => _ActCardState();
+  State<PostCard> createState() => _PostCardState();
 }
 
-class _ActCardState extends State<ActCard> {
+class _PostCardState extends State<PostCard> {
   double _scale = 1.0;
   @override
   Widget build(BuildContext context) {
@@ -50,17 +51,19 @@ class _ActCardState extends State<ActCard> {
           padding: EdgeInsets.symmetric(
             vertical: Dimensions.height5 * 2,
           ),
-          child: actCard(
+          child: PostCard(
             widget.imageUrl,
+            widget.title,
           ),
         ),
       ),
     );
   }
 
-  Widget actCard(imageUrl) {
+  Widget PostCard(imageUrl,title) {
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     Color hintColor = Theme.of(context).hintColor;
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -69,29 +72,55 @@ class _ActCardState extends State<ActCard> {
           imageBuilder: ((context, imageProvider) {
             return Hero(
               transitionOnUserGestures: true,
-              tag: imageUrl,
-              child: Container(
-                height: Dimensions.height5 * 35,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: imageProvider,
-                  ),
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    gradient: LinearGradient(
-                      begin: Alignment.bottomRight,
-                      stops: const [0.3, 0.9],
-                      colors: [
-                        Colors.black.withOpacity(.8),
-                        Colors.black.withOpacity(.2),
-                      ],
+              tag: title,
+              child: Stack(
+                children: [
+                  Container(
+                    height: Dimensions.height5 * 35,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: imageProvider,
+                      ),
+                    ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        gradient: LinearGradient(
+                          begin: Alignment.bottomRight,
+                          stops: const [0.3, 0.9],
+                          colors: [
+                            Colors.black.withOpacity(.8),
+                            Colors.black.withOpacity(.2),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  Positioned(
+                    right: 0,
+                    top: 20,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Dimensions.width5 * 4,
+                        vertical: Dimensions.height5,
+                      ),
+                      decoration: BoxDecoration(
+                        color: hintColor.withOpacity(.65),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                        ),
+                      ),
+                      child: MediumText(
+                        color: Colors.white,
+                        size: 16,
+                        text: '麥當勞折價券',
+                      ),
+                    ),
+                  ),
+                ],
               ),
             );
           }),
