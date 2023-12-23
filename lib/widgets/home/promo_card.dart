@@ -5,9 +5,11 @@ import 'package:upoint/pages/promo_page.dart';
 
 class PromoCard extends StatefulWidget {
   final String imageUrl;
+  final double aspectRatio;
   const PromoCard({
     super.key,
     required this.imageUrl,
+    required this.aspectRatio,
   });
 
   @override
@@ -18,35 +20,35 @@ class _PromoCardState extends State<PromoCard> {
   double _scale = 1.0;
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: (d) => setState(() {
-        _scale = 0.95;
-      }),
-      onTapUp: (d) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PromoPage(),
-          ),
-        );
-        setState(() {
-          _scale = 1.0;
-        });
-      },
-      onTapCancel: () => setState(() {
-        _scale = 1.0;
-      }),
-      child: Transform.scale(
-        scale: _scale,
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: Dimensions.width5 * 1.5,
-          ),
-          child: promoCard(
-            widget.imageUrl,
+    return Column(
+      children: [
+        GestureDetector(
+          onTapDown: (d) => setState(() {
+            _scale = 0.95;
+          }),
+          onTapUp: (d) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PromoPage(),
+              ),
+            );
+            setState(() {
+              _scale = 1.0;
+            });
+          },
+          onTapCancel: () => setState(() {
+            _scale = 1.0;
+          }),
+          child: Transform.scale(
+            scale: _scale,
+            child: promoCard(
+              widget.imageUrl,
+            ),
           ),
         ),
-      ),
+        SizedBox(height: Dimensions.height5),
+      ],
     );
   }
 
@@ -55,7 +57,7 @@ class _PromoCardState extends State<PromoCard> {
       imageUrl: imageUrl,
       imageBuilder: ((context, imageProvider) {
         return AspectRatio(
-          aspectRatio: 2 / 3,
+          aspectRatio: widget.aspectRatio,
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),

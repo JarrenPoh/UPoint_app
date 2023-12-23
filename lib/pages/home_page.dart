@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:upoint/bloc/home_page_bloc.dart';
+import 'package:upoint/globals/bold_text.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/scroll_things_provider.dart';
-import 'package:upoint/widgets/home/home_body.dart';
+import 'package:upoint/widgets/home/activity_body.dart';
+// import 'package:upoint/widgets/home/shop_body.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -34,7 +36,6 @@ class _HomePageState extends State<HomePage>
     Color appBarColor = Theme.of(context).appBarTheme.backgroundColor!;
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     Color scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
-        Color hintColor = Theme.of(context).hintColor;
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -51,42 +52,57 @@ class _HomePageState extends State<HomePage>
                     SliverPersistentHeader(
                       pinned: true,
                       delegate: MySliverDelegate(
-                        minHeight: Dimensions.height5 * 10,
-                        maxHeight: Dimensions.height5 * 10,
+                        minHeight: Dimensions.height5 * 8,
+                        maxHeight: Dimensions.height5 * 8,
                         child: Container(
+                          padding:
+                              EdgeInsets.only(bottom: Dimensions.height5 * 2),
+                          height: Dimensions.height5 * 8,
+                          width: Dimensions.screenWidth,
                           color: appBarColor,
-                          child: TabBar(
-                            overlayColor: null,
-                            labelColor: onSecondary,
-                            labelStyle: const TextStyle(
-                                fontWeight: FontWeight.w600),
-                            unselectedLabelColor: Colors.grey,
-                            indicatorSize: TabBarIndicatorSize.label,
-                            indicator: BoxDecoration(
-                              color: hintColor,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            indicatorPadding: EdgeInsets.only(
-                              bottom: Dimensions.height2 * 4,
-                              top: Dimensions.height2 * 18.5,
-                              left: Dimensions.width5 * 2,
-                              right: Dimensions.width5 * 2,
-                            ),
-                            indicatorWeight: 4,
-                            onTap: (value) {
-                              _homePageBloc.tabController.index = value;
-                            },
-                            controller: _homePageBloc.tabController,
-                            tabs: List.generate(
-                              _homePageBloc.tabList.length,
-                              (index) => Tab(
-                                  child:
-                                      Text(_homePageBloc.tabList[index])),
+                          child: Center(
+                            child: BoldText(
+                              color: onSecondary,
+                              size: 20,
+                              text: '中原大學',
                             ),
                           ),
                         ),
+                        // 有店家的時候加回來
+                        // child: Container(
+                        //   color: appBarColor,
+                        //   child: TabBar(
+                        //     overlayColor: null,
+                        //     labelColor: onSecondary,
+                        //     labelStyle:
+                        //         const TextStyle(fontWeight: FontWeight.w600),
+                        //     unselectedLabelColor: Colors.grey,
+                        //     indicatorSize: TabBarIndicatorSize.label,
+                        //     indicator: BoxDecoration(
+                        //       color: hintColor,
+                        //       borderRadius: BorderRadius.circular(10),
+                        //     ),
+                        //     indicatorPadding: EdgeInsets.only(
+                        //       bottom: Dimensions.height2 * 4,
+                        //       top: Dimensions.height2 * 18.5,
+                        //       left: Dimensions.width5 * 2,
+                        //       right: Dimensions.width5 * 2,
+                        //     ),
+                        //     indicatorWeight: 4,
+                        //     onTap: (value) {
+                        //       _homePageBloc.tabController.index = value;
+                        //     },
+                        //     controller: _homePageBloc.tabController,
+                        //     tabs: List.generate(
+                        //       _homePageBloc.tabList.length,
+                        //       (index) => Tab(
+                        //           child: Text(_homePageBloc.tabList[index])),
+                        //     ),
+                        //   ),
+                        // ),
                       ),
                     ),
+                    // 有店家的時候加回來
                     // SliverPersistentHeader(
                     //   pinned: true,
                     //   delegate: MySliverDelegate(
@@ -148,9 +164,10 @@ class _HomePageState extends State<HomePage>
                                   ),
                                 ),
                                 child: Container(
-                                  margin: EdgeInsets.symmetric(
-                                    horizontal: Dimensions.width5 * 4,
-                                    vertical: Dimensions.height5 * 2,
+                                  margin: EdgeInsets.only(
+                                    left: Dimensions.width5 * 4,
+                                    right: Dimensions.width5 * 4,
+                                    bottom: Dimensions.height5 * 3,
                                   ),
                                   padding: EdgeInsets.all(5),
                                   decoration: BoxDecoration(
@@ -178,19 +195,36 @@ class _HomePageState extends State<HomePage>
                     ),
                   ];
                 },
+                // 有店家的時候加回來
+                // body: Builder(
+                //   builder: (context) {
+                //     return CustomScrollProvider(
+                //       tabController: _homePageBloc.tabController,
+                //       parent: PrimaryScrollController.of(context),
+                //       child: TabBarView(
+                //         controller: _homePageBloc.tabController,
+                //         children: [
+                //           ActivityBody(
+                //             index: 0,
+                //             bloc: _homePageBloc.activityBodyBloc,
+                //           ),
+                //           ShopBody(
+                //             index: 1,
+                //             bloc: _homePageBloc.shopBodyBloc,
+                //           ),
+                //         ],
+                //       ),
+                //     );
+                //   },
+                // ),
                 body: Builder(
                   builder: (context) {
                     return CustomScrollProvider(
                       tabController: _homePageBloc.tabController,
                       parent: PrimaryScrollController.of(context),
-                      child: TabBarView(
-                        controller: _homePageBloc.tabController,
-                        children: List.generate(_homePageBloc.tabList.length,
-                            (index) {
-                          return HomeBody(
-                            index: index,
-                          );
-                        }),
+                      child: ActivityBody(
+                        index: 0,
+                        bloc: _homePageBloc.activityBodyBloc,
                       ),
                     );
                   },

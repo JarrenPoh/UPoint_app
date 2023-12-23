@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:upoint/bloc/activity_body_bloc.dart';
+import 'package:upoint/bloc/shop_body_bloc.dart';
 
 class HomePageBloc with ChangeNotifier {
-  List<ScrollController> scrollControllerList = [];
-  List tabList = ["找活動","找美食"];
+  // List<PostListBloc> postListBlocs = [];
+  List tabList = ["找活動"];
   late TabController tabController;
+  ActivityBodyBloc activityBodyBloc = ActivityBodyBloc();
+  ShopBodyBloc shopBodyBloc = ShopBodyBloc();
 
   HomePageBloc(){
-    createScroll(tabList.length);
+    // createBlocs(tabList.length);
   }
 
-  void createScroll(int length) {
-    for (int index = 0; index < length; index++) {
-      final scroll = ScrollController(); // 創建一個新的 PostListBloc
-      scrollControllerList.add(scroll); // 將新的 PostListBloc 添加到列表中
-    }
-  }
+  // void createBlocs(int length) {
+  //   for (int index = 0; index < length; index++) {
+  //     final bloc = PostListBloc('homeBloc${index.toString()}'); // 創建一個新的 PostListBloc
+  //     postListBlocs.add(bloc); // 將新的 PostListBloc 添加到列表中
+  //   }
+  // }
 
 }
