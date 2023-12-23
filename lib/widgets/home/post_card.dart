@@ -60,10 +60,10 @@ class _PostCardState extends State<PostCard> {
     );
   }
 
-  Widget PostCard(imageUrl,title) {
+  Widget PostCard(imageUrl, title) {
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     Color hintColor = Theme.of(context).hintColor;
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -75,25 +75,28 @@ class _PostCardState extends State<PostCard> {
               tag: title,
               child: Stack(
                 children: [
-                  Container(
-                    height: Dimensions.height5 * 35,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: imageProvider,
-                      ),
-                    ),
+                  AspectRatio(
+                    aspectRatio: 16 / 9,
                     child: Container(
+                      height: Dimensions.height5 * 35,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        gradient: LinearGradient(
-                          begin: Alignment.bottomRight,
-                          stops: const [0.3, 0.9],
-                          colors: [
-                            Colors.black.withOpacity(.8),
-                            Colors.black.withOpacity(.2),
-                          ],
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: imageProvider,
+                        ),
+                      ),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          gradient: LinearGradient(
+                            begin: Alignment.bottomRight,
+                            stops: const [0.3, 0.9],
+                            colors: [
+                              Colors.black.withOpacity(.8),
+                              Colors.black.withOpacity(.2),
+                            ],
+                          ),
                         ),
                       ),
                     ),

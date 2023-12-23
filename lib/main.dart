@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:upoint/bloc/add_post_page_bloc.dart';
 import 'package:upoint/navigation_container.dart';
 import 'package:upoint/theme/dark_theme.dart';
 import 'package:upoint/theme/light_theme.dart';
+import 'package:camera/camera.dart';
+import 'package:provider/provider.dart';
 
-void main() {
+late List<CameraDescription> _cameras;
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  _cameras = await availableCameras();
+
   runApp(const MyApp());
 }
 
@@ -17,7 +25,14 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: lightTheme,
       darkTheme: darkTheme,
-      home: const NavigationContainer(),
+      home: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (context) => AddPostPageBloc(),
+          ),
+        ],
+        child: const NavigationContainer(),
+      ),
     );
   }
 }

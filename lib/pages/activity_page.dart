@@ -1,7 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:overscroll_pop/overscroll_pop.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:upoint/globals/dimension.dart';
+import 'package:upoint/overscroll_pop-main/lib/overscroll_pop.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ActivityPage extends StatefulWidget {
@@ -66,10 +67,9 @@ class _ActivityPageState extends State<ActivityPage> {
                 ),
               ),
               actions: [
-                MaterialButton(
+                CupertinoButton(
                   onPressed: () async {
                     String postLink = 'sadasfdafafsf';
-                    print('press');
                     try {
                       await Share.share(
                         'text' + postLink,

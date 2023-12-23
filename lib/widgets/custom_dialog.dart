@@ -5,7 +5,13 @@ import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/globals/regular_text.dart';
 
 Future CustomDialog(
-    context, title, content, color_title, color_content, onPress) {
+  context,
+  title,
+  content,
+  color_title,
+  color_content,
+  onPress,
+) {
   return showDialog(
     context: context,
     builder: (context) {

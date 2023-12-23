@@ -6,7 +6,7 @@ ThemeData darkTheme = ThemeData(
     backgroundColor: Color.fromARGB(255, 25, 25, 25),
   ),
   primaryColor: Color(0xFF0a2e3f),
-  hintColor: Color(0xFFffb307),
+  hintColor: Color(0xFFF0A339),
   scaffoldBackgroundColor: Color.fromARGB(255, 38, 38, 38),
   // dividerTheme: DividerThemeData(color: Colors.grey[400]),
   colorScheme: const ColorScheme.light(

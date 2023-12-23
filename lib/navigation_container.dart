@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:upoint/pages/add_post_page.dart';
 import 'package:upoint/pages/home_page.dart';
 import 'package:upoint/widgets/custom_bottom_naviagation_bar.dart';
 
@@ -27,7 +28,7 @@ class _NavigationContainerState extends State<NavigationContainer> {
     _pages = [
       HomePage(),
       Container(),
-      Container(),
+      AddPostPage(onIconTapped: onIconTapped),
       Container(),
       Container(),
     ];
