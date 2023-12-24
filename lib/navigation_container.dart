@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:upoint/pages/add_post_page.dart';
 import 'package:upoint/pages/home_page.dart';
+import 'package:upoint/pages/search_page.dart';
 import 'package:upoint/widgets/custom_bottom_naviagation_bar.dart';
 
 class NavigationContainer extends StatefulWidget {
@@ -18,6 +19,14 @@ class _NavigationContainerState extends State<NavigationContainer> {
     _pageController.jumpToPage(index);
   }
 
+  void searchTapped(int index) {
+    _pageController.animateToPage(
+      index,
+      duration: Duration(milliseconds: 200),
+      curve: Curves.linear,
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -26,8 +35,8 @@ class _NavigationContainerState extends State<NavigationContainer> {
   @override
   Widget build(BuildContext context) {
     _pages = [
-      HomePage(),
-      Container(),
+      HomePage(searchTapped: searchTapped),
+      SearchPage(),
       AddPostPage(onIconTapped: onIconTapped),
       Container(),
       Container(),

@@ -148,6 +148,7 @@ class _ActivityBodyState extends State<ActivityBody>
                                 imageUrl: widget.bloc.actImages[index],
                                 title: widget.bloc.actTitle[index],
                                 organizer: widget.bloc.actOrganizer[index],
+                                hero: "activity${widget.bloc.actTitle[index]}",
                               );
                             },
                           ),

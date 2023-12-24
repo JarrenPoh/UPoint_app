@@ -6,7 +6,7 @@ class PostModel {
   String? startTime;
   String? endTime;
   String? content;
-  String? reWard;
+  String? reward;
   String? link;
   String? postId;
   DateTime? datePublished;
@@ -19,7 +19,7 @@ class PostModel {
     this.startTime,
     this.endTime,
     this.content,
-    this.reWard,
+    this.reward,
     this.link,
     this.postId,
     this.datePublished,
@@ -34,27 +34,26 @@ class PostModel {
       "startTime": cart.startTime,
       "endTime": cart.endTime,
       "content": cart.content,
-      "reWard": cart.reWard,
+      "reward": cart.reward,
       "link": cart.link,
       "postId": cart.postId,
       "datePublished": cart.datePublished,
     };
   }
 
-  // static PostModel fromMap(Map map) {
-  //   return PostModel(
-  //     photos: map['photos'],
-  //     gender: map['gender'],
-  //     single: map['single'],
-  //     chose: map['chose'],
-  //     isChose: map['isChose'],
-  //     initChose: map['initChose'],
-  //     chose: map['chose'],
-  //     isChose: map['isChose'],
-  //     initChose: map['initChose'],
-  //     chose: map['chose'],
-  //     isChose: map['isChose'],
-  //     initChose: map['initChose'],
-  //   );
-  // }
+  static PostModel fromMap(Map map) {
+    return PostModel(
+      photos: map['photos'],
+      organizer: map['organizer'],
+      title: map['title'],
+      date: map['date'],
+      startTime: map['startTime'],
+      endTime: map['endTime'],
+      content: map['content'],
+      reward: map['reward'],
+      link: map['link'],
+      postId: map['postId'],
+      datePublished: map['datePublished'],
+    );
+  }
 }

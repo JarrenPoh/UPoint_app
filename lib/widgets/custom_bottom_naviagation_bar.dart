@@ -1,22 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:upoint/globals/dimension.dart';
+import 'package:upoint/global_key.dart' as globals;
 
 class CustomBottomNavigationBar extends StatefulWidget {
   CustomBottomNavigationBar({
-    super.key,
+    Key? key,
     required this.onIconTap,
     required this.selectedPageIndex,
-  });
+  }) : super(key: globals.globalBottomNavigation ?? key);
   final int selectedPageIndex;
   final Function onIconTap;
 
   @override
   State<CustomBottomNavigationBar> createState() =>
-      _CustomBottomNavigationBarState();
+      CustomBottomNavigationBarState();
 }
 
-class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
+class CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   late int selectedPage;
   @override
   void initState() {
@@ -31,6 +32,12 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
     Icons.inbox_rounded,
     CupertinoIcons.profile_circled,
   ];
+
+  void onGlobalTap(int index) {
+    setState(() {
+      selectedPage = index;
+    });
+  }
 
   final List labelText = ["home", "search", "", "inbox", "profile"];
 
@@ -73,9 +80,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
     return GestureDetector(
       onTap: () {
         widget.onIconTap(index);
-        setState(() {
-          selectedPage = index;
-        });
+        onGlobalTap(index);
       },
       child: SizedBox(
         width: Dimensions.width5 * 14,

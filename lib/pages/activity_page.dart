@@ -9,11 +9,13 @@ class ActivityPage extends StatefulWidget {
   final String imageUrl;
   final String title;
   final String organizer;
+  final String hero;
   const ActivityPage({
     super.key,
     required this.imageUrl,
     required this.organizer,
     required this.title,
+    required this.hero,
   });
 
   @override
@@ -104,7 +106,7 @@ class _ActivityPageState extends State<ActivityPage> {
                 ],
                 background: Hero(
                   transitionOnUserGestures: true,
-                  tag: widget.title,
+                  tag: widget.hero,
                   child: Image.network(
                     widget.imageUrl,
                     fit: BoxFit.cover,

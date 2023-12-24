@@ -30,7 +30,6 @@ class _AddInformationState extends State<AddInformation>
   Widget build(BuildContext context) {
     super.build(context);
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
-
     widgets = [
       //主辦單位
       Container(

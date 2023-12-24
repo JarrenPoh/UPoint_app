@@ -158,7 +158,18 @@ class _AddPostPageState extends State<AddPostPage>
                               FocusScope.of(context).unfocus();
                             } else {
                               FocusScope.of(context).unfocus();
-                              await _bloc.uploadPost(context);
+                              await CustomDialog(
+                                context,
+                                '',
+                                '注意！請確認填寫無誤',
+                                onSecondary,
+                                onSecondary,
+                                ()async {
+                                  await _bloc.uploadPost(context);
+                                  // unFisnished: 導到活動頁面
+                                  Navigator.pop(context);
+                                },
+                              );
                               widget.onIconTapped(0);
                             }
                           },

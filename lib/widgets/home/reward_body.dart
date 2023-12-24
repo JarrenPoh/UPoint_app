@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:upoint/bloc/shop_body_bloc.dart';
+import 'package:upoint/bloc/reward_body_bloc.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/scroll_things_provider.dart';
 import 'package:upoint/widgets/home/post_card.dart';
 import 'package:upoint/widgets/home/promo_card.dart';
 
-class ShopBody extends StatefulWidget {
+class RewardBody extends StatefulWidget {
   final int index;
-  final ShopBodyBloc bloc;
-  const ShopBody({
+  final RewardBodyBloc bloc;
+  const RewardBody({
     super.key,
     required this.index,
     required this.bloc,
   });
 
   @override
-  State<ShopBody> createState() => _ShopBodyState();
+  State<RewardBody> createState() => _RewardBodyState();
 }
 
-class _ShopBodyState extends State<ShopBody>
+class _RewardBodyState extends State<RewardBody>
     with AutomaticKeepAliveClientMixin {
   @override
   final bool wantKeepAlive = true;
@@ -116,6 +116,7 @@ class _ShopBodyState extends State<ShopBody>
                                 imageUrl: widget.bloc.actImages[index],
                                 title: widget.bloc.actTitle[index],
                                 organizer: widget.bloc.actOrganizer[index],
+                                hero: "reward${widget.bloc.actTitle[index]}",
                               );
                             },
                           ),
