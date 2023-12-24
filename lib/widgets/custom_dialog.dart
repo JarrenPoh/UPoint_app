@@ -15,35 +15,39 @@ Future CustomDialog(
   return showDialog(
     context: context,
     builder: (context) {
-      return CupertinoAlertDialog(
-        title: RegularText(
-          color: color_title,
-          size: Dimensions.height2 * 6,
-          text: '',
-        ),
-        content: MediumText(
-          color: color_content,
-          size: Dimensions.height2 * 8,
-          text: content,
-        ),
-        actions: [
-          CupertinoDialogAction(
-            onPressed: () => Navigator.pop(context),
-            child: MediumText(
-              color: Colors.blueAccent,
-              size: Dimensions.height2 * 8,
-              text: '取消',
-            ),
+      Color onPrimary = Theme.of(context).colorScheme.onPrimary;
+      return CupertinoTheme(
+        data: CupertinoThemeData(barBackgroundColor: onPrimary),
+        child: CupertinoAlertDialog(
+          title: RegularText(
+            color: color_title,
+            size: Dimensions.height2 * 6,
+            text: title,
           ),
-          CupertinoDialogAction(
-            onPressed: () => onPress(),
-            child: MediumText(
-              color: Colors.redAccent,
-              size: Dimensions.height2 * 8,
-              text: '確定',
-            ),
+          content: MediumText(
+            color: color_content,
+            size: Dimensions.height2 * 8,
+            text: content,
           ),
-        ],
+          actions: [
+            CupertinoDialogAction(
+              onPressed: () => Navigator.pop(context),
+              child: MediumText(
+                color: Colors.blueAccent,
+                size: Dimensions.height2 * 8,
+                text: '取消',
+              ),
+            ),
+            CupertinoDialogAction(
+              onPressed: () => onPress(),
+              child: MediumText(
+                color: Colors.redAccent,
+                size: Dimensions.height2 * 8,
+                text: '確定',
+              ),
+            ),
+          ],
+        ),
       );
     },
   );

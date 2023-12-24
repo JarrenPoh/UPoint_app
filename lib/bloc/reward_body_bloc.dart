@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ShopBodyBloc extends ChangeNotifier{
+class RewardBodyBloc extends ChangeNotifier{
    List promoImages = [
     "https://images.unsplash.com/photo-1701127749663-78686c12f8e1?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw1fHx8ZW58MHx8fHx8",
     "https://images.unsplash.com/photo-1701203580497-e49d73574908?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw4fHx8ZW58MHx8fHx8",

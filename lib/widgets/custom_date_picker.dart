@@ -47,7 +47,8 @@ Future CustomDatePicker(
                   initialDateTime: _dateTime,
                   backgroundColor: color_onPrimary,
                   mode: mode,
-                  minimumDate:_dateTime,
+                  minimumDate:
+                      mode == CupertinoDatePickerMode.date ? _dateTime : null,
                   onDateTimeChanged: (date) {
                     onDateTimeChanged(date);
                   },

@@ -1,8 +1,6 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:insta_assets_picker/insta_assets_picker.dart';
 import 'package:upoint/models/post_model.dart';
 import 'package:upoint/value_notifier/bool_value_notifier.dart';
@@ -10,7 +8,6 @@ import 'package:upoint/value_notifier/bool_value_notifier.dart';
 class AddPostPageBloc with ChangeNotifier {
   final PageController pageController = PageController();
   List<Widget> pageWidget = [];
-  final BoolValueNotifier addOtherNotifier = BoolValueNotifier(false);
   int itemCount = 0;
   PostModel cart = PostModel();
 
@@ -89,6 +86,21 @@ class AddPostPageBloc with ChangeNotifier {
     ),
   );
 
+  /*  addOthers  */
+  List<Map<String, dynamic>> others = [
+    {"type": "IG連結", "bool": false},
+    {"type": "獎勵", "bool": false},
+  ];
+  final BoolValueNotifier addOtherNotifier = BoolValueNotifier(false);
+  //link
+  final TextEditingController linkController = TextEditingController();
+  FocusNode linkFocusNode = FocusNode();
+  bool isLink = false;
+  //reward
+  final TextEditingController rewardController = TextEditingController();
+  FocusNode rewardFocusNode = FocusNode();
+  bool isReward = false;
+
   /*  addPost  */
   void updateCart(PostModel input) {
     if (input.photos != null) {
@@ -105,8 +117,8 @@ class AddPostPageBloc with ChangeNotifier {
       cart.startTime = input.startTime;
     } else if (input.endTime != null) {
       cart.endTime = input.endTime;
-    } else if (input.reWard != null) {
-      cart.reWard = input.reWard;
+    } else if (input.reward != null) {
+      cart.reward = input.reward;
     } else if (input.link != null) {
       cart.link = input.link;
     }
@@ -117,13 +129,13 @@ class AddPostPageBloc with ChangeNotifier {
     context,
   ) async {
     try {
-      //跑loading
+      // unFisnished: 上傳後端
       // await SupabaseMethods().CreatePost(context);
-      //清空資料
+      // unFinished: 清空資料
       Get.snackbar(
         "上傳成功",
         "你的貼文已成功上傳",
-        snackPosition: SnackPosition.BOTTOM,
+        snackPosition: SnackPosition.TOP,
         duration: const Duration(
           seconds: 2,
         ),
@@ -132,7 +144,7 @@ class AddPostPageBloc with ChangeNotifier {
       Get.snackbar(
         "上傳失敗",
         "請聯繫官方回報問題拿獎勵",
-        snackPosition: SnackPosition.BOTTOM,
+        snackPosition: SnackPosition.TOP,
         duration: const Duration(
           seconds: 2,
         ),

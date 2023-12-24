@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:upoint/bloc/activity_body_bloc.dart';
-import 'package:upoint/bloc/shop_body_bloc.dart';
+import 'package:upoint/bloc/reward_body_bloc.dart';
 
 class HomePageBloc with ChangeNotifier {
   // List<PostListBloc> postListBlocs = [];
-  List tabList = ["找活動"];
+  List tabList = ["找活動","找獎勵"];
   late TabController tabController;
   ActivityBodyBloc activityBodyBloc = ActivityBodyBloc();
-  ShopBodyBloc shopBodyBloc = ShopBodyBloc();
+  RewardBodyBloc shopBodyBloc = RewardBodyBloc();
 
   HomePageBloc(){
     // createBlocs(tabList.length);

@@ -8,11 +8,13 @@ class PostCard extends StatefulWidget {
   final String imageUrl;
   final String title;
   final String organizer;
+  final String hero;
   const PostCard({
     super.key,
     required this.imageUrl,
     required this.organizer,
     required this.title,
+    required this.hero,
   });
 
   @override
@@ -35,6 +37,7 @@ class _PostCardState extends State<PostCard> {
               imageUrl: widget.imageUrl,
               title: widget.title,
               organizer: widget.organizer,
+              hero: widget.hero,
             ),
           ),
         );
@@ -72,7 +75,7 @@ class _PostCardState extends State<PostCard> {
           imageBuilder: ((context, imageProvider) {
             return Hero(
               transitionOnUserGestures: true,
-              tag: title,
+              tag: widget.hero,
               child: Stack(
                 children: [
                   AspectRatio(
