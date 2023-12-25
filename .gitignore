@@ -7,7 +7,7 @@ secret.dart
 ios/GoogleService-Info.plist
 android/app/google-services.json
 pubspec.lock
-Podfile.lock
+ios/Podfile.lock
 # Files and directories created by pub
 
 Images/
