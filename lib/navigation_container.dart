@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:upoint/pages/add_post_page.dart';
 import 'package:upoint/pages/home_page.dart';
 import 'package:upoint/pages/search_page.dart';
-import 'package:upoint/pages/login_page.dart';
 import 'package:upoint/widgets/custom_bottom_naviagation_bar.dart';
+import 'package:upoint/widgets/profile/profile_page.dart';
 
 class NavigationContainer extends StatefulWidget {
   const NavigationContainer({super.key});
@@ -40,7 +40,7 @@ class _NavigationContainerState extends State<NavigationContainer> {
       SearchPage(),
       AddPostPage(onIconTapped: onIconTapped),
       Container(),
-      LoginPage(onIconTapped: onIconTapped), //暫時放登入頁面
+      ProfilePage(),
     ];
     return Scaffold(
       body: PageView.builder(
