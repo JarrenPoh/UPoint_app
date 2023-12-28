@@ -57,8 +57,8 @@ class _HomePageState extends State<HomePage>
                     SliverPersistentHeader(
                       pinned: true,
                       delegate: MySliverDelegate(
-                        minHeight: Dimensions.height5 * 8,
-                        maxHeight: Dimensions.height5 * 8,
+                        minHeight: Dimensions.height5 * 10,
+                        maxHeight: Dimensions.height5 * 10,
                         child: Container(
                           color: appBarColor,
                           child: TabBar(
@@ -73,10 +73,10 @@ class _HomePageState extends State<HomePage>
                               borderRadius: BorderRadius.circular(10),
                             ),
                             indicatorPadding: EdgeInsets.only(
-                              bottom: Dimensions.height2 * 0,
-                              top: Dimensions.height2 * 17.5,
-                              left: Dimensions.width5 * 2.4,
-                              right: Dimensions.width5 * 2.4,
+                              bottom: Dimensions.height2 * 4,
+                              top: Dimensions.height2 * 18.5,
+                              left: Dimensions.width5 * 2,
+                              right: Dimensions.width5 * 2,
                             ),
                             indicatorWeight: 4,
                             onTap: (value) {
@@ -157,7 +157,9 @@ class _HomePageState extends State<HomePage>
                                 child: GestureDetector(
                                   onTap: () {
                                     widget.searchTapped(1);
-                                    globals.globalBottomNavigation!.currentState!.onGlobalTap(1);
+                                    globals
+                                        .globalBottomNavigation!.currentState!
+                                        .onGlobalTap(1);
                                   },
                                   child: Container(
                                     margin: EdgeInsets.only(
