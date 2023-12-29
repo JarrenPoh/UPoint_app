@@ -8,9 +8,11 @@ class CustomBottomNavigationBar extends StatefulWidget {
     Key? key,
     required this.onIconTap,
     required this.selectedPageIndex,
+    required this.isOrganizer,
   }) : super(key: globals.globalBottomNavigation ?? key);
   final int selectedPageIndex;
   final Function onIconTap;
+  final bool isOrganizer;
 
   @override
   State<CustomBottomNavigationBar> createState() =>
@@ -19,27 +21,37 @@ class CustomBottomNavigationBar extends StatefulWidget {
 
 class CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   late int selectedPage;
+  List labelText = [];
+  List iconList = [];
+  List<Widget> children = [];
   @override
   void initState() {
     super.initState();
     selectedPage = widget.selectedPageIndex;
+    if (widget.isOrganizer) {
+      iconList = [
+        Icons.home_filled,
+        Icons.add,
+        CupertinoIcons.profile_circled,
+      ];
+      labelText = ["home", "create", "profile"];
+    } else {
+      iconList = [
+        Icons.home_filled,
+        CupertinoIcons.search,
+        Icons.add,
+        Icons.inbox_rounded,
+        CupertinoIcons.profile_circled,
+      ];
+      labelText = ["home", "search", "", "inbox", "profile"];
+    }
   }
-
-  final List iconList = [
-    Icons.home_filled,
-    CupertinoIcons.search,
-    Icons.add,
-    Icons.inbox_rounded,
-    CupertinoIcons.profile_circled,
-  ];
 
   void onGlobalTap(int index) {
     setState(() {
       selectedPage = index;
     });
   }
-
-  final List labelText = ["home", "search", "", "inbox", "profile"];
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +60,21 @@ class CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
     final style = Theme.of(context).textTheme.bodyText1!.copyWith(
           fontSize: Dimensions.height2 * 5.5,
         );
+    if (widget.isOrganizer) {
+      children = [
+        _bottomBarNavItem(0, style, context),
+        _bottomBarNavItem(1, style, context),
+        _bottomBarNavItem(2, style, context),
+      ];
+    } else {
+      children = [
+        _bottomBarNavItem(0, style, context),
+        _bottomBarNavItem(1, style, context),
+        _addItem(2, barHeight, context),
+        _bottomBarNavItem(3, style, context),
+        _bottomBarNavItem(4, style, context),
+      ];
+    }
     return BottomAppBar(
       color: color_onPrimary,
       child: Container(
@@ -55,13 +82,7 @@ class CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            _bottomBarNavItem(0, style, context),
-            _bottomBarNavItem(1, style, context),
-            _addItem(2, barHeight, context),
-            _bottomBarNavItem(3, style, context),
-            _bottomBarNavItem(4, style, context),
-          ],
+          children: children,
         ),
       ),
     );
@@ -108,7 +129,10 @@ class CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
 
   _addItem(index, height, BuildContext context) {
     return GestureDetector(
-      onTap: () => {widget.onIconTap(index)},
+      onTap: () => {
+        widget.onIconTap(index),
+        onGlobalTap(index),
+      },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

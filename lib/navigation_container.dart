@@ -3,9 +3,16 @@ import 'package:upoint/pages/add_post_page.dart';
 import 'package:upoint/pages/home_page.dart';
 import 'package:upoint/pages/search_page.dart';
 import 'package:upoint/widgets/custom_bottom_naviagation_bar.dart';
+import 'package:upoint/pages/profile_page.dart';
 
 class NavigationContainer extends StatefulWidget {
-  const NavigationContainer({super.key});
+  final Uri? uri;
+  final bool isOrganizer;
+  const NavigationContainer({
+    super.key,
+    required this.uri,
+    required this.isOrganizer,
+  });
 
   @override
   State<NavigationContainer> createState() => _NavigationContainerState();
@@ -13,7 +20,7 @@ class NavigationContainer extends StatefulWidget {
 
 class _NavigationContainerState extends State<NavigationContainer> {
   List<Widget> _pages = [];
-  final PageController _pageController = PageController();
+  PageController _pageController = PageController();
   int _selectedPageIndex = 0;
   void onIconTapped(int index) {
     _pageController.jumpToPage(index);
@@ -30,17 +37,32 @@ class _NavigationContainerState extends State<NavigationContainer> {
   @override
   void initState() {
     super.initState();
+    if (widget.uri != null) {
+      if (widget.uri!.pathSegments.isNotEmpty &&
+          widget.uri!.pathSegments.first == 'profile') {
+        _selectedPageIndex = 4;
+      }
+    }
+    _pageController = PageController(initialPage: _selectedPageIndex);
   }
 
   @override
   Widget build(BuildContext context) {
-    _pages = [
-      HomePage(searchTapped: searchTapped),
-      SearchPage(),
-      AddPostPage(onIconTapped: onIconTapped),
-      Container(),
-      Container(),
-    ];
+    if (widget.isOrganizer) {
+      _pages = [
+        Container(),
+        AddPostPage(onIconTapped: onIconTapped),
+        ProfilePage(),
+      ];
+    } else {
+      _pages = [
+        HomePage(searchTapped: searchTapped),
+        SearchPage(),
+        AddPostPage(onIconTapped: onIconTapped),
+        Container(),
+        ProfilePage(),
+      ];
+    }
     return Scaffold(
       body: PageView.builder(
         physics: const NeverScrollableScrollPhysics(),
@@ -53,6 +75,7 @@ class _NavigationContainerState extends State<NavigationContainer> {
       bottomNavigationBar: CustomBottomNavigationBar(
         onIconTap: onIconTapped,
         selectedPageIndex: _selectedPageIndex,
+        isOrganizer: widget.isOrganizer,
       ),
     );
   }

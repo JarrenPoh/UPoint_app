@@ -40,8 +40,10 @@ dependencies:
   firebase_auth: 4.10.0
   crypto: ^3.0.3
   sign_in_with_apple: ^5.0.0
+  google_sign_in: ^6.1.4
 
   cupertino_icons: ^1.0.2
+  font_awesome_flutter: ^9.0.0
   hidden_drawer_menu: ^3.0.1
   get: ^4.6.6
   flutter_native_splash: ^2.3.4

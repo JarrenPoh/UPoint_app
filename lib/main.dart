@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -32,7 +33,32 @@ class MyApp extends StatelessWidget {
             create: (context) => AddPostPageBloc(),
           ),
         ],
-        child: const NavigationContainer(),
+        child: StreamBuilder(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator.adaptive(),
+              );
+            } else if (snapshot.hasData) {
+              print('data: ${snapshot.data}');
+              String email = FirebaseAuth.instance.currentUser!.email!;
+              bool isOrganizer = false;
+              if (email == "jjpohhh@gmail.com") {
+                isOrganizer = true;
+              }
+              return NavigationContainer(
+                uri: null,
+                isOrganizer: isOrganizer,
+              );
+            } else {
+              return const NavigationContainer(
+                uri: null,
+                isOrganizer: false,
+              );
+            }
+          },
+        ),
       ),
     );
   }
