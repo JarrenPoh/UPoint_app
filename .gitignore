@@ -8,6 +8,7 @@ ios/GoogleService-Info.plist
 android/app/google-services.json
 pubspec.lock
 ios/Podfile.lock
+ios/Runner/Info.plist
 # Files and directories created by pub
 
 Images/
