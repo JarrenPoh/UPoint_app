@@ -7,13 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:upoint/firebase/firestore_methods.dart';
 import 'package:upoint/models/user_model.dart' as model;
 
-class AuthMethods with ChangeNotifier{
+class AuthMethods with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-  model.User? user ;
+  model.User? user;
   Future<void> getUserDetails() async {
     print('拿了user from firestore廣播給provider');
     if (_auth.currentUser != null) {
@@ -22,7 +22,7 @@ class AuthMethods with ChangeNotifier{
           await _firestore.collection('users').doc(currentUser.uid).get();
       user = model.User.fromSnap(snap);
     }
-    notifyListeners();
+    // notifyListeners();
   }
 
   //註冊用戶
@@ -94,7 +94,8 @@ class AuthMethods with ChangeNotifier{
     return res;
   }
 
-  Future<void> signInWithApple() async {
+  Future<String> signInWithApple() async {
+    String res = 'some error occur';
     String generateNonce([int length = 32]) {
       final charset =
           '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
@@ -131,12 +132,20 @@ class AuthMethods with ChangeNotifier{
       print(userCredential.user!.displayName);
       print(userCredential.user!.photoURL);
       print(userCredential.user!);
+      //上傳用戶註冊資料
+      res = await FirestoreMethods().signUpUser(
+        userCredential.user!.email,
+        FirebaseAuth.instance.currentUser!,
+      );
     } catch (e) {
       print(e);
+      res = e.toString();
     }
+    return res;
   }
 
-  Future<void> signInWithGoogle() async {
+  Future<String> signInWithGoogle() async {
+    String res = 'some error occur';
     try {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
@@ -157,9 +166,16 @@ class AuthMethods with ChangeNotifier{
       print(userCredential.user!.displayName);
       print(userCredential.user!.photoURL);
       print(userCredential.user!);
+      //上傳用戶註冊資料
+      res = await FirestoreMethods().signUpUser(
+        userCredential.user!.email,
+        FirebaseAuth.instance.currentUser!,
+      );
     } catch (e) {
       print(e);
+      res = e.toString();
     }
+    return res;
   }
 
   //使用者登出

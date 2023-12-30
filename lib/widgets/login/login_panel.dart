@@ -60,7 +60,6 @@ class _LoginPanelState extends State<LoginPanel> {
   }
 
   void loginUser() async {
-    Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     if (_emailController.text.trim() == '') {
       setState(() {
         emptyEmail = true;
@@ -80,73 +79,79 @@ class _LoginPanelState extends State<LoginPanel> {
           password: _passwordController.text,
         );
 
-        if (res == "success") {
-          print(res);
-          if (FirebaseAuth.instance.currentUser!.emailVerified) {
-            String email = FirebaseAuth.instance.currentUser!.email!;
-            bool isOrganizer = false;
-            if (email == "jjpohhh@gmail.com") {
-              isOrganizer = true;
-            }
-            // ignore: use_build_context_synchronously
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MultiProvider(
-                    providers: [
-                      ChangeNotifierProvider(
-                        create: (context) => AddPostPageBloc(),
-                      ),
-                      ChangeNotifierProvider(
-                        create: (context) => AuthMethods(),
-                      ),
-                    ],
-                    child: NavigationContainer(
-                      uri: widget.uri,
-                      isOrganizer: isOrganizer,
-                    ),
-                  ),
-                ),
-                (route) => false);
-          } else {
-            await AuthMethods().signOut();
-            // ignore: use_build_context_synchronously
-            CustomDialog(
-              context,
-              '如有問題，請回報官方:service.upoint@gmail.com',
-              '你尚未驗證你的Gmail',
-              onSecondary,
-              onSecondary,
-              () {
-                Navigator.pop(context);
-              },
-            );
-          }
-        } else {
-          setState(() {
-            isLoading = false;
-          });
-          await AuthMethods().signOut();
-          Get.snackbar(
-            "失敗",
-            res.toString() + ' ，請回報官方發現問題',
-            snackPosition: SnackPosition.TOP,
-            duration: const Duration(
-              seconds: 4,
-            ),
-          );
-          CustomDialog(
-            context,
-            '如有問題，請回報官方:service.upoint@gmail.com',
-            res,
-            onSecondary,
-            onSecondary,
-            () {
-              Navigator.pop(context);
-            },
-          );
-        }
+        signIn(res);
       }
+    }
+  }
+
+  void signIn(res) async {
+    Color onSecondary = Theme.of(context).colorScheme.onSecondary;
+    if (res == "success") {
+      print(res);
+      if (FirebaseAuth.instance.currentUser!.emailVerified) {
+        String email = FirebaseAuth.instance.currentUser!.email!;
+        bool isOrganizer = false;
+        if (email == "jjpohhh@gmail.com") {
+          isOrganizer = true;
+        }
+        // ignore: use_build_context_synchronously
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MultiProvider(
+              providers: [
+                ChangeNotifierProvider(
+                  create: (context) => AddPostPageBloc(),
+                ),
+                ChangeNotifierProvider(
+                  create: (context) => AuthMethods(),
+                ),
+              ],
+              child: NavigationContainer(
+                uri: widget.uri,
+                isOrganizer: isOrganizer,
+              ),
+            ),
+          ),
+          (route) => false,
+        );
+      } else {
+        await AuthMethods().signOut();
+        // ignore: use_build_context_synchronously
+        CustomDialog(
+          context,
+          '如有問題，請回報官方:service.upoint@gmail.com',
+          '你尚未驗證你的Gmail',
+          onSecondary,
+          onSecondary,
+          () {
+            Navigator.pop(context);
+          },
+        );
+      }
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+      await AuthMethods().signOut();
+      Get.snackbar(
+        "失敗",
+        res.toString() + ' ，請回報官方發現問題',
+        snackPosition: SnackPosition.TOP,
+        duration: const Duration(
+          seconds: 4,
+        ),
+      );
+      CustomDialog(
+        context,
+        '如有問題，請回報官方:service.upoint@gmail.com',
+        res,
+        onSecondary,
+        onSecondary,
+        () {
+          Navigator.pop(context);
+        },
+      );
     }
   }
 
@@ -263,7 +268,12 @@ class _LoginPanelState extends State<LoginPanel> {
                         children: [
                           GestureDetector(
                             onTap: () async {
-                              await AuthMethods().signInWithGoogle();
+                              String res;
+                              setState(() {
+                                isLoading = true;
+                              });
+                              res = await AuthMethods().signInWithGoogle();
+                              signIn(res);
                             },
                             child: Container(
                               padding: EdgeInsets.all(20),
@@ -281,7 +291,12 @@ class _LoginPanelState extends State<LoginPanel> {
                           SizedBox(width: Dimensions.width5 * 5),
                           GestureDetector(
                             onTap: () async {
-                              await AuthMethods().signInWithApple();
+                              String res;
+                              setState(() {
+                                isLoading = true;
+                              });
+                              res = await AuthMethods().signInWithApple();
+                              signIn(res);
                             },
                             child: Container(
                               padding: EdgeInsets.all(20),

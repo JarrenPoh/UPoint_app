@@ -37,12 +37,6 @@ class _VerifyEmailState extends State<VerifyEmail> {
     getUserEmailVerify();
   }
 
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      print('我回來啦');
-    }
-  }
-
   getUserEmailVerify() {
     isEmailVerified = auth.FirebaseAuth.instance.currentUser!.emailVerified;
     print('信箱驗證 $isEmailVerified');
