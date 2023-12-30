@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:upoint/bloc/add_post_page_bloc.dart';
+import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/navigation_container.dart';
 import 'package:upoint/theme/dark_theme.dart';
 import 'package:upoint/theme/light_theme.dart';
@@ -32,6 +33,9 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(
             create: (context) => AddPostPageBloc(),
           ),
+          ChangeNotifierProvider(
+            create: (context) => AuthMethods(),
+          ),
         ],
         child: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
@@ -41,7 +45,6 @@ class MyApp extends StatelessWidget {
                 child: CircularProgressIndicator.adaptive(),
               );
             } else if (snapshot.hasData) {
-              print('data: ${snapshot.data}');
               String email = FirebaseAuth.instance.currentUser!.email!;
               bool isOrganizer = false;
               if (email == "jjpohhh@gmail.com") {

@@ -2,10 +2,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:insta_assets_picker/insta_assets_picker.dart';
+import 'package:upoint/firebase/firestore_methods.dart';
 import 'package:upoint/models/post_model.dart';
+import 'package:upoint/models/user_model.dart';
 import 'package:upoint/value_notifier/bool_value_notifier.dart';
 
 class AddPostPageBloc with ChangeNotifier {
+  String initText = "";
+  AddPostPageBloc() {}
   final PageController pageController = PageController();
   List<Widget> pageWidget = [];
   int itemCount = 0;
@@ -46,8 +50,8 @@ class AddPostPageBloc with ChangeNotifier {
   }
 
   //主辦單位
-  final TextEditingController organizerController =
-      TextEditingController(text: "中原xxxx中心");
+  TextEditingController organizerController =
+      TextEditingController(text: "initText");
   //標題
   final TextEditingController titleController = TextEditingController();
   FocusNode titleFocusNode = FocusNode();
@@ -91,7 +95,7 @@ class AddPostPageBloc with ChangeNotifier {
     {"type": "IG連結", "bool": false},
     {"type": "獎勵", "bool": false},
   ];
-  final BoolValueNotifier addOtherNotifier = BoolValueNotifier(false);
+  final BoolValueNotifier addOtherNotifier = BoolValueNotifier(true);
   //link
   final TextEditingController linkController = TextEditingController();
   FocusNode linkFocusNode = FocusNode();
@@ -125,13 +129,45 @@ class AddPostPageBloc with ChangeNotifier {
     notifyListeners();
   }
 
-  Future uploadPost(
-    context,
-  ) async {
+  void cleanCart() {
+    PostModel _cart = PostModel();
+    assetPics = [];
+    dateValueNotifier.ChooseModelChange(
+      ChooseModel(
+        chose: "日期",
+        isChose: false,
+        initChose: 0,
+      ),
+    );
+    startTimeValueNotifier.ChooseModelChange(
+      ChooseModel(
+        chose: "開始",
+        isChose: false,
+        initChose: 0,
+      ),
+    );
+    endTimeValueNotifier.ChooseModelChange(
+      ChooseModel(
+        chose: "開始",
+        isChose: false,
+        initChose: 0,
+      ),
+    );
+    titleController.clear();
+    contentController.clear();
+    linkController.clear();
+    rewardController.clear();
+    checkInform(_cart);
+    notifyListeners();
+  }
+
+  Future<String> uploadPost(context, User? _user, PostModel _cart) async {
+    String res = 'some error occur';
     try {
-      // unFisnished: 上傳後端
-      // await SupabaseMethods().CreatePost(context);
-      // unFinished: 清空資料
+      _cart.organizer = _user?.username;
+      res = await FirestoreMethods().uploadPost(
+        _cart,
+      );
       Get.snackbar(
         "上傳成功",
         "你的貼文已成功上傳",
@@ -149,7 +185,9 @@ class AddPostPageBloc with ChangeNotifier {
           seconds: 2,
         ),
       );
+      res = e.toString();
     }
+    return res;
   }
 }
 

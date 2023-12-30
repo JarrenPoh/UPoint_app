@@ -1,28 +1,29 @@
 import 'dart:convert';
 import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:upoint/models/user_model.dart' as model;
 
-class AuthMethods {
+class AuthMethods with ChangeNotifier{
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // Future<model.User?> getUserDetails() async {
-  //   User currentUser = _auth.currentUser!;
-  //   print('request in getUserDetail');
-  //   DocumentSnapshot snap =
-  //       await _firestore.collection('users').doc(currentUser.uid).get();
-  //   if(snap.data()!=null){
-  //     return model.User.fromSnap(snap);
-  //   }else{
-  //     return null;
-  //   }
-  // }
+  model.User? user ;
+  Future<void> getUserDetails() async {
+    print('拿了user from firestore廣播給provider');
+    if (_auth.currentUser != null) {
+      User currentUser = _auth.currentUser!;
+      DocumentSnapshot snap =
+          await _firestore.collection('users').doc(currentUser.uid).get();
+      user = model.User.fromSnap(snap);
+    }
+    notifyListeners();
+  }
 
   //註冊用戶
   Future<String> signUpUser({
@@ -69,7 +70,7 @@ class AuthMethods {
         email: email,
         password: password,
       );
-      res ="success";
+      res = "success";
     } on FirebaseAuthException catch (err) {
       print('errorr');
       if (err.code == 'unknown') {

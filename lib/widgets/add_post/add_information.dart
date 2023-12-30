@@ -8,6 +8,8 @@ import 'package:upoint/models/post_model.dart';
 import 'package:upoint/widgets/custom_date_picker.dart';
 import 'package:upoint/widgets/edit_choose.dart';
 import 'package:upoint/widgets/edit_textfield.dart';
+import 'package:upoint/firebase/auth_methods.dart';
+import 'package:upoint/models/user_model.dart';
 import 'package:provider/provider.dart';
 
 class AddInformation extends StatefulWidget {
@@ -29,7 +31,11 @@ class _AddInformationState extends State<AddInformation>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    User? user = Provider.of<AuthMethods>(context, listen: false).user;
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
+    if (user != null) {
+      widget.bloc.organizerController.text = user.username ?? "";
+    }
     widgets = [
       //主辦單位
       Container(
@@ -43,10 +49,11 @@ class _AddInformationState extends State<AddInformation>
         ),
         child: IgnorePointer(
           child: TextField(
-              controller: widget.bloc.organizerController,
-              style: TextStyle(color: onSecondary),
-              keyboardType: TextInputType.text,
-              decoration: null),
+            controller: widget.bloc.organizerController,
+            style: TextStyle(color: onSecondary),
+            keyboardType: TextInputType.text,
+            decoration: null,
+          ),
         ),
       ),
       //日期

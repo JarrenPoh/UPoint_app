@@ -41,6 +41,20 @@ class PostModel {
     };
   }
 
+  Map<String, dynamic> toJson() => {
+        "photos": photos,
+        "organizer": organizer,
+        "title": title,
+        "dateTime": date,
+        "startTime": startTime,
+        "endTime": endTime,
+        "content": content,
+        "reward": reward,
+        "link": link,
+        "postId": postId,
+        "datePublished": datePublished,
+      };
+
   static PostModel fromMap(Map map) {
     return PostModel(
       photos: map['photos'],

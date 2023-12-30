@@ -186,7 +186,7 @@ class _LoginPanelState extends State<LoginPanel> {
                       ),
                       SizedBox(height: Dimensions.height5 * 3),
                       ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async{
                           loginUser();
                         },
                         style: ElevatedButton.styleFrom(

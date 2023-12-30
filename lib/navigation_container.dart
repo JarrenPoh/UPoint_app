@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/pages/add_post_page.dart';
 import 'package:upoint/pages/home_page.dart';
 import 'package:upoint/pages/search_page.dart';
 import 'package:upoint/widgets/custom_bottom_naviagation_bar.dart';
 import 'package:upoint/pages/profile_page.dart';
+import 'package:provider/provider.dart';
 
 class NavigationContainer extends StatefulWidget {
   final Uri? uri;
@@ -34,6 +36,13 @@ class _NavigationContainerState extends State<NavigationContainer> {
     );
   }
 
+  Key _addPostPageKey = UniqueKey();
+  void resetAddPostPage() {
+    setState(() {
+      _addPostPageKey = UniqueKey();
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -48,17 +57,24 @@ class _NavigationContainerState extends State<NavigationContainer> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<AuthMethods>(context, listen: false).getUserDetails();
     if (widget.isOrganizer) {
       _pages = [
-        Container(),
-        AddPostPage(onIconTapped: onIconTapped),
+        Container(
+          color: Colors.amber,
+        ),
+        AddPostPage(
+          onIconTapped: onIconTapped,
+          resetAddPostPage: resetAddPostPage,
+          key: _addPostPageKey,
+        ),
         ProfilePage(),
       ];
     } else {
       _pages = [
         HomePage(searchTapped: searchTapped),
         SearchPage(),
-        AddPostPage(onIconTapped: onIconTapped),
+        Container(color: Colors.blue),
         Container(),
         ProfilePage(),
       ];

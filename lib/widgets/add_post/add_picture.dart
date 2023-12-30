@@ -68,8 +68,12 @@ class _AddPictureState extends State<AddPicture>
       onCompleted: (Stream<InstaAssetsExportDetails> stream) {
         stream.listen((event) {
           widget.bloc.imgStreamController.add(event);
+          List _photos = [];
+          for(var i in event.croppedFiles){
+            _photos.add(i.readAsBytes());
+          }
           Provider.of<AddPostPageBloc>(context, listen: false).updateCart(
-            PostModel(photos: event.croppedFiles),
+            PostModel(photos: _photos),
           );
         });
         widget.bloc.addPictureNotifier.boolChange(true);

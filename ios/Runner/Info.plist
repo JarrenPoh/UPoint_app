@@ -34,6 +34,25 @@
 		<string>Main</string>
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>Replace with your permission description.</string>
+		<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>com.googleusercontent.apps.112649280428-1rkte31opmb9hpuslv33dordb7l24o5t</string>
+				</array>
+			</dict>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>upoint</string>
+				</array>
+			</dict>
+		</array>
 		<key>UISupportedInterfaceOrientations</key>
 		<array>
 			<string>UIInterfaceOrientationPortrait</string>
