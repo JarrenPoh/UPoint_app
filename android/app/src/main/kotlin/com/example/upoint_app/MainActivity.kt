@@ -1,4 +1,4 @@
-package com.example.upoint_app
+package com.upoint.android
 
 import io.flutter.embedding.android.FlutterActivity
 
