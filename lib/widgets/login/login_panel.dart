@@ -1,10 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:upoint/bloc/add_post_page_bloc.dart';
 import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/navigation_container.dart';
 import 'package:upoint/widgets/custom_dialog.dart';
+import 'package:upoint/widgets/login/reset_password.dart';
+import 'package:provider/provider.dart';
 
 class LoginPanel extends StatefulWidget {
   final Function() onTap;
@@ -89,9 +92,19 @@ class _LoginPanelState extends State<LoginPanel> {
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => NavigationContainer(
-                    uri: widget.uri,
-                    isOrganizer: isOrganizer,
+                  builder: (context) => MultiProvider(
+                    providers: [
+                      ChangeNotifierProvider(
+                        create: (context) => AddPostPageBloc(),
+                      ),
+                      ChangeNotifierProvider(
+                        create: (context) => AuthMethods(),
+                      ),
+                    ],
+                    child: NavigationContainer(
+                      uri: widget.uri,
+                      isOrganizer: isOrganizer,
+                    ),
                   ),
                 ),
                 (route) => false);
@@ -186,7 +199,7 @@ class _LoginPanelState extends State<LoginPanel> {
                       ),
                       SizedBox(height: Dimensions.height5 * 3),
                       ElevatedButton(
-                        onPressed: () async{
+                        onPressed: () async {
                           loginUser();
                         },
                         style: ElevatedButton.styleFrom(
@@ -210,12 +223,21 @@ class _LoginPanelState extends State<LoginPanel> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Text(
-                            "忘記密碼>",
-                            style: TextStyle(
-                              color: primary,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 12,
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: ((context) => ResetPassword()),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              "忘記密碼>",
+                              style: TextStyle(
+                                color: primary,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 12,
+                              ),
                             ),
                           ),
                         ],

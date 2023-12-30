@@ -29,40 +29,28 @@ class MyApp extends StatelessWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       home: MultiProvider(
-        providers: [
-          ChangeNotifierProvider(
-            create: (context) => AddPostPageBloc(),
-          ),
-          ChangeNotifierProvider(
-            create: (context) => AuthMethods(),
-          ),
-        ],
-        child: StreamBuilder(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: CircularProgressIndicator.adaptive(),
-              );
-            } else if (snapshot.hasData) {
+          providers: [
+            ChangeNotifierProvider(
+              create: (context) => AddPostPageBloc(),
+            ),
+            ChangeNotifierProvider(
+              create: (context) => AuthMethods(),
+            ),
+          ],
+          child: Builder(builder: (context) {
+            bool isOrganizer = false;
+            if (FirebaseAuth.instance.currentUser != null) {
               String email = FirebaseAuth.instance.currentUser!.email!;
-              bool isOrganizer = false;
               if (email == "jjpohhh@gmail.com") {
                 isOrganizer = true;
               }
-              return NavigationContainer(
-                uri: null,
-                isOrganizer: isOrganizer,
-              );
-            } else {
-              return const NavigationContainer(
-                uri: null,
-                isOrganizer: false,
-              );
             }
-          },
-        ),
-      ),
+            return NavigationContainer(
+              uri: null,
+              isOrganizer: isOrganizer,
+            );
+          })
+          ),
     );
   }
 }

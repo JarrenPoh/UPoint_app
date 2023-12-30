@@ -48,7 +48,10 @@ class _AddPostPageState extends State<AddPostPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    User? user = Provider.of<AuthMethods>(context, listen: false).user;
+    User? user;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      user = Provider.of<AuthMethods>(context, listen: false).user;
+    });
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     Color primary = Theme.of(context).colorScheme.primary;
     Color hintColor = Theme.of(context).hintColor;

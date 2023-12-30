@@ -43,9 +43,16 @@ class _NavigationContainerState extends State<NavigationContainer> {
     });
   }
 
+  void getUserDetails() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<AuthMethods>(context, listen: false).getUserDetails();
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    getUserDetails();
     if (widget.uri != null) {
       if (widget.uri!.pathSegments.isNotEmpty &&
           widget.uri!.pathSegments.first == 'profile') {
@@ -57,7 +64,6 @@ class _NavigationContainerState extends State<NavigationContainer> {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<AuthMethods>(context, listen: false).getUserDetails();
     if (widget.isOrganizer) {
       _pages = [
         Container(

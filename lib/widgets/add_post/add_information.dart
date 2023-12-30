@@ -31,10 +31,13 @@ class _AddInformationState extends State<AddInformation>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    User? user = Provider.of<AuthMethods>(context, listen: false).user;
+    User? user;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      user = Provider.of<AuthMethods>(context, listen: false).user;
+    });
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     if (user != null) {
-      widget.bloc.organizerController.text = user.username ?? "";
+      widget.bloc.organizerController.text = user?.username ?? "";
     }
     widgets = [
       //主辦單位

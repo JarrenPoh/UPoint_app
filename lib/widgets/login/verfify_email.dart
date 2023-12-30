@@ -165,12 +165,18 @@ class _VerifyEmailState extends State<VerifyEmail> {
     Color hintColor = Theme.of(context).hintColor;
     Color primary = Theme.of(context).colorScheme.primary;
     Color onPrimary = Theme.of(context).colorScheme.onPrimary;
+    Color onSecondary = Theme.of(context).colorScheme.onSecondary;
+
     return Scaffold(
       backgroundColor: appBarColor,
       appBar: AppBar(
         elevation: 0,
         automaticallyImplyLeading: true,
-        title: Text('信箱驗證'),
+        title: MediumText(
+          color: onSecondary,
+          size: 18,
+          text: '信箱驗證',
+        ),
       ),
       body: Stack(
         alignment: Alignment.center,
