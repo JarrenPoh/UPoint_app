@@ -33,9 +33,14 @@ class _PostCardState extends State<PostCard> {
   @override
   void initState() {
     super.initState();
+    isOver = isOverTime(
+      widget.post.endTime!,
+      widget.post.date.toDate(),
+    );
   }
 
   double _scale = 1.0;
+  bool isOver = false;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -92,6 +97,7 @@ class _PostCardState extends State<PostCard> {
               transitionOnUserGestures: true,
               tag: widget.hero,
               child: Stack(
+                alignment: Alignment.center,
                 children: [
                   AspectRatio(
                     aspectRatio: 16 / 9,
@@ -106,15 +112,18 @@ class _PostCardState extends State<PostCard> {
                       ),
                       child: Container(
                         decoration: BoxDecoration(
+                          color: isOver ? Colors.black.withOpacity(0.8) : null,
                           borderRadius: BorderRadius.circular(20),
-                          gradient: LinearGradient(
-                            begin: Alignment.bottomRight,
-                            stops: const [0.3, 0.9],
-                            colors: [
-                              Colors.black.withOpacity(.8),
-                              Colors.black.withOpacity(.2),
-                            ],
-                          ),
+                          gradient: isOver
+                              ? null
+                              : LinearGradient(
+                                  begin: Alignment.bottomRight,
+                                  stops: const [0.3, 0.9],
+                                  colors: [
+                                    Colors.black.withOpacity(.8),
+                                    Colors.black.withOpacity(.2),
+                                  ],
+                                ),
                         ),
                       ),
                     ),
@@ -143,7 +152,7 @@ class _PostCardState extends State<PostCard> {
                           ),
                         )
                       : Container(),
-                  widget.isOrganizer
+                  widget.isOrganizer && !isOver
                       ? Positioned(
                           right: 0,
                           top: Dimensions.height2 * 7,
@@ -189,7 +198,8 @@ class _PostCardState extends State<PostCard> {
                                     return AddPostPage(
                                       backToHome: () {
                                         Navigator.pop(context);
-                                        globals.globalManagePage!.currentState!.updatePost(widget.post.postId);
+                                        globals.globalManagePage!.currentState!
+                                            .updatePost(widget.post.postId);
                                       },
                                       user: widget.user,
                                       isEdit: widget.isOrganizer,
@@ -199,6 +209,29 @@ class _PostCardState extends State<PostCard> {
                                 ),
                               );
                             },
+                          ),
+                        )
+                      : Container(),
+                  isOver
+                      ? Container(
+                          width: Dimensions.width5 * 25,
+                          height: Dimensions.height5 * 8,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: Dimensions.width5 * 4,
+                            vertical: Dimensions.height5,
+                          ),
+                          decoration: BoxDecoration(
+                            color: primaryColor.withOpacity(1),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                          child: const Center(
+                            child: MediumText(
+                              color: Colors.white,
+                              size: 16,
+                              text: '活動已結束',
+                            ),
                           ),
                         )
                       : Container()

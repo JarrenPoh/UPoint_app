@@ -20,15 +20,31 @@ DateTime parseDateString(String dateString, bool isDate) {
   // 尝试将字符串解析为DateTime对象
   try {
     return isDate == true
-      ? dateFormat.parse(dateString)
-      : timeFormat.parse(dateString);
+        ? dateFormat.parse(dateString)
+        : timeFormat.parse(dateString);
   } catch (e) {
     print('Failed to parse date: $dateString');
     return DateTime.now(); // 如果解析失败，返回当前时间
   }
 }
 
+//將datePublished 變成 "01/01（週一）"
 String formatTimestamp(Timestamp timestamp) {
   DateTime dateTime = timestamp.toDate();
   return DateFormat('MM/dd（E）', 'zh').format(dateTime);
+}
+
+bool isOverTime(
+  String timeString,
+  DateTime eventDate,
+) {
+  List<String> timeParts = timeString.split(':');
+  eventDate = DateTime(
+    eventDate.year,
+    eventDate.month,
+    eventDate.day,
+    int.parse(timeParts[0]),
+    int.parse(timeParts[1]),
+  );
+  return eventDate.isBefore(DateTime.now());
 }
