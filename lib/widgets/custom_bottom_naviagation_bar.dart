@@ -35,7 +35,7 @@ class CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         Icons.add,
         CupertinoIcons.profile_circled,
       ];
-      labelText = ["home", "create", "profile"];
+      labelText = ["manage", "create", "profile"];
     } else {
       iconList = [
         Icons.home_filled,

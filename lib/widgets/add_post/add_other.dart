@@ -8,9 +8,11 @@ import 'package:provider/provider.dart';
 
 class AddOther extends StatefulWidget {
   final AddPostPageBloc bloc;
+  final bool isEdit;
   const AddOther({
     super.key,
     required this.bloc,
+    required this.isEdit,
   });
 
   @override
@@ -19,6 +21,19 @@ class AddOther extends StatefulWidget {
 
 class _AddOtherState extends State<AddOther>
     with AutomaticKeepAliveClientMixin {
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isEdit) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        PostModel cart =
+            Provider.of<AddPostPageBloc>(context, listen: false).cart;
+        widget.bloc.linkController.text = cart.link ?? '';
+        widget.bloc.rewardController.text = cart.reward ?? '';
+      });
+    }
+  }
+
   @override
   final bool wantKeepAlive = true;
   List widgets = [];

@@ -93,42 +93,6 @@ class _HomePageState extends State<HomePage>
                         ),
                       ),
                     ),
-                    // 有店家的時候加回來
-                    // SliverPersistentHeader(
-                    //   pinned: true,
-                    //   delegate: MySliverDelegate(
-                    //     minHeight: Dimensions.height5 * 21,
-                    //     maxHeight: Dimensions.height5 * 21,
-                    //     child: Container(
-                    //       color: appBarColor,
-                    //       padding: EdgeInsets.symmetric(
-                    //         horizontal: Dimensions.width5 * 6,
-                    //         vertical: Dimensions.height5,
-                    //       ),
-                    //       child: Column(
-                    //         crossAxisAlignment: CrossAxisAlignment.start,
-                    //         children: [
-                    //           Text(
-                    //             'Find Your',
-                    //             style: TextStyle(
-                    //               color: onSecondary,
-                    //               fontSize: Dimensions.height5 * 5,
-                    //             ),
-                    //           ),
-                    //           SizedBox(height: Dimensions.height5),
-                    //           Text(
-                    //             'Activities',
-                    //             style: TextStyle(
-                    //               color: onSecondary,
-                    //               fontSize: Dimensions.height5 * 8,
-                    //             ),
-                    //           ),
-                    //           SizedBox(height: Dimensions.height5 * 2),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
                     SliverOverlapAbsorber(
                       handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
                           context),

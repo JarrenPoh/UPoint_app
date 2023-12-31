@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:upoint/bloc/add_post_page_bloc.dart';
-import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/globals/bold_text.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
@@ -14,13 +13,17 @@ import 'package:upoint/widgets/custom_dialog.dart';
 import 'package:provider/provider.dart';
 
 class AddPostPage extends StatefulWidget {
-  final Function(int) onIconTapped;
-  final Function() resetAddPostPage;
+  final Function() backToHome;
+  final User? user;
+  final bool isEdit;
+  final AddPostPageBloc bloc;
 
-  const AddPostPage({
+  AddPostPage({
     super.key,
-    required this.onIconTapped,
-    required this.resetAddPostPage,
+    required this.backToHome,
+    required this.user,
+    required this.isEdit,
+    required this.bloc,
   });
 
   @override
@@ -29,7 +32,6 @@ class AddPostPage extends StatefulWidget {
 
 class _AddPostPageState extends State<AddPostPage>
     with AutomaticKeepAliveClientMixin {
-  final AddPostPageBloc _bloc = AddPostPageBloc();
   bool isLoading = false;
   @override
   final bool wantKeepAlive = true;
@@ -37,21 +39,27 @@ class _AddPostPageState extends State<AddPostPage>
   @override
   void initState() {
     super.initState();
-    _bloc.pageWidget = [
-      AddPicture(bloc: _bloc),
-      AddInformation(bloc: _bloc),
-      AddOther(bloc: _bloc),
+    widget.bloc.pageWidget = [
+      AddPicture(
+        bloc: widget.bloc,
+        isEdit: widget.isEdit,
+      ),
+      AddInformation(
+        bloc: widget.bloc,
+        user: widget.user,
+        isEdit: widget.isEdit,
+      ),
+      AddOther(
+        bloc: widget.bloc,
+        isEdit: widget.isEdit,
+      ),
     ];
-    _bloc.itemCount = _bloc.pageWidget.length;
+    widget.bloc.itemCount = widget.bloc.pageWidget.length;
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    User? user;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      user = Provider.of<AuthMethods>(context, listen: false).user;
-    });
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     Color primary = Theme.of(context).colorScheme.primary;
     Color hintColor = Theme.of(context).hintColor;
@@ -61,6 +69,8 @@ class _AddPostPageState extends State<AddPostPage>
     return Scaffold(
       backgroundColor: appBarColor,
       appBar: AppBar(
+        iconTheme: IconThemeData(color: onSecondary),
+        automaticallyImplyLeading: widget.isEdit ? true : false,
         title: Padding(
           padding: EdgeInsets.only(bottom: Dimensions.height5 * 5),
           child: BoldText(
@@ -85,10 +95,10 @@ class _AddPostPageState extends State<AddPostPage>
                 Expanded(
                   child: PageView.builder(
                     physics: const NeverScrollableScrollPhysics(),
-                    controller: _bloc.pageController,
-                    itemCount: _bloc.itemCount,
+                    controller: widget.bloc.pageController,
+                    itemCount: widget.bloc.itemCount,
                     itemBuilder: (context, index) {
-                      return _bloc.pageWidget[index];
+                      return widget.bloc.pageWidget[index];
                     },
                     onPageChanged: (value) {
                       setState(() {
@@ -109,7 +119,7 @@ class _AddPostPageState extends State<AddPostPage>
                           onPressed: () {
                             currPageValue == 0
                                 ? null
-                                : _bloc.pageController
+                                : widget.bloc.pageController
                                     .jumpToPage(currPageValue - 1);
                             FocusScope.of(context).unfocus();
                           },
@@ -136,16 +146,17 @@ class _AddPostPageState extends State<AddPostPage>
                           child: MediumText(
                             color: onSecondary,
                             size: Dimensions.height5 * 3,
-                            text: '已完成${currPageValue + 1}/${_bloc.itemCount}',
+                            text:
+                                '已完成${currPageValue + 1}/${widget.bloc.itemCount}',
                           ),
                         ),
                       ),
                       ValueListenableBuilder(
                         valueListenable: currPageValue + 1 == 1
-                            ? _bloc.addPictureNotifier
+                            ? widget.bloc.addPictureNotifier
                             : currPageValue + 1 == 2
-                                ? _bloc.addInformNotifier
-                                : _bloc.addOtherNotifier,
+                                ? widget.bloc.addInformNotifier
+                                : widget.bloc.addOtherNotifier,
                         builder: (context, value, child) {
                           value as bool;
                           return SizedBox(
@@ -154,7 +165,7 @@ class _AddPostPageState extends State<AddPostPage>
                               onPressed: () async {
                                 if (currPageValue + 1 != 3) {
                                   if (value) {
-                                    _bloc.pageController
+                                    widget.bloc.pageController
                                         .jumpToPage(currPageValue + 1);
                                   }
                                   if (!value) {
@@ -174,9 +185,6 @@ class _AddPostPageState extends State<AddPostPage>
                                   FocusScope.of(context).unfocus();
                                 } else {
                                   FocusScope.of(context).unfocus();
-                                  setState(() {
-                                    isLoading = true;
-                                  });
                                   await CustomDialog(
                                     context,
                                     '',
@@ -185,16 +193,28 @@ class _AddPostPageState extends State<AddPostPage>
                                     onSecondary,
                                     () async {
                                       Navigator.pop(context);
-                                      await _bloc.uploadPost(
-                                        context,
-                                        user,
-                                        Provider.of<AddPostPageBloc>(context,
-                                                listen: false)
-                                            .cart,
-                                      );
+                                      setState(() {
+                                        isLoading = true;
+                                      });
+                                      if (widget.isEdit) {
+                                        await widget.bloc.updatePost(
+                                          context,
+                                          widget.user,
+                                          Provider.of<AddPostPageBloc>(context,
+                                                  listen: false)
+                                              .cart,
+                                        );
+                                      } else {
+                                        await widget.bloc.uploadPost(
+                                          context,
+                                          widget.user,
+                                          Provider.of<AddPostPageBloc>(context,
+                                                  listen: false)
+                                              .cart,
+                                        );
+                                      }
                                       // unFisnished: 導到活動頁面
-                                      widget.onIconTapped(0);
-                                      widget.resetAddPostPage();
+                                      widget.backToHome();
                                       globals
                                           .globalBottomNavigation!.currentState!
                                           .onGlobalTap(0);

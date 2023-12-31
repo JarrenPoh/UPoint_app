@@ -13,7 +13,7 @@ class StorageMethods {
     try {
       Reference ref =
           _storage.ref().child(childname).child(_auth.currentUser!.uid);
-          
+
       if (isPost) {
         ref = ref.child(postId!);
       }
@@ -27,13 +27,14 @@ class StorageMethods {
     return "";
   }
 
-  Future deletePost(String postId, String childname) async {
+  Future deleteImageToStorage(
+      String postId, String childname, bool isPost) async {
     try {
-      Reference ref = _storage
-          .ref()
-          .child(childname)
-          .child(_auth.currentUser!.uid)
-          .child(postId);
+      Reference ref =
+          _storage.ref().child(childname).child(_auth.currentUser!.uid);
+      if (isPost) {
+        ref = ref.child(postId);
+      }
       print('ref: $ref');
       ref.delete();
     } catch (e) {

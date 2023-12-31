@@ -2,19 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:upoint/globals/dimension.dart';
+import 'package:upoint/models/post_model.dart';
 import 'package:upoint/overscroll_pop-main/lib/overscroll_pop.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:upoint/globals/date_time_transfer.dart';
 
 class ActivityPage extends StatefulWidget {
-  final String imageUrl;
-  final String title;
-  final String organizer;
+  final PostModel post;
   final String hero;
   const ActivityPage({
     super.key,
-    required this.imageUrl,
-    required this.organizer,
-    required this.title,
+    required this.post,
     required this.hero,
   });
 
@@ -108,7 +106,7 @@ class _ActivityPageState extends State<ActivityPage> {
                   transitionOnUserGestures: true,
                   tag: widget.hero,
                   child: Image.network(
-                    widget.imageUrl,
+                    widget.post.photos!.first,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -162,7 +160,7 @@ class _ActivityPageState extends State<ActivityPage> {
                                       Container(
                                         width: Dimensions.screenWidth * 0.55,
                                         child: Text(
-                                          widget.title,
+                                          widget.post.title!,
                                           style: TextStyle(
                                             color: onSecondary,
                                             fontSize: Dimensions.height2 * 11,
@@ -174,7 +172,7 @@ class _ActivityPageState extends State<ActivityPage> {
                                       Container(
                                         width: Dimensions.screenWidth * 0.55,
                                         child: Text(
-                                          widget.organizer,
+                                          widget.post.organizer!,
                                           style: TextStyle(
                                             color: hintColor,
                                             fontSize: Dimensions.height2 * 8,
@@ -193,7 +191,7 @@ class _ActivityPageState extends State<ActivityPage> {
                                     Container(
                                       width: Dimensions.screenWidth * 0.3,
                                       child: Text(
-                                        '11月5日(三)',
+                                        formatTimestamp(widget.post.date),
                                         style: TextStyle(
                                           color: onSecondary,
                                           fontSize: Dimensions.height2 * 8,
@@ -203,7 +201,7 @@ class _ActivityPageState extends State<ActivityPage> {
                                     ),
                                     SizedBox(height: Dimensions.height5 * 2),
                                     Text(
-                                      '12:00-20:00',
+                                      '${widget.post.startTime}-${widget.post.endTime}',
                                       style: TextStyle(
                                         color: onSecondary,
                                         fontSize: Dimensions.height2 * 8,
@@ -235,8 +233,7 @@ class _ActivityPageState extends State<ActivityPage> {
                                     },
                                     height: Dimensions.height5 * 10,
                                     elevation: 0,
-                                    splashColor:
-                                        hintColor,
+                                    splashColor: hintColor,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
                                     ),
@@ -271,8 +268,7 @@ class _ActivityPageState extends State<ActivityPage> {
                                     },
                                     height: Dimensions.height5 * 10,
                                     elevation: 0,
-                                    splashColor:
-                                        hintColor,
+                                    splashColor: hintColor,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
                                     ),

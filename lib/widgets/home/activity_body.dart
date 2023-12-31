@@ -3,6 +3,7 @@ import 'package:upoint/bloc/activity_body_bloc.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/globals/scroll_things_provider.dart';
+import 'package:upoint/models/post_model.dart';
 import 'package:upoint/widgets/home/post_card.dart';
 import 'package:upoint/widgets/home/promo_card.dart';
 
@@ -145,10 +146,10 @@ class _ActivityBodyState extends State<ActivityBody>
                             widget.bloc.actImages.length,
                             (index) {
                               return PostCard(
-                                imageUrl: widget.bloc.actImages[index],
-                                title: widget.bloc.actTitle[index],
-                                organizer: widget.bloc.actOrganizer[index],
+                                post: PostModel(),
+                                user: null,
                                 hero: "activity${widget.bloc.actTitle[index]}",
+                                isOrganizer: false,
                               );
                             },
                           ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:upoint/bloc/reward_body_bloc.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/scroll_things_provider.dart';
+import 'package:upoint/models/post_model.dart';
 import 'package:upoint/widgets/home/post_card.dart';
 import 'package:upoint/widgets/home/promo_card.dart';
 
@@ -113,10 +114,10 @@ class _RewardBodyState extends State<RewardBody>
                             widget.bloc.actImages.length,
                             (index) {
                               return PostCard(
-                                imageUrl: widget.bloc.actImages[index],
-                                title: widget.bloc.actTitle[index],
-                                organizer: widget.bloc.actOrganizer[index],
+                                post: PostModel(),
+                                user: null,
                                 hero: "reward${widget.bloc.actTitle[index]}",
+                                isOrganizer: false,
                               );
                             },
                           ),

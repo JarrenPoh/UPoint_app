@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 String formatDate(DateTime dateTime, bool isDate) {
@@ -25,4 +26,9 @@ DateTime parseDateString(String dateString, bool isDate) {
     print('Failed to parse date: $dateString');
     return DateTime.now(); // 如果解析失败，返回当前时间
   }
+}
+
+String formatTimestamp(Timestamp timestamp) {
+  DateTime dateTime = timestamp.toDate();
+  return DateFormat('MM/dd（E）', 'zh').format(dateTime);
 }

@@ -1,15 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class PostModel {
   List? photos;
   String? organizer;
   String? title;
-  DateTime? date;
+  var date;
   String? startTime;
   String? endTime;
   String? content;
   String? reward;
   String? link;
   String? postId;
-  DateTime? datePublished;
+  String? uid;
+  var datePublished;
 
   PostModel({
     this.photos,
@@ -23,6 +26,7 @@ class PostModel {
     this.link,
     this.postId,
     this.datePublished,
+    this.uid,
   });
 
   static Map toMap(PostModel cart) {
@@ -30,7 +34,7 @@ class PostModel {
       "photos": cart.photos,
       "organizer": cart.organizer,
       "title": cart.title,
-      "dateTime": cart.date,
+      "date": cart.date,
       "startTime": cart.startTime,
       "endTime": cart.endTime,
       "content": cart.content,
@@ -38,14 +42,34 @@ class PostModel {
       "link": cart.link,
       "postId": cart.postId,
       "datePublished": cart.datePublished,
+      "uid":cart.uid,
     };
+  }
+
+   static PostModel fromSnap(DocumentSnapshot snap) {
+    var snapshot = (snap.data()) as Map<String, dynamic>;
+    // print('這是本帳用戶信息在 post.dart in model ${snapshot}');
+    return PostModel(
+      photos: snapshot['photos'],
+      organizer: snapshot['organizer'],
+      title: snapshot['title'],
+      date: snapshot['date'],
+      startTime: snapshot['startTime'],
+      endTime: snapshot['endTime'],
+      content: snapshot['content'],
+      reward: snapshot['reward'],
+      link: snapshot['link'],
+      postId: snapshot['postId'],
+      datePublished: snapshot['datePublished'],
+      uid:snapshot['uid'],
+    );
   }
 
   Map<String, dynamic> toJson() => {
         "photos": photos,
         "organizer": organizer,
         "title": title,
-        "dateTime": date,
+        "date": date,
         "startTime": startTime,
         "endTime": endTime,
         "content": content,
@@ -53,6 +77,7 @@ class PostModel {
         "link": link,
         "postId": postId,
         "datePublished": datePublished,
+        "uid":uid,
       };
 
   static PostModel fromMap(Map map) {
@@ -68,6 +93,7 @@ class PostModel {
       link: map['link'],
       postId: map['postId'],
       datePublished: map['datePublished'],
+      uid:map['uid'],
     );
   }
 }

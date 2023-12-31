@@ -109,22 +109,39 @@ class AddPostPageBloc with ChangeNotifier {
   void updateCart(PostModel input) {
     if (input.photos != null) {
       cart.photos = input.photos;
-    } else if (input.content != null) {
+    }
+    if (input.content != null) {
       cart.content = input.content;
-    } else if (input.organizer != null) {
+    }
+    if (input.organizer != null) {
       cart.organizer = input.organizer;
-    } else if (input.title != null) {
+    }
+    if (input.title != null) {
       cart.title = input.title;
-    } else if (input.date != null) {
+    }
+    if (input.date != null) {
       cart.date = input.date;
-    } else if (input.startTime != null) {
+    }
+    if (input.startTime != null) {
       cart.startTime = input.startTime;
-    } else if (input.endTime != null) {
+    }
+    if (input.endTime != null) {
       cart.endTime = input.endTime;
-    } else if (input.reward != null) {
+    }
+    if (input.reward != null) {
       cart.reward = input.reward;
-    } else if (input.link != null) {
+    }
+    if (input.link != null) {
       cart.link = input.link;
+    }
+    if (input.postId != null) {
+      cart.postId = input.postId;
+    }
+    if (input.datePublished != null) {
+      cart.datePublished = input.datePublished;
+    }
+    if (input.uid != null) {
+      cart.uid = input.uid;
     }
     notifyListeners();
   }
@@ -148,7 +165,7 @@ class AddPostPageBloc with ChangeNotifier {
     );
     endTimeValueNotifier.ChooseModelChange(
       ChooseModel(
-        chose: "開始",
+        chose: "結束",
         isChose: false,
         initChose: 0,
       ),
@@ -165,9 +182,7 @@ class AddPostPageBloc with ChangeNotifier {
     String res = 'some error occur';
     try {
       _cart.organizer = _user?.username;
-      res = await FirestoreMethods().uploadPost(
-        _cart,
-      );
+      res = await FirestoreMethods().uploadPost(_cart, _user!);
       Get.snackbar(
         "上傳成功",
         "你的貼文已成功上傳",
@@ -179,6 +194,32 @@ class AddPostPageBloc with ChangeNotifier {
     } catch (e) {
       Get.snackbar(
         "上傳失敗",
+        "請聯繫官方回報問題拿獎勵",
+        snackPosition: SnackPosition.TOP,
+        duration: const Duration(
+          seconds: 2,
+        ),
+      );
+      res = e.toString();
+    }
+    return res;
+  }
+
+  Future<String> updatePost(context, User? _user, PostModel _cart) async {
+    String res = 'some error occur';
+    try {
+      res = await FirestoreMethods().updatePost(_cart, _user!);
+      Get.snackbar(
+        "更新成功",
+        "你的貼文已成功更新",
+        snackPosition: SnackPosition.TOP,
+        duration: const Duration(
+          seconds: 2,
+        ),
+      );
+    } catch (e) {
+      Get.snackbar(
+        "更新失敗",
         "請聯繫官方回報問題拿獎勵",
         snackPosition: SnackPosition.TOP,
         duration: const Duration(

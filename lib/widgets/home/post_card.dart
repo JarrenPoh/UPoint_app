@@ -1,20 +1,28 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:upoint/bloc/add_post_page_bloc.dart';
+import 'package:upoint/globals/date_time_transfer.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
+import 'package:upoint/models/post_model.dart';
+import 'package:provider/provider.dart';
+import 'package:upoint/models/user_model.dart';
 import 'package:upoint/pages/activity_page.dart';
+import 'package:upoint/pages/add_post_page.dart';
+import 'package:upoint/global_key.dart' as globals;
 
 class PostCard extends StatefulWidget {
-  final String imageUrl;
-  final String title;
-  final String organizer;
+  final PostModel post;
+  final User? user;
   final String hero;
+  final bool isOrganizer;
   const PostCard({
     super.key,
-    required this.imageUrl,
-    required this.organizer,
-    required this.title,
+    required this.post,
     required this.hero,
+    required this.isOrganizer,
+    required this.user,
   });
 
   @override
@@ -22,32 +30,35 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   double _scale = 1.0;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapDown: (d) => setState(() {
-        _scale = 0.95;
-      }),
+      // onTapDown: (d) => setState(() {
+      //   _scale = 0.95;
+      // }),
       onTapUp: (d) {
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => ActivityPage(
-              imageUrl: widget.imageUrl,
-              title: widget.title,
-              organizer: widget.organizer,
+              post: widget.post,
               hero: widget.hero,
             ),
           ),
         );
-        setState(() {
-          _scale = 1.0;
-        });
+        // setState(() {
+        //   _scale = 1.0;
+        // });
       },
-      onTapCancel: () => setState(() {
-        _scale = 1.0;
-      }),
+      // onTapCancel: () => setState(() {
+      //   _scale = 1.0;
+      // }),
       child: Transform.scale(
         scale: _scale,
         child: Padding(
@@ -55,18 +66,22 @@ class _PostCardState extends State<PostCard> {
             vertical: Dimensions.height5 * 2,
           ),
           child: PostCard(
-            widget.imageUrl,
-            widget.title,
+            widget.post.photos!.first,
+            widget.post.title,
+            widget.post.organizer,
+            widget.post.datePublished,
+            widget.post.startTime,
+            widget.post.endTime,
           ),
         ),
       ),
     );
   }
 
-  Widget PostCard(imageUrl, title) {
+  Widget PostCard(imageUrl, title, organizer, date, startTime, endTime) {
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     Color hintColor = Theme.of(context).hintColor;
-
+    Color primaryColor = Theme.of(context).primaryColor;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -104,28 +119,89 @@ class _PostCardState extends State<PostCard> {
                       ),
                     ),
                   ),
-                  Positioned(
-                    right: 0,
-                    top: 20,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: Dimensions.width5 * 4,
-                        vertical: Dimensions.height5,
-                      ),
-                      decoration: BoxDecoration(
-                        color: hintColor.withOpacity(.65),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          bottomLeft: Radius.circular(10),
-                        ),
-                      ),
-                      child: MediumText(
-                        color: Colors.white,
-                        size: 16,
-                        text: '麥當勞折價券',
-                      ),
-                    ),
-                  ),
+                  widget.post.reward != null
+                      ? Positioned(
+                          left: 0,
+                          top: Dimensions.height2 * 10,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Dimensions.width5 * 4,
+                              vertical: Dimensions.height5,
+                            ),
+                            decoration: BoxDecoration(
+                              color: hintColor.withOpacity(.65),
+                              borderRadius: const BorderRadius.only(
+                                topRight: Radius.circular(10),
+                                bottomRight: Radius.circular(10),
+                              ),
+                            ),
+                            child: MediumText(
+                              color: Colors.white,
+                              size: 16,
+                              text: widget.post.reward!,
+                            ),
+                          ),
+                        )
+                      : Container(),
+                  widget.isOrganizer
+                      ? Positioned(
+                          right: 0,
+                          top: Dimensions.height2 * 7,
+                          child: CupertinoButton(
+                            padding: EdgeInsets.all(0),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: Dimensions.width5 * 4,
+                                vertical: Dimensions.height5,
+                              ),
+                              decoration: BoxDecoration(
+                                color: primaryColor.withOpacity(1),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  const MediumText(
+                                    color: Colors.white,
+                                    size: 16,
+                                    text: '編輯',
+                                  ),
+                                  SizedBox(width: Dimensions.width5),
+                                  Icon(
+                                    Icons.edit,
+                                    color: onSecondary,
+                                    size: 16,
+                                  )
+                                ],
+                              ),
+                            ),
+                            onPressed: () {
+                              final AddPostPageBloc bloc = AddPostPageBloc();
+                              Provider.of<AddPostPageBloc>(context,
+                                      listen: false)
+                                  .updateCart(widget.post);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return AddPostPage(
+                                      backToHome: () {
+                                        Navigator.pop(context);
+                                        globals.globalManagePage!.currentState!.updatePost(widget.post.postId);
+                                      },
+                                      user: widget.user,
+                                      isEdit: widget.isOrganizer,
+                                      bloc: bloc,
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ),
+                        )
+                      : Container()
                 ],
               ),
             );
@@ -151,7 +227,7 @@ class _PostCardState extends State<PostCard> {
                   Container(
                     width: Dimensions.screenWidth * 0.55,
                     child: Text(
-                      widget.title,
+                      title,
                       style: TextStyle(
                         color: onSecondary,
                         fontSize: Dimensions.height2 * 8,
@@ -163,7 +239,7 @@ class _PostCardState extends State<PostCard> {
                   Container(
                     width: Dimensions.screenWidth * 0.55,
                     child: Text(
-                      widget.organizer,
+                      organizer,
                       style: TextStyle(
                         color: hintColor,
                         fontSize: Dimensions.height2 * 7,
@@ -181,7 +257,7 @@ class _PostCardState extends State<PostCard> {
                 Container(
                   width: Dimensions.screenWidth * 0.3,
                   child: Text(
-                    '11月5日(三)',
+                    formatTimestamp(date),
                     style: TextStyle(
                       color: onSecondary,
                       fontSize: Dimensions.height2 * 7,
@@ -191,7 +267,7 @@ class _PostCardState extends State<PostCard> {
                 ),
                 SizedBox(height: Dimensions.height5 * 2),
                 Text(
-                  '12:00-20:00',
+                  '$startTime-$endTime',
                   style: TextStyle(
                     color: onSecondary,
                     fontSize: Dimensions.height2 * 7,

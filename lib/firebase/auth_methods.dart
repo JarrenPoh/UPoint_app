@@ -128,10 +128,6 @@ class AuthMethods with ChangeNotifier {
 
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(oauthCredential);
-      print(userCredential.user!.uid);
-      print(userCredential.user!.displayName);
-      print(userCredential.user!.photoURL);
-      print(userCredential.user!);
       //上傳用戶註冊資料
       res = await FirestoreMethods().signUpUser(
         userCredential.user!.email,
@@ -162,16 +158,13 @@ class AuthMethods with ChangeNotifier {
       // Once signed in, return the UserCredential
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
-      print(userCredential.user!.uid);
-      print(userCredential.user!.displayName);
-      print(userCredential.user!.photoURL);
-      print(userCredential.user!);
       //上傳用戶註冊資料
       res = await FirestoreMethods().signUpUser(
         userCredential.user!.email,
         FirebaseAuth.instance.currentUser!,
       );
-    } catch (e) {
+    } on PlatformException catch (e) {
+      res = e.toString();
       print(e);
       res = e.toString();
     }

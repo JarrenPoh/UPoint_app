@@ -34,6 +34,7 @@ class _SearchPageState extends State<SearchPage>
   @override
   void initState() {
     super.initState();
+    print('---------------initstate---------------');
   }
 
   void searchBook(String query) {
@@ -107,10 +108,10 @@ class _SearchPageState extends State<SearchPage>
                         horizontal: Dimensions.width5 * 2,
                       ),
                       child: PostCard(
-                        imageUrl: model.photos![index],
-                        organizer: model.organizer!,
-                        title: model.title!,
+                        post: model,
+                        user: null,
                         hero: "search${model.title}",
+                        isOrganizer: false,
                       ),
                     );
                   }),

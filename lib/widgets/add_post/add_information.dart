@@ -8,15 +8,18 @@ import 'package:upoint/models/post_model.dart';
 import 'package:upoint/widgets/custom_date_picker.dart';
 import 'package:upoint/widgets/edit_choose.dart';
 import 'package:upoint/widgets/edit_textfield.dart';
-import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/models/user_model.dart';
 import 'package:provider/provider.dart';
 
 class AddInformation extends StatefulWidget {
   final AddPostPageBloc bloc;
+  final User? user;
+  final bool isEdit;
   const AddInformation({
     super.key,
     required this.bloc,
+    required this.user,
+    required this.isEdit,
   });
 
   @override
@@ -26,18 +29,48 @@ class AddInformation extends StatefulWidget {
 class _AddInformationState extends State<AddInformation>
     with AutomaticKeepAliveClientMixin {
   @override
+  void initState() {
+    super.initState();
+    if (widget.isEdit) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        PostModel cart =
+            Provider.of<AddPostPageBloc>(context, listen: false).cart;
+        widget.bloc.dateValueNotifier.ChooseModelChange(
+          ChooseModel(
+            chose: formatDate(cart.date.toDate(), true),
+            isChose: true, //沒用
+            initChose: 0, //沒用
+          ),
+        );
+        widget.bloc.startTimeValueNotifier.ChooseModelChange(
+          ChooseModel(
+            chose: cart.startTime!,
+            isChose: true, //沒用
+            initChose: 0, //沒用
+          ),
+        );
+        widget.bloc.endTimeValueNotifier.ChooseModelChange(
+          ChooseModel(
+            chose: cart.endTime!,
+            isChose: true, //沒用
+            initChose: 0, //沒用
+          ),
+        );
+        widget.bloc.titleController.text = cart.title!;
+        widget.bloc.contentController.text = cart.content!;
+      });
+    }
+  }
+
+  @override
   final bool wantKeepAlive = true;
   List widgets = [];
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    User? user;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      user = Provider.of<AuthMethods>(context, listen: false).user;
-    });
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
-    if (user != null) {
-      widget.bloc.organizerController.text = user?.username ?? "";
+    if (widget.user != null) {
+      widget.bloc.organizerController.text = widget.user?.username ?? "";
     }
     widgets = [
       //主辦單位

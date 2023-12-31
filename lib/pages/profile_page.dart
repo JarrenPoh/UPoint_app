@@ -13,7 +13,10 @@ class ProfilePage extends StatefulWidget {
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfilePageState extends State<ProfilePage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  final bool wantKeepAlive = true;
   User? _user;
   late StreamSubscription<User?> _authSubscription;
   void listenToAuthChanges() {
@@ -43,7 +46,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    print('user: ${_user}');
+    super.build(context);
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     return Scaffold(
       body: Center(
