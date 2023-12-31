@@ -1,13 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:upoint/bloc/add_post_page_bloc.dart';
 import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/navigation_container.dart';
 import 'package:upoint/widgets/custom_dialog.dart';
 import 'package:upoint/widgets/login/reset_password.dart';
-import 'package:provider/provider.dart';
 
 class LoginPanel extends StatefulWidget {
   final Function() onTap;
@@ -98,19 +96,9 @@ class _LoginPanelState extends State<LoginPanel> {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (context) => MultiProvider(
-              providers: [
-                ChangeNotifierProvider(
-                  create: (context) => AddPostPageBloc(),
-                ),
-                ChangeNotifierProvider(
-                  create: (context) => AuthMethods(),
-                ),
-              ],
-              child: NavigationContainer(
-                uri: widget.uri,
-                isOrganizer: isOrganizer,
-              ),
+            builder: (context) => NavigationContainer(
+              uri: widget.uri,
+              isOrganizer: isOrganizer,
             ),
           ),
           (route) => false,
@@ -160,6 +148,7 @@ class _LoginPanelState extends State<LoginPanel> {
     Color hintColor = Theme.of(context).hintColor;
     Color primary = Theme.of(context).colorScheme.primary;
     Color onPrimary = Theme.of(context).colorScheme.onPrimary;
+    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     return Container(
       height: MediaQuery.of(context).size.height,
       child: Stack(
@@ -288,29 +277,32 @@ class _LoginPanelState extends State<LoginPanel> {
                               ),
                             ),
                           ),
-                          SizedBox(width: Dimensions.width5 * 5),
-                          GestureDetector(
-                            onTap: () async {
-                              String res;
-                              setState(() {
-                                isLoading = true;
-                              });
-                              res = await AuthMethods().signInWithApple();
-                              signIn(res);
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(20),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey.shade200),
-                                borderRadius: BorderRadius.circular(16),
-                                color: Colors.grey[100],
-                              ),
-                              child: Image.asset(
-                                "assets/apple.png",
-                                height: Dimensions.height5 * 6,
-                              ),
-                            ),
-                          ),
+                          SizedBox(width: isIOS ? Dimensions.width5 * 5 : 0),
+                          isIOS
+                              ? GestureDetector(
+                                  onTap: () async {
+                                    String res;
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+                                    res = await AuthMethods().signInWithApple();
+                                    signIn(res);
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.all(20),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Colors.grey.shade200),
+                                      borderRadius: BorderRadius.circular(16),
+                                      color: Colors.grey[100],
+                                    ),
+                                    child: Image.asset(
+                                      "assets/apple.png",
+                                      height: Dimensions.height5 * 6,
+                                    ),
+                                  ),
+                                )
+                              : Container()
                         ],
                       ),
                       SizedBox(height: Dimensions.height5 * 10),

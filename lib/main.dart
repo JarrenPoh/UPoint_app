@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:upoint/bloc/add_post_page_bloc.dart';
 import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/navigation_container.dart';
@@ -13,10 +14,19 @@ import 'package:provider/provider.dart';
 late List<CameraDescription> _cameras;
 
 Future<void> main() async {
+  await initializeDateFormatting('zh', null);
   WidgetsFlutterBinding.ensureInitialized();
   _cameras = await availableCameras();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AddPostPageBloc()),
+        ChangeNotifierProvider(create: (context) => AuthMethods()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -28,29 +38,21 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: lightTheme,
       darkTheme: darkTheme,
-      home: MultiProvider(
-          providers: [
-            ChangeNotifierProvider(
-              create: (context) => AddPostPageBloc(),
-            ),
-            ChangeNotifierProvider(
-              create: (context) => AuthMethods(),
-            ),
-          ],
-          child: Builder(builder: (context) {
-            bool isOrganizer = false;
-            if (FirebaseAuth.instance.currentUser != null) {
-              String email = FirebaseAuth.instance.currentUser!.email!;
-              if (email == "jjpohhh@gmail.com") {
-                isOrganizer = true;
-              }
+      home: Builder(
+        builder: (context) {
+          bool isOrganizer = false;
+          if (FirebaseAuth.instance.currentUser != null) {
+            String email = FirebaseAuth.instance.currentUser!.email!;
+            if (email == "jjpohhh@gmail.com") {
+              isOrganizer = true;
             }
-            return NavigationContainer(
-              uri: null,
-              isOrganizer: isOrganizer,
-            );
-          })
-          ),
+          }
+          return NavigationContainer(
+            uri: null,
+            isOrganizer: isOrganizer,
+          );
+        },
+      ),
     );
   }
 }
