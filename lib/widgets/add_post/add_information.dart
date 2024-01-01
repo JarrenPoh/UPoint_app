@@ -4,21 +4,21 @@ import 'package:upoint/bloc/add_post_page_bloc.dart';
 import 'package:upoint/globals/date_time_transfer.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
+import 'package:upoint/models/organizer_model.dart';
 import 'package:upoint/models/post_model.dart';
 import 'package:upoint/widgets/custom_date_picker.dart';
 import 'package:upoint/widgets/edit_choose.dart';
 import 'package:upoint/widgets/edit_textfield.dart';
-import 'package:upoint/models/user_model.dart';
 import 'package:provider/provider.dart';
 
 class AddInformation extends StatefulWidget {
   final AddPostPageBloc bloc;
-  final User? user;
+  final OrganModel? organizer;
   final bool isEdit;
   const AddInformation({
     super.key,
     required this.bloc,
-    required this.user,
+    required this.organizer,
     required this.isEdit,
   });
 
@@ -69,8 +69,8 @@ class _AddInformationState extends State<AddInformation>
   Widget build(BuildContext context) {
     super.build(context);
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
-    if (widget.user != null) {
-      widget.bloc.organizerController.text = widget.user?.username ?? "";
+    if (widget.organizer != null) {
+      widget.bloc.organizerController.text = widget.organizer?.organizerName ?? "";
     }
     widgets = [
       //主辦單位

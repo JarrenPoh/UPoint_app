@@ -3,9 +3,9 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:upoint/firebase/storage_methods.dart';
+import 'package:upoint/models/organizer_model.dart';
 import 'package:upoint/models/post_model.dart';
 import 'package:upoint/models/user_model.dart' as model;
-import 'package:upoint/models/user_model.dart';
 import 'package:uuid/uuid.dart';
 
 class FirestoreMethods {
@@ -34,7 +34,7 @@ class FirestoreMethods {
   }
 
   //上傳貼文
-  Future<String> uploadPost(PostModel post, User user) async {
+  Future<String> uploadPost(PostModel post, OrganModel organizer) async {
     String res = "some error occur";
     String? photoUrl;
     Uint8List? file;
@@ -46,7 +46,7 @@ class FirestoreMethods {
       post.photos!.first = photoUrl;
       post.postId = postId;
       post.datePublished = DateTime.now();
-      post.uid = user.uuid;
+      post.no = organizer.uid;
       await _firestore.collection('posts').doc(postId).set(post.toJson());
       res = 'success';
     } catch (err) {
@@ -57,10 +57,7 @@ class FirestoreMethods {
 
   //
   //更新貼文
-  Future<String> updatePost(
-    PostModel post,
-    User user,
-  ) async {
+  Future<String> updatePost(PostModel post) async {
     String res = "some error occur";
     String? photoUrl;
     Uint8List? file;

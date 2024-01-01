@@ -88,13 +88,13 @@ class _NavigationContainerState extends State<NavigationContainer>
     return Scaffold(
       backgroundColor: scaffoldBackgroundColor,
       body: FutureBuilder(
-          future: userAccountManager.getUserDetails(),
+          future: userAccountManager.getUserDetails(widget.isOrganizer),
           builder: (context, snapshot) {
             if (widget.isOrganizer) {
               _pages = [
                 ManagePage(
                   searchTapped: searchTapped,
-                  user: userAccountManager.user,
+                  organizer: userAccountManager.organizer,
                 ),
                 AddPostPage(
                   backToHome: () {
@@ -103,7 +103,7 @@ class _NavigationContainerState extends State<NavigationContainer>
                   },
                   isEdit: false,
                   // key: _addPostPageKey,
-                  user: userAccountManager.user,
+                  organizer: userAccountManager.organizer,
                   bloc: bloc,
                 ),
                 ProfilePage(),

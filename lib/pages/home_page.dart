@@ -170,11 +170,11 @@ class _HomePageState extends State<HomePage>
                         children: [
                           ActivityBody(
                             index: 0,
-                            bloc: _homePageBloc.activityBodyBloc,
+                            bloc: _homePageBloc,
                           ),
                           RewardBody(
                             index: 1,
-                            bloc: _homePageBloc.shopBodyBloc,
+                            bloc: _homePageBloc,
                           ),
                         ],
                       ),

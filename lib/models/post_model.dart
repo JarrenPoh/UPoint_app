@@ -11,7 +11,7 @@ class PostModel {
   String? reward;
   String? link;
   String? postId;
-  String? uid;
+  String? no;
   var datePublished;
 
   PostModel({
@@ -26,7 +26,7 @@ class PostModel {
     this.link,
     this.postId,
     this.datePublished,
-    this.uid,
+    this.no,
   });
 
   static Map toMap(PostModel cart) {
@@ -42,7 +42,7 @@ class PostModel {
       "link": cart.link,
       "postId": cart.postId,
       "datePublished": cart.datePublished,
-      "uid":cart.uid,
+      "no":cart.no,
     };
   }
 
@@ -61,7 +61,7 @@ class PostModel {
       link: snapshot['link'],
       postId: snapshot['postId'],
       datePublished: snapshot['datePublished'],
-      uid:snapshot['uid'],
+      no:snapshot['no'],
     );
   }
 
@@ -77,7 +77,7 @@ class PostModel {
         "link": link,
         "postId": postId,
         "datePublished": datePublished,
-        "uid":uid,
+        "no":no,
       };
 
   static PostModel fromMap(Map map) {
@@ -93,7 +93,7 @@ class PostModel {
       link: map['link'],
       postId: map['postId'],
       datePublished: map['datePublished'],
-      uid:map['uid'],
+      no:map['no'],
     );
   }
 }

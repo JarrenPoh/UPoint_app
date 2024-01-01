@@ -4,7 +4,7 @@ import 'package:upoint/bloc/add_post_page_bloc.dart';
 import 'package:upoint/globals/bold_text.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
-import 'package:upoint/models/user_model.dart';
+import 'package:upoint/models/organizer_model.dart';
 import 'package:upoint/global_key.dart' as globals;
 import 'package:upoint/widgets/add_post/add_information.dart';
 import 'package:upoint/widgets/add_post/add_other.dart';
@@ -14,14 +14,14 @@ import 'package:provider/provider.dart';
 
 class AddPostPage extends StatefulWidget {
   final Function() backToHome;
-  final User? user;
+  final OrganModel? organizer;
   final bool isEdit;
   final AddPostPageBloc bloc;
 
   AddPostPage({
     super.key,
     required this.backToHome,
-    required this.user,
+    required this.organizer,
     required this.isEdit,
     required this.bloc,
   });
@@ -46,7 +46,7 @@ class _AddPostPageState extends State<AddPostPage>
       ),
       AddInformation(
         bloc: widget.bloc,
-        user: widget.user,
+        organizer: widget.organizer,
         isEdit: widget.isEdit,
       ),
       AddOther(
@@ -199,7 +199,7 @@ class _AddPostPageState extends State<AddPostPage>
                                       if (widget.isEdit) {
                                         await widget.bloc.updatePost(
                                           context,
-                                          widget.user,
+                                          widget.organizer,
                                           Provider.of<AddPostPageBloc>(context,
                                                   listen: false)
                                               .cart,
@@ -207,7 +207,7 @@ class _AddPostPageState extends State<AddPostPage>
                                       } else {
                                         await widget.bloc.uploadPost(
                                           context,
-                                          widget.user,
+                                          widget.organizer,
                                           Provider.of<AddPostPageBloc>(context,
                                                   listen: false)
                                               .cart,

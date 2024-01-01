@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:insta_assets_picker/insta_assets_picker.dart';
 import 'package:upoint/firebase/firestore_methods.dart';
+import 'package:upoint/models/organizer_model.dart';
 import 'package:upoint/models/post_model.dart';
-import 'package:upoint/models/user_model.dart';
 import 'package:upoint/value_notifier/bool_value_notifier.dart';
 
 class AddPostPageBloc with ChangeNotifier {
@@ -140,8 +140,8 @@ class AddPostPageBloc with ChangeNotifier {
     if (input.datePublished != null) {
       cart.datePublished = input.datePublished;
     }
-    if (input.uid != null) {
-      cart.uid = input.uid;
+    if (input.no != null) {
+      cart.no = input.no;
     }
     notifyListeners();
   }
@@ -178,11 +178,11 @@ class AddPostPageBloc with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<String> uploadPost(context, User? _user, PostModel _cart) async {
+  Future<String> uploadPost(context, OrganModel? _organizer, PostModel _cart) async {
     String res = 'some error occur';
     try {
-      _cart.organizer = _user?.username;
-      res = await FirestoreMethods().uploadPost(_cart, _user!);
+      _cart.organizer = _organizer?.organizerName;
+      res = await FirestoreMethods().uploadPost(_cart, _organizer!);
       Get.snackbar(
         "上傳成功",
         "你的貼文已成功上傳",
@@ -205,10 +205,10 @@ class AddPostPageBloc with ChangeNotifier {
     return res;
   }
 
-  Future<String> updatePost(context, User? _user, PostModel _cart) async {
+  Future<String> updatePost(context, OrganModel? _organizer, PostModel _cart) async {
     String res = 'some error occur';
     try {
-      res = await FirestoreMethods().updatePost(_cart, _user!);
+      res = await FirestoreMethods().updatePost(_cart);
       Get.snackbar(
         "更新成功",
         "你的貼文已成功更新",

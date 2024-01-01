@@ -4,18 +4,17 @@ import 'package:upoint/bloc/manage_bloc.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/global_key.dart' as globals;
 import 'package:upoint/globals/medium_text.dart';
+import 'package:upoint/models/organizer_model.dart';
 import 'package:upoint/models/post_model.dart';
 import 'package:upoint/widgets/home/post_card.dart';
 
-import '../models/user_model.dart';
-
 class ManagePage extends StatefulWidget {
   final Function(int) searchTapped;
-  final User? user;
+  final OrganModel? organizer;
   ManagePage({
     Key? key,
     required this.searchTapped,
-    required this.user,
+    required this.organizer,
   }) : super(key: globals.globalManagePage ?? key);
 
   @override
@@ -30,7 +29,7 @@ class ManagePageState extends State<ManagePage>
   @override
   void initState() {
     super.initState();
-    _bloc = ManageBloc(widget.user!.uuid);
+    _bloc = ManageBloc(widget.organizer!.uid);
   }
 
   Future<void> updatePost(postId)async{
@@ -196,7 +195,7 @@ class ManagePageState extends State<ManagePage>
                               backgroundColor: onPrimary,
                               color: onSecondary,
                               onRefresh: () async {
-                                await _bloc.fetchPosts(widget.user!.uuid);
+                                await _bloc.fetchPosts(widget.organizer!.uid);
                               },
                               child: ListView(
                                 children: List.generate(
@@ -204,7 +203,7 @@ class ManagePageState extends State<ManagePage>
                                   (index) {
                                     return PostCard(
                                       post: postList[index],
-                                      user: widget.user!,
+                                      organizer: widget.organizer!,
                                       hero:
                                           "activity${postList[index].datePublished}",
                                       isOrganizer: true,

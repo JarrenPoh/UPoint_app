@@ -5,16 +5,16 @@ import 'package:upoint/bloc/add_post_page_bloc.dart';
 import 'package:upoint/globals/date_time_transfer.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
+import 'package:upoint/models/organizer_model.dart';
 import 'package:upoint/models/post_model.dart';
 import 'package:provider/provider.dart';
-import 'package:upoint/models/user_model.dart';
 import 'package:upoint/pages/activity_page.dart';
 import 'package:upoint/pages/add_post_page.dart';
 import 'package:upoint/global_key.dart' as globals;
 
 class PostCard extends StatefulWidget {
   final PostModel post;
-  final User? user;
+  final OrganModel? organizer;
   final String hero;
   final bool isOrganizer;
   const PostCard({
@@ -22,7 +22,7 @@ class PostCard extends StatefulWidget {
     required this.post,
     required this.hero,
     required this.isOrganizer,
-    required this.user,
+    required this.organizer,
   });
 
   @override
@@ -201,7 +201,7 @@ class _PostCardState extends State<PostCard> {
                                         globals.globalManagePage!.currentState!
                                             .updatePost(widget.post.postId);
                                       },
-                                      user: widget.user,
+                                      organizer: widget.organizer,
                                       isEdit: widget.isOrganizer,
                                       bloc: bloc,
                                     );

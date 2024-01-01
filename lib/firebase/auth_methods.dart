@@ -8,19 +8,31 @@ import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:upoint/firebase/firestore_methods.dart';
+import 'package:upoint/models/organizer_model.dart';
 import 'package:upoint/models/user_model.dart' as model;
 
 class AuthMethods with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   model.User? user;
-  Future<void> getUserDetails() async {
-    print('拿了user from firestore廣播給provider');
-    if (_auth.currentUser != null) {
-      User currentUser = _auth.currentUser!;
-      DocumentSnapshot snap =
-          await _firestore.collection('users').doc(currentUser.uid).get();
-      user = model.User.fromSnap(snap);
+  OrganModel? organizer;
+  Future<void> getUserDetails(isOrganizer) async {
+    if (isOrganizer) {
+      print('拿了organizer 資料');
+      if (_auth.currentUser != null) {
+        User currentUser = _auth.currentUser!;
+        DocumentSnapshot snap =
+            await _firestore.collection('organizers').doc(currentUser.uid).get();
+        organizer = OrganModel.fromSnap(snap);
+      }
+    } else {
+      print('拿了user from 資料');
+      if (_auth.currentUser != null) {
+        User currentUser = _auth.currentUser!;
+        DocumentSnapshot snap =
+            await _firestore.collection('users').doc(currentUser.uid).get();
+        user = model.User.fromSnap(snap);
+      }
     }
     // notifyListeners();
   }

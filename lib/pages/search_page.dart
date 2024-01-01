@@ -109,7 +109,7 @@ class _SearchPageState extends State<SearchPage>
                       ),
                       child: PostCard(
                         post: model,
-                        user: null,
+                        organizer: null,
                         hero: "search${model.title}",
                         isOrganizer: false,
                       ),
