@@ -112,10 +112,7 @@ class _RewardBodyState extends State<RewardBody>
                                           );
                                         }
                                       },
-                                      index == 0
-                                          ? null
-                                          : widget.bloc.postLengthFromReward[
-                                              rewardTagList[index - 1].id],
+                                      widget.bloc.postLengthFromReward,
                                     );
                                   },
                                 ),
@@ -159,6 +156,8 @@ class _RewardBodyState extends State<RewardBody>
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
+                                        SizedBox(
+                                            height: Dimensions.height5 * 16),
                                         MediumText(
                                           color: onSecondary,
                                           size: 16,
@@ -199,7 +198,7 @@ class _RewardBodyState extends State<RewardBody>
     List<RewardTagModel> rewardTagList,
     int index,
     Function() filterFunc,
-    ValueNotifier<int>? postLengthFromReward,
+    Map<String, ValueNotifier<int>> postLengthFromReward,
   ) {
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     Color hintColor = Theme.of(context).hintColor;
@@ -222,14 +221,16 @@ class _RewardBodyState extends State<RewardBody>
               text: index == 0 ? '全部' : rewardTagList[index - 1].name,
             ),
             SizedBox(width: Dimensions.width2),
-            postLengthFromReward == null
+            postLengthFromReward['all'] == null
                 ? MediumText(
                     color: hintColor,
                     size: 12,
                     text: '0',
                   )
                 : ValueListenableBuilder(
-                    valueListenable: postLengthFromReward,
+                    valueListenable: index == 0
+                        ? postLengthFromReward['all']!
+                        : postLengthFromReward[rewardTagList[index - 1].id]!,
                     builder: (
                       context,
                       dynamic value,

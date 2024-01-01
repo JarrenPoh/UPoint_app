@@ -14,10 +14,11 @@ Future CustomDatePicker(
     builder: (context) {
       Color onSecondary = Theme.of(context).colorScheme.onSecondary;
       Color color_onPrimary = Theme.of(context).colorScheme.onPrimary;
+      DateTime _now = DateTime.now();
       DateTime _dateTime = isChose
           ? parseDateString(
               chose, mode == CupertinoDatePickerMode.date ? true : false)
-          : DateTime.now();
+          : _now;
 
       return Container(
         height: MediaQuery.of(context).size.height * 0.3,
@@ -48,7 +49,7 @@ Future CustomDatePicker(
                   backgroundColor: color_onPrimary,
                   mode: mode,
                   minimumDate:
-                      mode == CupertinoDatePickerMode.date ? _dateTime : null,
+                      mode == CupertinoDatePickerMode.date ? _now : null,
                   onDateTimeChanged: (date) {
                     onDateTimeChanged(date);
                   },

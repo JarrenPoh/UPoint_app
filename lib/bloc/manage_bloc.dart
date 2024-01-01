@@ -14,9 +14,15 @@ class ManageBloc extends ChangeNotifier {
         .where('uid', isEqualTo: uid)
         .get();
     print('找了${fetchPost.docs.length}則貼文');
-    postListNotifier.addList(fetchPost.docs.toList());
+    List _list = fetchPost.docs.toList();
+    _list.sort((a, b) {
+      DateTime dateA = (a['date'] as Timestamp).toDate();
+      DateTime dateB = (b['date'] as Timestamp).toDate();
+      return dateB.compareTo(dateA); 
+    });
+    postListNotifier.addList(_list);
     postListNotifier.notifyListeners();
-    return fetchPost.docs.toList();
+    return _list;
   }
 
   Future<List> updatePost(postId) async {

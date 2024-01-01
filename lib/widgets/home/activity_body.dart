@@ -120,10 +120,7 @@ class _ActivityBodyState extends State<ActivityBody>
                                           );
                                         }
                                       },
-                                      index == 0
-                                          ? null
-                                          : widget.bloc.postLengthFromOrgan[
-                                              organList[index - 1].uid],
+                                      widget.bloc.postLengthFromOrgan,
                                     );
                                   },
                                 ),
@@ -206,7 +203,7 @@ class _ActivityBodyState extends State<ActivityBody>
     List<OrganModel> organList,
     int index,
     Function() filterFunc,
-    ValueNotifier<int>? postLengthFromOrgan,
+    Map<String, ValueNotifier<int>> postLengthFromOrgan,
   ) {
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     Color hintColor = Theme.of(context).hintColor;
@@ -229,20 +226,21 @@ class _ActivityBodyState extends State<ActivityBody>
               text: index == 0 ? '全部' : organList[index - 1].organizerName,
             ),
             SizedBox(width: Dimensions.width2),
-            postLengthFromOrgan == null
+            postLengthFromOrgan['all'] == null
                 ? MediumText(
                     color: hintColor,
                     size: 12,
                     text: '0',
                   )
                 : ValueListenableBuilder(
-                    valueListenable: postLengthFromOrgan,
+                    valueListenable: index == 0
+                        ? postLengthFromOrgan['all']!
+                        : postLengthFromOrgan[organList[index-1].uid]!,
                     builder: (
                       context,
                       dynamic value,
                       Widget? child,
                     ) {
-                      print('object');
                       return MediumText(
                         color: hintColor,
                         size: 12,

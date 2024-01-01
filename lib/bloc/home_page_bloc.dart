@@ -20,9 +20,13 @@ class HomePageBloc with ChangeNotifier {
     fetchPosts();
   }
   Future<List> fetchPosts() async {
+    DateTime now = DateTime.now();
+    DateTime today = DateTime(now.year, now.month, now.day);
     QuerySnapshot<Map<String, dynamic>> fetchPost = await FirebaseFirestore
         .instance
         .collection('posts')
+        .where('datePublished',
+            isGreaterThanOrEqualTo: Timestamp.fromDate(today))
         .orderBy('datePublished', descending: true)
         .get();
     print('找了${fetchPost.docs.length}則貼文');
@@ -81,6 +85,8 @@ class HomePageBloc with ChangeNotifier {
           .length;
       postLengthFromOrgan[tag]?.value = count;
     }
+    postLengthFromOrgan['all'] = ValueNotifier<int>(0);
+    postLengthFromOrgan['all']?.value = (originList.value as List).length;
     return fetchPost.docs.toList();
   }
 
@@ -110,6 +116,8 @@ class HomePageBloc with ChangeNotifier {
       print('count: $count');
       postLengthFromReward[tag]?.value = count;
     }
+    postLengthFromReward['all'] = ValueNotifier<int>(0);
+    postLengthFromReward['all']?.value = (originList.value as List).length;
     return fetchPost.docs.toList();
   }
 }
