@@ -4,7 +4,9 @@ import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/globals/scroll_things_provider.dart';
 import 'package:upoint/models/post_model.dart';
+import 'package:upoint/models/reward_tag_model.dart';
 import 'package:upoint/widgets/home/post_card.dart';
+import 'package:upoint/widgets/home/promo_card.dart';
 
 class RewardBody extends StatefulWidget {
   final int index;
@@ -35,7 +37,7 @@ class _RewardBodyState extends State<RewardBody>
       backgroundColor: onPrimary,
       color: onSecondary,
       onRefresh: () async {
-        print('onRefresh');
+        await widget.bloc.refreshBody(1);
       },
       child: CustomScrollView(
         controller: CustomScrollProviderData.of(context)
@@ -49,50 +51,81 @@ class _RewardBodyState extends State<RewardBody>
               color: scaffoldBackgroundColor,
               child: Column(
                 children: [
-                  // Padding(
-                  //   padding: EdgeInsets.symmetric(
-                  //     horizontal: Dimensions.width5 * 1.5,
-                  //   ),
-                  //   child: Column(
-                  //     children: [
-                  //       SizedBox(height: Dimensions.height5 * 2),
-                  //       Row(
-                  //         children: [
-                  //           Text(
-                  //             'Promo Today',
-                  //             style: TextStyle(
-                  //               color: onSecondary,
-                  //               fontSize: 24,
-                  //               fontWeight: FontWeight.bold,
-                  //             ),
-                  //           ),
-                  //         ],
-                  //       ),
-                  //       SizedBox(height: Dimensions.height5 * 3),
-                  //       Container(
-                  //         height: Dimensions.height5 * 45,
-                  //         child: GridView(
-                  //           gridDelegate:
-                  //               SliverGridDelegateWithFixedCrossAxisCount(
-                  //             crossAxisCount: 1,
-                  //             crossAxisSpacing: Dimensions.height5 * 4,
-                  //             mainAxisSpacing: Dimensions.width5 * 4,
-                  //             childAspectRatio: 1.6,
-                  //           ),
-                  //           shrinkWrap: true,
-                  //           scrollDirection: Axis.horizontal,
-                  //           children: List.generate(
-                  //               widget.bloc.promoImages.length, (index) {
-                  //             return PromoCard(
-                  //               imageUrl: widget.bloc.promoImages[index],
-                  //               aspectRatio: 2 / 3,
-                  //             );
-                  //           }),
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Dimensions.width5 * 1.5,
+                    ),
+                    child: Column(
+                      children: [
+                        SizedBox(height: Dimensions.height5 * 2),
+                        Row(
+                          children: [
+                            Text(
+                              'Promo Today',
+                              style: TextStyle(
+                                color: onSecondary,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: Dimensions.height5 * 3),
+                        ValueListenableBuilder(
+                          valueListenable: widget.bloc.rewardTagListNotifier,
+                          builder: (
+                            BuildContext context,
+                            dynamic value,
+                            Widget? child,
+                          ) {
+                            value as List;
+                            List<RewardTagModel> rewardTagList = [];
+                            value.forEach((e) {
+                              rewardTagList.add(
+                                RewardTagModel.fromSnap(e),
+                              );
+                            });
+                            return SizedBox(
+                              height: Dimensions.height5 * 55,
+                              child: GridView(
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: Dimensions.height5 * 4,
+                                  mainAxisSpacing: Dimensions.width5 * 4,
+                                  childAspectRatio: 1.3,
+                                ),
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                children: List.generate(
+                                  rewardTagList.length + 1,
+                                  (index) {
+                                    return reWardTagContainer(
+                                      rewardTagList,
+                                      index,
+                                      () {
+                                        if (index == 0) {
+                                          widget.bloc.filterOriginList(1);
+                                        } else {
+                                          widget.bloc.filterPostsByReward(
+                                            rewardTagList[index - 1].id,
+                                          );
+                                        }
+                                      },
+                                      index == 0
+                                          ? null
+                                          : widget.bloc.postLengthFromReward[
+                                              rewardTagList[index - 1].id],
+                                    );
+                                  },
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
                   SizedBox(height: Dimensions.height5 * 6),
                   Padding(
                     padding:
@@ -101,7 +134,7 @@ class _RewardBodyState extends State<RewardBody>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Restaurant',
+                          'Activity',
                           style: TextStyle(
                             color: onSecondary,
                             fontSize: 24,
@@ -110,7 +143,7 @@ class _RewardBodyState extends State<RewardBody>
                         ),
                         SizedBox(height: Dimensions.height5 * 1),
                         ValueListenableBuilder(
-                          valueListenable: widget.bloc.postListNotifier,
+                          valueListenable: widget.bloc.postList2Notifier,
                           builder: (BuildContext context, dynamic value,
                               Widget? child) {
                             value as List;
@@ -159,6 +192,60 @@ class _RewardBodyState extends State<RewardBody>
           ),
         ],
       ),
+    );
+  }
+
+  Widget reWardTagContainer(
+    List<RewardTagModel> rewardTagList,
+    int index,
+    Function() filterFunc,
+    ValueNotifier<int>? postLengthFromReward,
+  ) {
+    Color onSecondary = Theme.of(context).colorScheme.onSecondary;
+    Color hintColor = Theme.of(context).hintColor;
+    return Column(
+      children: [
+        PromoCard(
+          index: index,
+          imageUrl: index == 0 ? '' : rewardTagList[index - 1].pic,
+          aspectRatio: 1 / 1,
+          selectedNotifier: widget.bloc.selectedRewardTagNotifier,
+          filterFunc: filterFunc,
+        ),
+        SizedBox(height: Dimensions.height5),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            MediumText(
+              color: onSecondary,
+              size: 12,
+              text: index == 0 ? '全部' : rewardTagList[index - 1].name,
+            ),
+            SizedBox(width: Dimensions.width2),
+            postLengthFromReward == null
+                ? MediumText(
+                    color: hintColor,
+                    size: 12,
+                    text: '0',
+                  )
+                : ValueListenableBuilder(
+                    valueListenable: postLengthFromReward,
+                    builder: (
+                      context,
+                      dynamic value,
+                      Widget? child,
+                    ) {
+                      print('object');
+                      return MediumText(
+                        color: hintColor,
+                        size: 12,
+                        text: value.toString(),
+                      );
+                    },
+                  )
+          ],
+        ),
+      ],
     );
   }
 }

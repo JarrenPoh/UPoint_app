@@ -7,14 +7,18 @@ class HomePageBloc with ChangeNotifier {
   List tabList = ["找活動", "找獎勵"];
   late TabController tabController;
   ListValueNotifier postListNotifier = ListValueNotifier([]);
+  ListValueNotifier postList2Notifier = ListValueNotifier([]);
   ListValueNotifier originList = ListValueNotifier([]);
   ListValueNotifier organListNotifier = ListValueNotifier([]);
-  final ValueNotifier<int> selectedNotifier = ValueNotifier<int>(0);
+  ListValueNotifier rewardTagListNotifier = ListValueNotifier([]);
+  final ValueNotifier<int> selectedOrganizerNotifier = ValueNotifier<int>(0);
+  final ValueNotifier<int> selectedRewardTagNotifier = ValueNotifier<int>(0);
+  Map<String, ValueNotifier<int>> postLengthFromOrgan = {};
+  Map<String, ValueNotifier<int>> postLengthFromReward = {};
+
   HomePageBloc() {
     fetchPosts();
-    fetchOrganizers();
   }
-
   Future<List> fetchPosts() async {
     QuerySnapshot<Map<String, dynamic>> fetchPost = await FirebaseFirestore
         .instance
@@ -22,11 +26,36 @@ class HomePageBloc with ChangeNotifier {
         .orderBy('datePublished', descending: true)
         .get();
     print('找了${fetchPost.docs.length}則貼文');
-    postListNotifier.addList(fetchPost.docs.toList());
-    originList.addList(fetchPost.docs.toList());
+    postListNotifier.addList(fetchPost.docs.toList()); //activity_body用的
+    postList2Notifier.addList(fetchPost.docs.toList());
+    originList.addList(fetchPost.docs.toList()); //最願使數據要用的
     postListNotifier.notifyListeners();
+    fetchOrganizers();
+    fetchRewardTags();
     return fetchPost.docs.toList();
   }
+
+  void filterOriginList(int index) {
+    if (index == 0) {
+      postListNotifier.addList(originList.value);
+      postListNotifier.notifyListeners();
+    } else {
+      postList2Notifier.addList(originList.value);
+      postList2Notifier.notifyListeners();
+    }
+  }
+
+  Future<void> refreshBody(int index) async {
+    if (index == 0) {
+      await fetchPosts();
+      selectedOrganizerNotifier.value = 0;
+    } else {
+      await fetchPosts();
+      selectedRewardTagNotifier.value = 0;
+    }
+  }
+
+  /*  activity body  */
 
   void filterPostsByOrganizer(uid) {
     List _list = (originList.value as List)
@@ -36,24 +65,51 @@ class HomePageBloc with ChangeNotifier {
     postListNotifier.notifyListeners();
   }
 
-  void filterOriginList() {
-    postListNotifier.addList(originList.value);
-    postListNotifier.notifyListeners();
-  }
-
   Future<List> fetchOrganizers() async {
     QuerySnapshot<Map<String, dynamic>> fetchPost =
         await FirebaseFirestore.instance.collection('organizers').get();
     print('找了${fetchPost.docs.length}個活動方');
     organListNotifier.addList(fetchPost.docs.toList());
     organListNotifier.notifyListeners();
+
+    //計算每個主辦方多少活動
+    for (var doc in fetchPost.docs) {
+      String tag = doc['uid'];
+      postLengthFromOrgan[tag] = ValueNotifier<int>(0);
+      int count = (originList.value as List)
+          .where((post) => post['uid'] == doc.data()['uid'])
+          .length;
+      postLengthFromOrgan[tag]?.value = count;
+    }
     return fetchPost.docs.toList();
   }
 
-  // void createBlocs(int length) {
-  //   for (int index = 0; index < length; index++) {
-  //     final bloc = PostListBloc('homeBloc${index.toString()}'); // 創建一個新的 PostListBloc
-  //     postListBlocs.add(bloc); // 將新的 PostListBloc 添加到列表中
-  //   }
-  // }
+  /*  reward body  */
+  void filterPostsByReward(id) {
+    List _list = (originList.value as List)
+        .where((doc) => doc.data()['rewardTagId'] == id)
+        .toList();
+    postList2Notifier.addList(_list);
+    postList2Notifier.notifyListeners();
+  }
+
+  Future<List> fetchRewardTags() async {
+    QuerySnapshot<Map<String, dynamic>> fetchPost =
+        await FirebaseFirestore.instance.collection('rewardTags').get();
+    print('找了${fetchPost.docs.length}個獎勵標籤');
+    rewardTagListNotifier.addList(fetchPost.docs.toList());
+    rewardTagListNotifier.notifyListeners();
+
+    //計算每個獎勵標籤多少活動
+    for (var doc in fetchPost.docs) {
+      String tag = doc['id'];
+      postLengthFromReward[tag] = ValueNotifier<int>(0);
+      int count = (originList.value as List)
+          .where((post) => post['rewardTagId'] == doc.data()['id'])
+          .length;
+      print('count: $count');
+      postLengthFromReward[tag]?.value = count;
+    }
+    return fetchPost.docs.toList();
+  }
 }

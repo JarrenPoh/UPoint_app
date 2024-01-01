@@ -39,7 +39,7 @@ class _ActivityBodyState extends State<ActivityBody>
       backgroundColor: onPrimary,
       color: onSecondary,
       onRefresh: () async {
-        print('onRefresh');
+        await widget.bloc.refreshBody(0);
       },
       child: CustomScrollView(
         controller: CustomScrollProviderData.of(context)
@@ -113,13 +113,17 @@ class _ActivityBodyState extends State<ActivityBody>
                                       index,
                                       () {
                                         if (index == 0) {
-                                          widget.bloc.filterOriginList();
+                                          widget.bloc.filterOriginList(0);
                                         } else {
                                           widget.bloc.filterPostsByOrganizer(
                                             organList[index - 1].uid,
                                           );
                                         }
                                       },
+                                      index == 0
+                                          ? null
+                                          : widget.bloc.postLengthFromOrgan[
+                                              organList[index - 1].uid],
                                     );
                                   },
                                 ),
@@ -138,7 +142,7 @@ class _ActivityBodyState extends State<ActivityBody>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Activity Today',
+                          'Activity',
                           style: TextStyle(
                             color: onSecondary,
                             fontSize: 24,
@@ -159,17 +163,17 @@ class _ActivityBodyState extends State<ActivityBody>
                             });
                             return postList.isEmpty
                                 ? Column(
-                                  children: [
-                                    SizedBox(height: Dimensions.height5*16),
-                                    Center(
+                                    children: [
+                                      SizedBox(height: Dimensions.height5 * 16),
+                                      Center(
                                         child: MediumText(
                                           color: onSecondary,
                                           size: 16,
                                           text: "還沒有創建過貼文",
                                         ),
                                       ),
-                                  ],
-                                )
+                                    ],
+                                  )
                                 : Column(
                                     children: List.generate(
                                       postList.length,
@@ -202,6 +206,7 @@ class _ActivityBodyState extends State<ActivityBody>
     List<OrganModel> organList,
     int index,
     Function() filterFunc,
+    ValueNotifier<int>? postLengthFromOrgan,
   ) {
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     Color hintColor = Theme.of(context).hintColor;
@@ -211,7 +216,7 @@ class _ActivityBodyState extends State<ActivityBody>
           index: index,
           imageUrl: index == 0 ? '' : organList[index - 1].pic,
           aspectRatio: 1 / 1,
-          selectedNotifier: widget.bloc.selectedNotifier,
+          selectedNotifier: widget.bloc.selectedOrganizerNotifier,
           filterFunc: filterFunc,
         ),
         SizedBox(height: Dimensions.height5),
@@ -224,11 +229,27 @@ class _ActivityBodyState extends State<ActivityBody>
               text: index == 0 ? '全部' : organList[index - 1].organizerName,
             ),
             SizedBox(width: Dimensions.width2),
-            MediumText(
-              color: hintColor,
-              size: 12,
-              text: '3',
-            )
+            postLengthFromOrgan == null
+                ? MediumText(
+                    color: hintColor,
+                    size: 12,
+                    text: '0',
+                  )
+                : ValueListenableBuilder(
+                    valueListenable: postLengthFromOrgan,
+                    builder: (
+                      context,
+                      dynamic value,
+                      Widget? child,
+                    ) {
+                      print('object');
+                      return MediumText(
+                        color: hintColor,
+                        size: 12,
+                        text: value.toString(),
+                      );
+                    },
+                  )
           ],
         ),
       ],
