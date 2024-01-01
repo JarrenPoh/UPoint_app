@@ -46,7 +46,7 @@ class FirestoreMethods {
       post.photos!.first = photoUrl;
       post.postId = postId;
       post.datePublished = DateTime.now();
-      post.no = organizer.uid;
+      post.uid = organizer.uid;
       await _firestore.collection('posts').doc(postId).set(post.toJson());
       res = 'success';
     } catch (err) {

@@ -9,9 +9,10 @@ class PostModel {
   String? endTime;
   String? content;
   String? reward;
+  String? rewardTagId;
   String? link;
   String? postId;
-  String? no;
+  String? uid;
   var datePublished;
 
   PostModel({
@@ -23,10 +24,11 @@ class PostModel {
     this.endTime,
     this.content,
     this.reward,
+    this.rewardTagId,
     this.link,
     this.postId,
     this.datePublished,
-    this.no,
+    this.uid,
   });
 
   static Map toMap(PostModel cart) {
@@ -39,10 +41,11 @@ class PostModel {
       "endTime": cart.endTime,
       "content": cart.content,
       "reward": cart.reward,
+      "rewardTagId":cart.rewardTagId,
       "link": cart.link,
       "postId": cart.postId,
       "datePublished": cart.datePublished,
-      "no":cart.no,
+      "uid":cart.uid,
     };
   }
 
@@ -58,10 +61,11 @@ class PostModel {
       endTime: snapshot['endTime'],
       content: snapshot['content'],
       reward: snapshot['reward'],
+      rewardTagId: snapshot['rewardTagId'],
       link: snapshot['link'],
       postId: snapshot['postId'],
       datePublished: snapshot['datePublished'],
-      no:snapshot['no'],
+      uid:snapshot['uid'],
     );
   }
 
@@ -74,10 +78,11 @@ class PostModel {
         "endTime": endTime,
         "content": content,
         "reward": reward,
+        "rewardTagId":rewardTagId,
         "link": link,
         "postId": postId,
         "datePublished": datePublished,
-        "no":no,
+        "uid":uid,
       };
 
   static PostModel fromMap(Map map) {
@@ -90,10 +95,11 @@ class PostModel {
       endTime: map['endTime'],
       content: map['content'],
       reward: map['reward'],
+      rewardTagId:map['rewardTagId'],
       link: map['link'],
       postId: map['postId'],
       datePublished: map['datePublished'],
-      no:map['no'],
+      uid:map['uid'],
     );
   }
 }

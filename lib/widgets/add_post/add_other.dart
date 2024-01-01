@@ -3,6 +3,8 @@ import 'package:upoint/bloc/add_post_page_bloc.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/models/post_model.dart';
+import 'package:upoint/widgets/custom_picker.dart';
+import 'package:upoint/widgets/edit_choose.dart';
 import 'package:upoint/widgets/edit_textfield.dart';
 import 'package:provider/provider.dart';
 
@@ -65,6 +67,39 @@ class _AddOtherState extends State<AddOther>
         onChanged: () {
           Provider.of<AddPostPageBloc>(context, listen: false).updateCart(
             PostModel(reward: widget.bloc.rewardController.text),
+          );
+        },
+      ),
+      //rewardTagId
+      ValueListenableBuilder(
+        valueListenable: widget.bloc.rewardTagIdValueNotifier,
+        builder: (context, value, child) {
+          value as ChooseModel;
+          return EditChoose(
+            chose: value.chose,
+            isChose: value.isChose,
+            unit: widget.bloc.unitOfRewardTagId,
+            onPressed: () => CustomPicker(
+              context,
+              widget.bloc.rewardTagIdList,
+              value.initChose,
+              value.chose,
+              value.isChose,
+              (v) {
+                widget.bloc.rewardTagIdValueNotifier.ChooseModelChange(
+                  ChooseModel(
+                    chose: widget.bloc.rewardTagIdList[v].toString(),
+                    isChose: true,
+                    initChose: v,
+                  ),
+                );
+                Provider.of<AddPostPageBloc>(context, listen: false).updateCart(
+                  PostModel(
+                    rewardTagId: "00$v",
+                  ),
+                );
+              },
+            ),
           );
         },
       ),

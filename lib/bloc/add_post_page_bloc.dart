@@ -94,6 +94,7 @@ class AddPostPageBloc with ChangeNotifier {
   List<Map<String, dynamic>> others = [
     {"type": "IG連結", "bool": false},
     {"type": "獎勵", "bool": false},
+    {"type": "獎勵的類別", "bool": false}
   ];
   final BoolValueNotifier addOtherNotifier = BoolValueNotifier(true);
   //link
@@ -104,6 +105,18 @@ class AddPostPageBloc with ChangeNotifier {
   final TextEditingController rewardController = TextEditingController();
   FocusNode rewardFocusNode = FocusNode();
   bool isReward = false;
+  //rewardTagId
+  String unitOfRewardTagId = "類";
+  List rewardTagIdList = [
+    "無","麥當勞","中式便當","100元餐券","麵包餐盒","飲料"
+  ];
+  ChooseModelValueNotifier rewardTagIdValueNotifier = ChooseModelValueNotifier(
+    ChooseModel(
+      chose: "無",
+      isChose: false,
+      initChose: 0,
+    ),
+  );
 
   /*  addPost  */
   void updateCart(PostModel input) {
@@ -131,6 +144,9 @@ class AddPostPageBloc with ChangeNotifier {
     if (input.reward != null) {
       cart.reward = input.reward;
     }
+    if (input.rewardTagId != null) {
+      cart.rewardTagId = input.rewardTagId;
+    }
     if (input.link != null) {
       cart.link = input.link;
     }
@@ -140,45 +156,14 @@ class AddPostPageBloc with ChangeNotifier {
     if (input.datePublished != null) {
       cart.datePublished = input.datePublished;
     }
-    if (input.no != null) {
-      cart.no = input.no;
+    if (input.uid != null) {
+      cart.uid = input.uid;
     }
     notifyListeners();
   }
 
-  void cleanCart() {
-    PostModel _cart = PostModel();
-    assetPics = [];
-    dateValueNotifier.ChooseModelChange(
-      ChooseModel(
-        chose: "日期",
-        isChose: false,
-        initChose: 0,
-      ),
-    );
-    startTimeValueNotifier.ChooseModelChange(
-      ChooseModel(
-        chose: "開始",
-        isChose: false,
-        initChose: 0,
-      ),
-    );
-    endTimeValueNotifier.ChooseModelChange(
-      ChooseModel(
-        chose: "結束",
-        isChose: false,
-        initChose: 0,
-      ),
-    );
-    titleController.clear();
-    contentController.clear();
-    linkController.clear();
-    rewardController.clear();
-    checkInform(_cart);
-    notifyListeners();
-  }
-
-  Future<String> uploadPost(context, OrganModel? _organizer, PostModel _cart) async {
+  Future<String> uploadPost(
+      context, OrganModel? _organizer, PostModel _cart) async {
     String res = 'some error occur';
     try {
       _cart.organizer = _organizer?.organizerName;
@@ -205,7 +190,8 @@ class AddPostPageBloc with ChangeNotifier {
     return res;
   }
 
-  Future<String> updatePost(context, OrganModel? _organizer, PostModel _cart) async {
+  Future<String> updatePost(
+      context, OrganModel? _organizer, PostModel _cart) async {
     String res = 'some error occur';
     try {
       res = await FirestoreMethods().updatePost(_cart);
