@@ -158,7 +158,7 @@ class _LoginPanelState extends State<LoginPanel> {
       obscureText: obscureText,
       decoration: InputDecoration(
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10), // 圓角設定
+          borderRadius: BorderRadius.circular(10),
         ),
         prefixIcon: Icon(prefixIcon, color: primary),
         hintText: hintText,
