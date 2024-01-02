@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:upoint/globals/dimension.dart';
+import 'package:upoint/globals/user_simple_preference.dart';
 
 class SearchWidget extends StatefulWidget {
   final ValueChanged<String> onChanged;
   final String text;
   final String hintText;
   final bool autoFocus;
+  final TextEditingController controller;
+  final Function() setState;
   const SearchWidget({
     Key? key,
     required this.hintText,
     required this.onChanged,
     required this.text,
     required this.autoFocus,
+    required this.controller,
+    required this.setState,
   }) : super(key: key);
 
   @override
@@ -19,31 +24,16 @@ class SearchWidget extends StatefulWidget {
 }
 
 class _SearchWidgetState extends State<SearchWidget> {
-  final controller = TextEditingController();
-  String _text = '';
   @override
   void initState() {
     super.initState();
-    _text = widget.text;
-    controller.text = _text;
-    controller.addListener(() {
-      if (controller.text.trim() == '') {
-        setState(() {
-          _text = '';
-        });
-      } else {
-        setState(() {
-          _text = controller.text.trim();
-        });
-      }
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     const styleActive = TextStyle(color: Colors.black);
     const styleHint = TextStyle(color: Colors.black54);
-    final style = _text.isEmpty ? styleHint : styleActive;
+    final style = widget.text.isEmpty ? styleHint : styleActive;
     Color hintColor = Theme.of(context).hintColor;
 
     return Container(
@@ -58,8 +48,14 @@ class _SearchWidgetState extends State<SearchWidget> {
         color: Colors.white,
       ),
       child: TextField(
+        onSubmitted: (value) {
+          UserSimplePreference.setSearchPostHistory(
+            value,
+          );
+          widget.setState();
+        },
         autofocus: widget.autoFocus,
-        controller: controller,
+        controller: widget.controller,
         cursorColor: hintColor,
         decoration: InputDecoration(
           border: InputBorder.none,
@@ -68,7 +64,7 @@ class _SearchWidgetState extends State<SearchWidget> {
             color: Colors.grey,
             size: Dimensions.height5 * 5,
           ),
-          suffixIcon: _text.isNotEmpty
+          suffixIcon: widget.text.isNotEmpty
               ? GestureDetector(
                   child: Icon(
                     Icons.close,
@@ -76,7 +72,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                     size: Dimensions.height5 * 5,
                   ),
                   onTap: () {
-                    controller.clear();
+                    widget.controller.clear();
                     widget.onChanged('');
                     FocusScope.of(context).requestFocus();
                   },

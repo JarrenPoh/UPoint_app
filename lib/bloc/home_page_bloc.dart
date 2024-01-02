@@ -113,7 +113,6 @@ class HomePageBloc with ChangeNotifier {
       int count = (originList.value as List)
           .where((post) => post['rewardTagId'] == doc.data()['id'])
           .length;
-      print('count: $count');
       postLengthFromReward[tag]?.value = count;
     }
     postLengthFromReward['all'] = ValueNotifier<int>(0);

@@ -9,9 +9,11 @@ import 'package:upoint/global_key.dart' as globals;
 
 class HomePage extends StatefulWidget {
   final Function(int) searchTapped;
+  final HomePageBloc bloc;
   const HomePage({
     super.key,
     required this.searchTapped,
+    required this.bloc,
   });
 
   @override
@@ -22,13 +24,12 @@ class _HomePageState extends State<HomePage>
     with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   @override
   final bool wantKeepAlive = true;
-  final HomePageBloc _homePageBloc = HomePageBloc();
 
   @override
   void initState() {
     super.initState();
-    _homePageBloc.tabController = TabController(
-      length: _homePageBloc.tabList.length,
+    widget.bloc.tabController = TabController(
+      length: widget.bloc.tabList.length,
       vsync: this,
       initialIndex: 0,
     );
@@ -80,13 +81,13 @@ class _HomePageState extends State<HomePage>
                             ),
                             indicatorWeight: 4,
                             onTap: (value) {
-                              _homePageBloc.tabController.index = value;
+                              widget.bloc.tabController.index = value;
                             },
-                            controller: _homePageBloc.tabController,
+                            controller: widget.bloc.tabController,
                             tabs: List.generate(
-                              _homePageBloc.tabList.length,
+                              widget.bloc.tabList.length,
                               (index) => Tab(
-                                child: Text(_homePageBloc.tabList[index]),
+                                child: Text(widget.bloc.tabList[index]),
                               ),
                             ),
                           ),
@@ -163,18 +164,18 @@ class _HomePageState extends State<HomePage>
                 body: Builder(
                   builder: (context) {
                     return CustomScrollProvider(
-                      tabController: _homePageBloc.tabController,
+                      tabController: widget.bloc.tabController,
                       parent: PrimaryScrollController.of(context),
                       child: TabBarView(
-                        controller: _homePageBloc.tabController,
+                        controller: widget.bloc.tabController,
                         children: [
                           ActivityBody(
                             index: 0,
-                            bloc: _homePageBloc,
+                            bloc: widget.bloc,
                           ),
                           RewardBody(
                             index: 1,
-                            bloc: _homePageBloc,
+                            bloc: widget.bloc,
                           ),
                         ],
                       ),

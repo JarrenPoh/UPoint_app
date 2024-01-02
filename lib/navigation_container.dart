@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:upoint/bloc/add_post_page_bloc.dart';
+import 'package:upoint/bloc/home_page_bloc.dart';
 import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/pages/add_post_page.dart';
 import 'package:upoint/pages/home_page.dart';
@@ -29,6 +30,8 @@ class _NavigationContainerState extends State<NavigationContainer>
   List<Widget> _pages = [];
   PageController _pageController = PageController();
   AddPostPageBloc bloc = AddPostPageBloc();
+  final HomePageBloc _homePageBloc = HomePageBloc();
+
   int _selectedPageIndex = 0;
   void onIconTapped(int index) {
     _pageController.jumpToPage(index);
@@ -110,8 +113,8 @@ class _NavigationContainerState extends State<NavigationContainer>
               ];
             } else {
               _pages = [
-                HomePage(searchTapped: searchTapped),
-                SearchPage(),
+                HomePage(bloc: _homePageBloc, searchTapped: searchTapped),
+                SearchPage(bloc: _homePageBloc),
                 Container(color: Colors.blue),
                 Container(),
                 ProfilePage(),
