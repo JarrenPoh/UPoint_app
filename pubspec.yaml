@@ -55,6 +55,7 @@ dependencies:
   url_launcher: ^6.2.1
   camera: ^0.10.5+4
   intl: ^0.17.0
+  expandable_text: ^2.3.0
   overscroll_pop: 
     path: lib/overscroll_pop-main
 

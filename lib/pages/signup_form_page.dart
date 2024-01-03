@@ -71,6 +71,7 @@ class _SignUpFormPageState extends State<SignUpFormPage> {
         "studentID": controllers[2].text,
         "phoneNumber": controllers[3].text,
         "className": controllers[4].text,
+        "datePublished": DateTime.now(),
       },
     );
     return res;

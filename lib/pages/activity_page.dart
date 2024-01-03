@@ -8,6 +8,7 @@ import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/models/post_model.dart';
 import 'package:upoint/overscroll_pop-main/lib/overscroll_pop.dart';
 import 'package:upoint/pages/login_page.dart';
+import 'package:upoint/pages/sign_list_page.dart';
 import 'package:upoint/pages/signup_form_page.dart';
 import 'package:upoint/widgets/custom_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -369,15 +370,15 @@ class _ActivityPageState extends State<ActivityPage> {
                     ),
                     onPressed: widget.isOrganizer
                         ? () async {
-                            await CustomDialog(
+                            Navigator.push(
                               context,
-                              '無法報名',
-                              '管理系統帳號無法報名活動',
-                              onSecondary,
-                              onSecondary,
-                              () {
-                                Navigator.pop(context);
-                              },
+                              MaterialPageRoute(
+                                builder: ((context) {
+                                  return SignListPage(
+                                    post: widget.post,
+                                  );
+                                }),
+                              ),
                             );
                           }
                         : widget.isOver
@@ -421,12 +422,20 @@ class _ActivityPageState extends State<ActivityPage> {
                                 );
                               },
                     borderRadius: BorderRadius.circular(10),
-                    color: widget.isOver ? Colors.grey : hintColor,
+                    color: widget.isOrganizer
+                        ? hintColor
+                        : widget.isOver
+                            ? Colors.grey
+                            : hintColor,
                     child: Center(
                       child: MediumText(
                         color: Colors.white,
                         size: 18,
-                        text: widget.isOver ? "已結束" : "報名",
+                        text: widget.isOrganizer
+                            ? "查看報名名單"
+                            : widget.isOver
+                                ? "已結束"
+                                : "報名",
                       ),
                     ),
                   ),
