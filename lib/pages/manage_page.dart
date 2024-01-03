@@ -11,10 +11,12 @@ import 'package:upoint/widgets/home/post_card.dart';
 class ManagePage extends StatefulWidget {
   final Function(int) searchTapped;
   final OrganModel? organizer;
+  final ManageBloc bloc;
   ManagePage({
     Key? key,
     required this.searchTapped,
     required this.organizer,
+    required this.bloc,
   }) : super(key: globals.globalManagePage ?? key);
 
   @override

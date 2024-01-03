@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:upoint/bloc/add_post_page_bloc.dart';
 import 'package:upoint/bloc/home_page_bloc.dart';
+import 'package:upoint/bloc/manage_bloc.dart';
 import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/models/post_model.dart';
 import 'package:upoint/pages/activity_page.dart';
@@ -33,6 +34,7 @@ class _NavigationContainerState extends State<NavigationContainer>
   PageController _pageController = PageController();
   AddPostPageBloc bloc = AddPostPageBloc();
   final HomePageBloc _homePageBloc = HomePageBloc();
+  ManageBloc? _managePageBloc;
 
   int _selectedPageIndex = 0;
   void onIconTapped(int index) {
@@ -116,11 +118,19 @@ class _NavigationContainerState extends State<NavigationContainer>
       body: FutureBuilder(
           future: userAccountManager.getUserDetails(widget.isOrganizer),
           builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                  child: CircularProgressIndicator.adaptive(
+                backgroundColor: onSecondary,
+              ));
+            }
             if (widget.isOrganizer) {
+              _managePageBloc = ManageBloc(userAccountManager.organizer!.uid);
               _pages = [
                 ManagePage(
                   searchTapped: searchTapped,
                   organizer: userAccountManager.organizer,
+                  bloc: _managePageBloc!,
                 ),
                 AddPostPage(
                   backToHome: () {
@@ -135,6 +145,7 @@ class _NavigationContainerState extends State<NavigationContainer>
                 ProfilePage(
                   isOrganizer: widget.isOrganizer,
                   organizer: userAccountManager.organizer,
+                  valueListenable: _managePageBloc!.postListNotifier,
                 ),
               ];
             } else {
@@ -155,12 +166,6 @@ class _NavigationContainerState extends State<NavigationContainer>
                   user: userAccountManager.user,
                 ),
               ];
-            }
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                  child: CircularProgressIndicator.adaptive(
-                backgroundColor: onSecondary,
-              ));
             }
             return Scaffold(
               body: PageView.builder(

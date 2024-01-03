@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:upoint/firebase/auth_methods.dart';
@@ -10,18 +9,20 @@ import 'package:upoint/models/organizer_model.dart';
 import 'package:upoint/models/user_model.dart' as model;
 import 'package:upoint/pages/edit_profile_page.dart';
 import 'package:upoint/pages/login_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:upoint/pages/privacy_page.dart';
+import 'package:upoint/value_notifier/list_value_notifier.dart';
 
 class ProfilePage extends StatefulWidget {
   final bool isOrganizer;
   final model.User? user;
   final OrganModel? organizer;
+  final ListValueNotifier? valueListenable;
   const ProfilePage({
     super.key,
     required this.isOrganizer,
     this.organizer,
     this.user,
+    this.valueListenable,
   });
 
   @override
@@ -33,7 +34,7 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   final bool wantKeepAlive = true;
   model.User? _user;
-  late StreamSubscription<User?> _authSubscription;
+  OrganModel? _organizer;
   int countTime = 0;
   String username = 'xxx';
   String className = '尚未編輯';
@@ -47,10 +48,24 @@ class _ProfilePageState extends State<ProfilePage>
     if (widget.user != null) {
       _user = widget.user;
     }
+    if (widget.organizer != null) {
+      _organizer = widget.organizer;
+    }
     initInform();
   }
 
   initInform() {
+    if (_organizer != null) {
+      if (_organizer!.organizerName.isNotEmpty) {
+        username = _organizer!.organizerName;
+      }
+      if (_organizer!.phoneNumber.isNotEmpty) {
+        phoneNumber = _organizer!.phoneNumber;
+      }
+      if (_organizer!.email.isNotEmpty) {
+        email = _organizer!.email;
+      }
+    }
     if (_user != null) {
       if (_user!.signList != null && _user!.signList!.isNotEmpty) {
         countTime = _user!.signList!.length;
@@ -67,7 +82,7 @@ class _ProfilePageState extends State<ProfilePage>
       if (_user!.phoneNumber != null && _user!.phoneNumber!.isNotEmpty) {
         phoneNumber = _user!.phoneNumber!;
       }
-      if ( _user!.email.isNotEmpty) {
+      if (_user!.email.isNotEmpty) {
         email = _user!.email;
       }
     }
@@ -75,7 +90,6 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   void dispose() {
-    _authSubscription.cancel();
     super.dispose();
   }
 
@@ -155,16 +169,33 @@ class _ProfilePageState extends State<ProfilePage>
                     children: [
                       Row(
                         children: [
-                          scnContainer(0, "1,800"),
-                          SizedBox(width: 16),
                           scnContainer(
-                            1,
-                            '${countTime.toString()} 次',
+                            0,
+                            "1,800",
+                            widget.isOrganizer,
                           ),
+                          SizedBox(width: 16),
+                          !widget.isOrganizer
+                              ? scnContainer(
+                                  1,
+                                  '${countTime.toString()} 次',
+                                  widget.isOrganizer,
+                                )
+                              : ValueListenableBuilder(
+                                  valueListenable: widget.valueListenable!,
+                                  builder: (context, value, builder) {
+                                    value as List;
+                                    return scnContainer(
+                                      1,
+                                      '${value.length.toString()} 次',
+                                      widget.isOrganizer,
+                                    );
+                                  },
+                                ),
                         ],
                       ),
                       SizedBox(height: 16),
-                      widget.user != null
+                      widget.user != null || widget.organizer != null
                           ? Container(
                               decoration: BoxDecoration(
                                 color: appBarColor,
@@ -195,18 +226,21 @@ class _ProfilePageState extends State<ProfilePage>
                                               child: BoldText(
                                                 color: onSecondary,
                                                 size: 16,
-                                                text: "Hi~ $username/ 個人資料",
+                                                text: widget.isOrganizer
+                                                    ? "Hi~ $username / 單位資料"
+                                                    : "Hi~ $username / 個人資料",
                                               ),
                                             ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                editProfile();
-                                              },
-                                              child: Icon(
-                                                Icons.edit,
-                                                color: Colors.grey,
-                                              ),
-                                            )
+                                            if (!widget.isOrganizer)
+                                              GestureDetector(
+                                                onTap: () {
+                                                  editProfile();
+                                                },
+                                                child: Icon(
+                                                  Icons.edit,
+                                                  color: Colors.grey,
+                                                ),
+                                              )
                                           ],
                                         ),
                                       ),
@@ -216,8 +250,12 @@ class _ProfilePageState extends State<ProfilePage>
                                             CrossAxisAlignment.start,
                                         children: [
                                           profileRow("學校：中原大學"),
-                                          profileRow("系級：$className"),
-                                          profileRow("學號：$studentID"),
+                                          widget.isOrganizer
+                                              ? Container()
+                                              : profileRow("系級：$className"),
+                                          widget.isOrganizer
+                                              ? Container()
+                                              : profileRow("學號：$studentID"),
                                           profileRow("連絡電話：$phoneNumber"),
                                           profileRow("電子郵件：$email"),
                                         ],
@@ -229,7 +267,7 @@ class _ProfilePageState extends State<ProfilePage>
                             )
                           : Container(),
                       SizedBox(height: 16),
-                      widget.user != null
+                      widget.user != null || widget.organizer != null
                           ? Container(
                               // height: Dimensions.width2 * 85,
                               decoration: BoxDecoration(
@@ -264,11 +302,12 @@ class _ProfilePageState extends State<ProfilePage>
                                       Divider(thickness: 1, color: Colors.grey),
                                       Column(
                                         children: [
-                                          funcBtn(
-                                            () => editProfile(),
-                                            Icons.edit_note_outlined,
-                                            "編輯個人資料",
-                                          ),
+                                          if (!widget.isOrganizer)
+                                            funcBtn(
+                                              () => editProfile(),
+                                              Icons.edit_note_outlined,
+                                              "編輯個人資料",
+                                            ),
                                           funcBtn(
                                             () {
                                               Navigator.push(
@@ -318,7 +357,7 @@ class _ProfilePageState extends State<ProfilePage>
                             )
                           : Container(),
                       SizedBox(height: 16),
-                      widget.user == null
+                      widget.user == null || widget.organizer != null
                           ? Container(
                               // height: Dimensions.width2 * 85,
                               decoration: BoxDecoration(
@@ -457,7 +496,7 @@ class _ProfilePageState extends State<ProfilePage>
     );
   }
 
-  Widget scnContainer(int index, String str) {
+  Widget scnContainer(int index, String str, bool isOrganizer) {
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     Color appBarColor = Theme.of(context).appBarTheme.backgroundColor!;
     return Expanded(
@@ -482,7 +521,11 @@ class _ProfilePageState extends State<ProfilePage>
             MediumText(
               color: onSecondary,
               size: 14,
-              text: index == 0 ? "UPoints" : "活動紀錄",
+              text: index == 0
+                  ? "UPoints"
+                  : isOrganizer
+                      ? "舉辦活動"
+                      : "活動紀錄",
             ),
             SizedBox(height: 8),
             Row(
