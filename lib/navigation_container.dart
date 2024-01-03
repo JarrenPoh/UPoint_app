@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:upoint/bloc/add_post_page_bloc.dart';
 import 'package:upoint/bloc/home_page_bloc.dart';
 import 'package:upoint/firebase/auth_methods.dart';
+import 'package:upoint/models/post_model.dart';
+import 'package:upoint/pages/activity_page.dart';
 import 'package:upoint/pages/add_post_page.dart';
 import 'package:upoint/pages/home_page.dart';
 import 'package:upoint/pages/manage_page.dart';
@@ -60,11 +62,32 @@ class _NavigationContainerState extends State<NavigationContainer>
     if (widget.uri != null) {
       if (widget.uri!.pathSegments.isNotEmpty &&
           widget.uri!.pathSegments.first == 'profile') {
-        _selectedPageIndex = 4;
+        _selectedPageIndex = 0;
+      } else if (widget.uri!.pathSegments.isNotEmpty &&
+          widget.uri!.pathSegments.first == 'activity') {
+        _selectedPageIndex = 0;
+        findAndGoPost(widget.uri!.pathSegments[1]);
       }
     }
     _pageController = PageController(initialPage: _selectedPageIndex);
     WidgetsBinding.instance.addObserver(this);
+  }
+
+  findAndGoPost(postId) async {
+    PostModel _p = await _homePageBloc.fetchPostById(postId);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return ActivityPage(
+            post: _p,
+            hero: "activity${_p.datePublished.toString()}",
+            isOver: false,
+            isOrganizer: widget.isOrganizer,
+          );
+        },
+      ),
+    );
   }
 
   @override
@@ -113,8 +136,15 @@ class _NavigationContainerState extends State<NavigationContainer>
               ];
             } else {
               _pages = [
-                HomePage(bloc: _homePageBloc, searchTapped: searchTapped),
-                SearchPage(bloc: _homePageBloc),
+                HomePage(
+                  bloc: _homePageBloc,
+                  searchTapped: searchTapped,
+                  user: userAccountManager.user,
+                ),
+                SearchPage(
+                  bloc: _homePageBloc,
+                  user: userAccountManager.user,
+                ),
                 Container(color: Colors.blue),
                 Container(),
                 ProfilePage(),

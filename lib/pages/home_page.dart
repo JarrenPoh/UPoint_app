@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:upoint/bloc/home_page_bloc.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/scroll_things_provider.dart';
+import 'package:upoint/models/user_model.dart';
 import 'package:upoint/widgets/home/activity_body.dart';
 import 'package:upoint/widgets/home/reward_body.dart';
 import 'package:upoint/global_key.dart' as globals;
@@ -10,10 +11,12 @@ import 'package:upoint/global_key.dart' as globals;
 class HomePage extends StatefulWidget {
   final Function(int) searchTapped;
   final HomePageBloc bloc;
+  final User? user;
   const HomePage({
     super.key,
     required this.searchTapped,
     required this.bloc,
+    required this.user,
   });
 
   @override
@@ -172,10 +175,12 @@ class _HomePageState extends State<HomePage>
                           ActivityBody(
                             index: 0,
                             bloc: widget.bloc,
+                            user: widget.user,
                           ),
                           RewardBody(
                             index: 1,
                             bloc: widget.bloc,
+                            user: widget.user,
                           ),
                         ],
                       ),

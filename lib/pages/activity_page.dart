@@ -1,19 +1,29 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:upoint/globals/dimension.dart';
+import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/models/post_model.dart';
 import 'package:upoint/overscroll_pop-main/lib/overscroll_pop.dart';
+import 'package:upoint/pages/login_page.dart';
+import 'package:upoint/pages/signup_form_page.dart';
+import 'package:upoint/widgets/custom_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:upoint/globals/date_time_transfer.dart';
 
 class ActivityPage extends StatefulWidget {
   final PostModel post;
   final String hero;
+  final bool isOver;
+  final bool isOrganizer;
   const ActivityPage({
     super.key,
     required this.post,
     required this.hero,
+    required this.isOver,
+    required this.isOrganizer,
   });
 
   @override
@@ -105,9 +115,78 @@ class _ActivityPageState extends State<ActivityPage> {
                 background: Hero(
                   transitionOnUserGestures: true,
                   tag: widget.hero,
-                  child: Image.network(
-                    widget.post.photos!.first,
-                    fit: BoxFit.cover,
+                  child: CachedNetworkImage(
+                    imageUrl: widget.post.photos!.first,
+                    imageBuilder: ((context, imageProvider) {
+                      return Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          AspectRatio(
+                            aspectRatio: 16 / 9,
+                            child: Container(
+                              height: Dimensions.height5 * 35,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: imageProvider,
+                                ),
+                              ),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: widget.isOver
+                                      ? Colors.black.withOpacity(0.8)
+                                      : null,
+                                  borderRadius: BorderRadius.circular(20),
+                                  gradient: widget.isOver
+                                      ? null
+                                      : LinearGradient(
+                                          begin: Alignment.bottomRight,
+                                          stops: const [0.3, 0.9],
+                                          colors: [
+                                            Colors.black.withOpacity(.8),
+                                            Colors.black.withOpacity(.2),
+                                          ],
+                                        ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          widget.post.reward != null
+                              ? Positioned(
+                                  left: 0,
+                                  top: Dimensions.height2 * 10,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: Dimensions.width5 * 4,
+                                      vertical: Dimensions.height5,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: hintColor.withOpacity(.65),
+                                      borderRadius: const BorderRadius.only(
+                                        topRight: Radius.circular(10),
+                                        bottomRight: Radius.circular(10),
+                                      ),
+                                    ),
+                                    child: MediumText(
+                                      color: Colors.white,
+                                      size: 16,
+                                      text: widget.post.reward!,
+                                    ),
+                                  ),
+                                )
+                              : Container(),
+                        ],
+                      );
+                    }),
+                    placeholder: (context, url) => SizedBox(
+                      height: Dimensions.height5 * 3,
+                      width: Dimensions.height5 * 3,
+                      child: CircularProgressIndicator.adaptive(
+                        backgroundColor: Colors.grey,
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
                 ),
               ),
@@ -212,7 +291,7 @@ class _ActivityPageState extends State<ActivityPage> {
                               ],
                             ),
                             Text(
-                              'Today is a wonderful day that ChongYuan University hold a huge activity in luhoulo ,and welcome every students & teachers participate!Today is a wonderful day that ChongYuan University hold a huge activity in luhoulo ,and welcome every students & teachers participate!Today is a wonderful day that ChongYuan University hold a huge activity in luhoulo ,and welcome every students & teachers participate!Today is a wonderful day that ChongYuan University hold a huge activity in luhoulo ,and welcome every students & teachers participate!Today is a wonderful day that ChongYuan University hold a huge activity in luhoulo ,and welcome every students & teachers participate!Today is a wonderful day that ChongYuan University hold a huge activity in luhoulo ,and welcome every students & teachers participate!Today is a wonderful day that ChongYuan University hold a huge activity in luhoulo ,and welcome every students & teachers participate! ',
+                              widget.post.content!,
                               style: TextStyle(
                                 height: 1.5,
                                 color: primary,
@@ -220,70 +299,6 @@ class _ActivityPageState extends State<ActivityPage> {
                               ),
                             ),
                             SizedBox(height: Dimensions.height5 * 6),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: MaterialButton(
-                                    onPressed: () async {
-                                      const url =
-                                          'https://youtu.be/7x_XGlto9Bk?si=PfHB4WJggF8LdTO4';
-                                      if (await canLaunch(url)) {
-                                        await launch(url);
-                                      }
-                                    },
-                                    height: Dimensions.height5 * 10,
-                                    elevation: 0,
-                                    splashColor: hintColor,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    color: hintColor,
-                                    child: Center(
-                                      child: Text(
-                                        "前往報名連結",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: Dimensions.height2 * 9,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: Dimensions.width5 * 2),
-                                SizedBox(
-                                  width: Dimensions.width5 * 12,
-                                  child: MaterialButton(
-                                    onPressed: () async {
-                                      String postLink = 'sadasfdafafsf';
-                                      print('press');
-                                      try {
-                                        await Share.share(
-                                          'text' + postLink,
-                                          subject: 'subject',
-                                        );
-                                      } catch (e) {
-                                        print(e.toString());
-                                      }
-                                    },
-                                    height: Dimensions.height5 * 10,
-                                    elevation: 0,
-                                    splashColor: hintColor,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    color: hintColor,
-                                    child: Center(
-                                      child: Icon(
-                                        Icons.share,
-                                        color: Colors.white,
-                                        size: Dimensions.height5 * 4,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
                           ],
                         ),
                       ),
@@ -293,6 +308,132 @@ class _ActivityPageState extends State<ActivityPage> {
               ),
             ),
           ],
+        ),
+        bottomNavigationBar: SafeArea(
+          child: Container(
+            decoration: BoxDecoration(
+              color: scaffoldBackgroundColor,
+              // boxShadow: [
+              //   BoxShadow(
+              //     color: primary,
+              //     blurRadius: 5.0,
+              //     offset: Offset(0, -5),
+              //   ),
+              // ],
+            ),
+            padding: EdgeInsets.only(
+              bottom: 0,
+              left: Dimensions.width5 * 2,
+              right: Dimensions.width5 * 2,
+            ),
+            height: Dimensions.height5 * 12.5,
+            child: Row(
+              children: [
+                widget.post.link != null && widget.post.link!.isNotEmpty
+                    ? SizedBox(
+                        width: Dimensions.width5 * 50,
+                        child: CupertinoButton(
+                          padding: EdgeInsets.symmetric(
+                            vertical: Dimensions.height5 * 3,
+                          ),
+                          onPressed: widget.post.link == null
+                              ? () {}
+                              : () async {
+                                  final String url = widget.post.link!;
+                                  if (await canLaunch(url)) {
+                                    await launch(url);
+                                  }
+                                },
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.grey,
+                          child: Center(
+                            child: MediumText(
+                              color: Colors.white,
+                              size: 18,
+                              text: "查看更多報名資訊",
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(),
+                SizedBox(
+                  width:
+                      widget.post.link != null && widget.post.link!.isNotEmpty
+                          ? Dimensions.width5 * 2
+                          : 0,
+                ),
+                Expanded(
+                  child: CupertinoButton(
+                    padding: EdgeInsets.symmetric(
+                      vertical: Dimensions.height5 * 3,
+                    ),
+                    onPressed: widget.isOrganizer
+                        ? () async {
+                            await CustomDialog(
+                              context,
+                              '無法報名',
+                              '管理系統帳號無法報名活動',
+                              onSecondary,
+                              onSecondary,
+                              () {
+                                Navigator.pop(context);
+                              },
+                            );
+                          }
+                        : widget.isOver
+                            ? () {}
+                            : () async {
+                                if (auth.FirebaseAuth.instance.currentUser ==
+                                    null) {
+                                  await CustomDialog(
+                                    context,
+                                    '請先登入',
+                                    '您尚未登入帳戶',
+                                    onSecondary,
+                                    onSecondary,
+                                    () {
+                                      Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => LoginPage(
+                                            uri: Uri(pathSegments: [
+                                              'activity',
+                                              widget.post.postId!,
+                                            ]),
+                                          ),
+                                        ),
+                                        (Route<dynamic> route) =>
+                                            false, // 不保留任何旧路由
+                                      );
+                                    },
+                                  );
+                                }
+                                // ignore: use_build_context_synchronously
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return SignUpFormPage(
+                                        post: widget.post,
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
+                    borderRadius: BorderRadius.circular(10),
+                    color: widget.isOver ? Colors.grey : hintColor,
+                    child: Center(
+                      child: MediumText(
+                        color: Colors.white,
+                        size: 18,
+                        text: widget.isOver ? "已結束" : "報名",
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

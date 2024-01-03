@@ -7,14 +7,17 @@ import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/globals/user_simple_preference.dart';
 import 'package:upoint/models/post_model.dart';
+import 'package:upoint/models/user_model.dart';
 import 'package:upoint/widgets/home/post_card.dart';
 import 'package:upoint/widgets/search/search_widget.dart';
 
 class SearchPage extends StatefulWidget {
   final HomePageBloc bloc;
+  final User? user;
   const SearchPage({
     super.key,
     required this.bloc,
+    required this.user,
   });
 
   @override
@@ -176,6 +179,7 @@ class _SearchPageState extends State<SearchPage>
                               organizer: null,
                               hero: "search${model.title}",
                               isOrganizer: false,
+                              user: widget.user,
                             ),
                           );
                         }),

@@ -13,6 +13,7 @@ class PostModel {
   String? link;
   String? postId;
   String? uid;
+  List? signList;
   var datePublished;
 
   PostModel({
@@ -29,6 +30,7 @@ class PostModel {
     this.postId,
     this.datePublished,
     this.uid,
+    this.signList,
   });
 
   static Map toMap(PostModel cart) {
@@ -46,6 +48,7 @@ class PostModel {
       "postId": cart.postId,
       "datePublished": cart.datePublished,
       "uid":cart.uid,
+      "signList":cart.signList,
     };
   }
 
@@ -66,6 +69,7 @@ class PostModel {
       postId: snapshot['postId'],
       datePublished: snapshot['datePublished'],
       uid:snapshot['uid'],
+      signList:snapshot['signList'],
     );
   }
 

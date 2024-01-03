@@ -5,16 +5,19 @@ import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/globals/scroll_things_provider.dart';
 import 'package:upoint/models/post_model.dart';
 import 'package:upoint/models/reward_tag_model.dart';
+import 'package:upoint/models/user_model.dart';
 import 'package:upoint/widgets/home/post_card.dart';
 import 'package:upoint/widgets/home/promo_card.dart';
 
 class RewardBody extends StatefulWidget {
   final int index;
   final HomePageBloc bloc;
+  final User? user;
   const RewardBody({
     super.key,
     required this.index,
     required this.bloc,
+    required this.user,
   });
 
   @override
@@ -176,6 +179,7 @@ class _RewardBodyState extends State<RewardBody>
                                           hero:
                                               "reward${postList[index].datePublished.toString()}",
                                           isOrganizer: false,
+                                          user: widget.user,
                                         );
                                       },
                                     ),

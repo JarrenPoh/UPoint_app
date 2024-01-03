@@ -207,6 +207,7 @@ class ManagePageState extends State<ManagePage>
                                       hero:
                                           "activity${postList[index].datePublished}",
                                       isOrganizer: true,
+                                      user: null,
                                     );
                                   },
                                 ),

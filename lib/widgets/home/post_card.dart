@@ -8,6 +8,7 @@ import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/models/organizer_model.dart';
 import 'package:upoint/models/post_model.dart';
 import 'package:provider/provider.dart';
+import 'package:upoint/models/user_model.dart';
 import 'package:upoint/pages/activity_page.dart';
 import 'package:upoint/pages/add_post_page.dart';
 import 'package:upoint/global_key.dart' as globals;
@@ -17,12 +18,14 @@ class PostCard extends StatefulWidget {
   final OrganModel? organizer;
   final String hero;
   final bool isOrganizer;
+  final User? user;
   const PostCard({
     super.key,
     required this.post,
     required this.hero,
     required this.isOrganizer,
     required this.organizer,
+    required this.user,
   });
 
   @override
@@ -54,6 +57,8 @@ class _PostCardState extends State<PostCard> {
             builder: (context) => ActivityPage(
               post: widget.post,
               hero: widget.hero,
+              isOver: isOver,
+              isOrganizer: widget.isOrganizer,
             ),
           ),
         );

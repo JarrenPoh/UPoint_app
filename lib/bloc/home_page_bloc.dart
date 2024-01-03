@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:upoint/models/post_model.dart';
 import 'package:upoint/value_notifier/list_value_notifier.dart';
 
 class HomePageBloc with ChangeNotifier {
@@ -25,9 +26,9 @@ class HomePageBloc with ChangeNotifier {
     QuerySnapshot<Map<String, dynamic>> fetchPost = await FirebaseFirestore
         .instance
         .collection('posts')
-        .where('datePublished',
+        .where('date',
             isGreaterThanOrEqualTo: Timestamp.fromDate(today))
-        .orderBy('datePublished', descending: true)
+        .orderBy('date', descending: true)
         .get();
     print('找了${fetchPost.docs.length}則貼文');
     postListNotifier.addList(fetchPost.docs.toList()); //activity_body用的
@@ -37,6 +38,19 @@ class HomePageBloc with ChangeNotifier {
     fetchOrganizers();
     fetchRewardTags();
     return fetchPost.docs.toList();
+  }
+
+  Future<PostModel> fetchPostById(postId) async {
+    QuerySnapshot<Map<String, dynamic>> fetchPost =
+        await FirebaseFirestore.instance
+            .collection('posts')
+            .where(
+              'postId',
+              isEqualTo: postId,
+            )
+            .get();
+    PostModel _post = PostModel.fromSnap(fetchPost.docs.toList().first);
+    return _post;
   }
 
   void filterOriginList(int index) {

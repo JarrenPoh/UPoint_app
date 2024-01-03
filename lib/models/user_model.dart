@@ -5,6 +5,7 @@ class User {
   final String uuid;
   String? username;
   String? studentID;
+  String? className;
   String? phoneNumber;
   String? fcmToken;
 
@@ -13,6 +14,7 @@ class User {
     required this.uuid,
     this.phoneNumber,
     this.studentID,
+    this.className,
     this.username,
     this.fcmToken,
   });
@@ -22,6 +24,7 @@ class User {
         "uuid": uuid,
         "username": username,
         "studentID": studentID,
+        "className":className,
         "phoneNumber": phoneNumber,
         "fcmToken": fcmToken,
       };
@@ -34,6 +37,7 @@ class User {
       uuid: snapshot['uuid'],
       username: snapshot['username'],
       studentID: snapshot['studentID'],
+      className: snapshot['className'],
       phoneNumber: snapshot['phoneNumber'],
       fcmToken: snapshot['fcmToken'],
     );
