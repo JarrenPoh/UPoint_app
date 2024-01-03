@@ -3,9 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/models/post_model.dart';
+import 'package:upoint/models/user_model.dart';
 import 'package:upoint/overscroll_pop-main/lib/overscroll_pop.dart';
 import 'package:upoint/pages/login_page.dart';
 import 'package:upoint/pages/sign_list_page.dart';
@@ -13,6 +15,7 @@ import 'package:upoint/pages/signup_form_page.dart';
 import 'package:upoint/widgets/custom_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:upoint/globals/date_time_transfer.dart';
+import 'package:provider/provider.dart';
 
 class ActivityPage extends StatefulWidget {
   final PostModel post;
@@ -35,7 +38,8 @@ class _ActivityPageState extends State<ActivityPage> {
   @override
   Widget build(BuildContext context) {
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
-    Color scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
+    // Color scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
+    Color appBarColor = Theme.of(context).appBarTheme.backgroundColor!;
     Color primary = Theme.of(context).colorScheme.primary;
     Color primaryContainer = Theme.of(context).colorScheme.primaryContainer;
     Color hintColor = Theme.of(context).hintColor;
@@ -44,16 +48,16 @@ class _ActivityPageState extends State<ActivityPage> {
       scrollToPopOption: ScrollToPopOption.start,
       dragToPopDirection: DragToPopDirection.horizontal,
       child: Scaffold(
-        backgroundColor: scaffoldBackgroundColor,
+        backgroundColor: appBarColor,
         body: CustomScrollView(
           slivers: [
             SliverAppBar(
-              expandedHeight: Dimensions.screenHeight * 0.25,
+              expandedHeight: Dimensions.screenHeight * 0.24,
               elevation: 0,
               snap: true,
               floating: true,
               stretch: true,
-              backgroundColor: primaryContainer,
+              backgroundColor: appBarColor,
               leading: IconButton(
                 onPressed: () {
                   Navigator.pop(context);
@@ -65,7 +69,7 @@ class _ActivityPageState extends State<ActivityPage> {
                     borderRadius: BorderRadius.circular(
                       40,
                     ),
-                    color: primaryContainer,
+                    color: appBarColor,
                   ),
                   child: Align(
                     alignment: Alignment.center,
@@ -97,7 +101,7 @@ class _ActivityPageState extends State<ActivityPage> {
                       borderRadius: BorderRadius.circular(
                         40,
                       ),
-                      color: primaryContainer,
+                      color: appBarColor,
                     ),
                     child: Icon(
                       Icons.share,
@@ -120,14 +124,14 @@ class _ActivityPageState extends State<ActivityPage> {
                     imageUrl: widget.post.photos!.first,
                     imageBuilder: ((context, imageProvider) {
                       return Stack(
-                        alignment: Alignment.center,
+                        alignment: Alignment.topCenter,
                         children: [
                           AspectRatio(
-                            aspectRatio: 16 / 9,
+                            aspectRatio: 16 / 10,
                             child: Container(
                               height: Dimensions.height5 * 35,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
+                                borderRadius: BorderRadius.circular(0),
                                 image: DecorationImage(
                                   fit: BoxFit.cover,
                                   image: imageProvider,
@@ -138,7 +142,7 @@ class _ActivityPageState extends State<ActivityPage> {
                                   color: widget.isOver
                                       ? Colors.black.withOpacity(0.8)
                                       : null,
-                                  borderRadius: BorderRadius.circular(20),
+                                  borderRadius: BorderRadius.circular(0),
                                   gradient: widget.isOver
                                       ? null
                                       : LinearGradient(
@@ -196,7 +200,7 @@ class _ActivityPageState extends State<ActivityPage> {
                 child: Container(
                   height: Dimensions.height5 * 6,
                   decoration: BoxDecoration(
-                    color: scaffoldBackgroundColor,
+                    color: appBarColor,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(30),
                       topRight: Radius.circular(30),
@@ -225,7 +229,7 @@ class _ActivityPageState extends State<ActivityPage> {
                           horizontal: Dimensions.width5 * 4,
                           vertical: Dimensions.height5 * 6,
                         ),
-                        color: scaffoldBackgroundColor,
+                        color: appBarColor,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -313,7 +317,7 @@ class _ActivityPageState extends State<ActivityPage> {
         bottomNavigationBar: SafeArea(
           child: Container(
             decoration: BoxDecoration(
-              color: scaffoldBackgroundColor,
+              color: appBarColor,
               // boxShadow: [
               //   BoxShadow(
               //     color: primary,
@@ -414,9 +418,22 @@ class _ActivityPageState extends State<ActivityPage> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) {
-                                      return SignUpFormPage(
-                                        post: widget.post,
-                                      );
+                                      return FutureBuilder(
+                                          future: Provider.of<AuthMethods>(
+                                                  context,
+                                                  listen: false)
+                                              .getUserDetails(false),
+                                          builder: (context, snapshot) {
+                                            User _user =
+                                                Provider.of<AuthMethods>(
+                                                        context,
+                                                        listen: false)
+                                                    .user!;
+                                            return SignUpFormPage(
+                                              post: widget.post,
+                                              user: _user,
+                                            );
+                                          });
                                     },
                                   ),
                                 );

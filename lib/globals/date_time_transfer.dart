@@ -54,7 +54,7 @@ String relativeDateFormat(DateTime date) {
   num delta =
       DateTime.now().millisecondsSinceEpoch - date.millisecondsSinceEpoch;
   if (delta < 1 * ONE_MINUTE) {
-    num seconds = toSeconds(delta);
+    // num seconds = toSeconds(delta);
     return '剛剛';
   }
   if (delta < 60 * ONE_MINUTE) {

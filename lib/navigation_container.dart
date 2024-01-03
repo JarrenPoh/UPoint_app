@@ -132,7 +132,10 @@ class _NavigationContainerState extends State<NavigationContainer>
                   organizer: userAccountManager.organizer,
                   bloc: bloc,
                 ),
-                ProfilePage(),
+                ProfilePage(
+                  isOrganizer: widget.isOrganizer,
+                  organizer: userAccountManager.organizer,
+                ),
               ];
             } else {
               _pages = [
@@ -147,7 +150,10 @@ class _NavigationContainerState extends State<NavigationContainer>
                 ),
                 Container(color: Colors.blue),
                 Container(),
-                ProfilePage(),
+                ProfilePage(
+                  isOrganizer: widget.isOrganizer,
+                  user: userAccountManager.user,
+                ),
               ];
             }
             if (snapshot.connectionState == ConnectionState.waiting) {

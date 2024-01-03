@@ -21,8 +21,10 @@ class AuthMethods with ChangeNotifier {
       print('拿了organizer 資料');
       if (_auth.currentUser != null) {
         User currentUser = _auth.currentUser!;
-        DocumentSnapshot snap =
-            await _firestore.collection('organizers').doc(currentUser.uid).get();
+        DocumentSnapshot snap = await _firestore
+            .collection('organizers')
+            .doc(currentUser.uid)
+            .get();
         organizer = OrganModel.fromSnap(snap);
       }
     } else {
@@ -141,10 +143,16 @@ class AuthMethods with ChangeNotifier {
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(oauthCredential);
       //上傳用戶註冊資料
-      res = await FirestoreMethods().signUpUser(
-        userCredential.user!.email,
-        FirebaseAuth.instance.currentUser!,
-      );
+      final DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .get();
+      if (!userDoc.exists) {
+        res = await FirestoreMethods().signUpUser(
+          userCredential.user!.email,
+          FirebaseAuth.instance.currentUser!,
+        );
+      }
     } catch (e) {
       print(e);
       res = e.toString();
@@ -171,10 +179,16 @@ class AuthMethods with ChangeNotifier {
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
       //上傳用戶註冊資料
-      res = await FirestoreMethods().signUpUser(
-        userCredential.user!.email,
-        FirebaseAuth.instance.currentUser!,
-      );
+      final DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .get();
+      if (!userDoc.exists) {
+        res = await FirestoreMethods().signUpUser(
+          userCredential.user!.email,
+          FirebaseAuth.instance.currentUser!,
+        );
+      }
     } on PlatformException catch (e) {
       res = e.toString();
       print(e);

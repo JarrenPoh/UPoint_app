@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:upoint/firebase/auth_methods.dart';
-import 'package:provider/provider.dart';
 import 'package:upoint/firebase/firestore_methods.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
@@ -11,9 +9,11 @@ import 'package:get/get.dart';
 
 class SignUpFormPage extends StatefulWidget {
   final PostModel post;
+  final User user;
   const SignUpFormPage({
     super.key,
     required this.post,
+    required this.user,
   });
   @override
   State<SignUpFormPage> createState() => _SignUpFormPageState();
@@ -40,6 +40,19 @@ class _SignUpFormPageState extends State<SignUpFormPage> {
         });
       }
     }
+    List _inform = [];
+    _inform.addAll([
+      widget.user.email.endsWith('@privaterelay.appleid.com')
+          ? ''
+          : widget.user.email,
+      widget.user.username ?? '',
+      widget.user.studentID ?? '',
+      widget.user.phoneNumber ?? '',
+      widget.user.className ?? '',
+    ]);
+    for (var i = 0; i < controllers.length; i++) {
+      controllers[i].text = _inform[i] ?? '';
+    }
   }
 
   @override
@@ -62,16 +75,23 @@ class _SignUpFormPageState extends State<SignUpFormPage> {
     return 'success';
   }
 
-  Future<String> sent(postId) async {
+  Future<String> sent(PostModel post, User user) async {
+    DateTime _now = DateTime.now();
     String res = await FirestoreMethods().sentSignForm(
-      postId,
+      post.postId!,
       {
         "email": controllers[0].text,
         "name": controllers[1].text,
         "studentID": controllers[2].text,
         "phoneNumber": controllers[3].text,
         "className": controllers[4].text,
-        "datePublished": DateTime.now(),
+        "datePublished": _now,
+      },
+      user,
+      {
+        "postId": post.postId!,
+        "title": post.title,
+        "datePublished": _now,
       },
     );
     return res;
@@ -79,7 +99,6 @@ class _SignUpFormPageState extends State<SignUpFormPage> {
 
   @override
   Widget build(BuildContext context) {
-    final userAccountManager = Provider.of<AuthMethods>(context, listen: false);
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     Color scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
     Color hintColor = Theme.of(context).hintColor;
@@ -95,132 +114,116 @@ class _SignUpFormPageState extends State<SignUpFormPage> {
           text: '報名表單',
         ),
       ),
-      body: FutureBuilder(
-        future: userAccountManager.getUserDetails(false),
-        builder: (context, snapshot) {
-          User _user = userAccountManager.user!;
-          List _inform = [];
-          _inform.addAll([
-            _user.email.endsWith('@privaterelay.appleid.com')
-                ? ''
-                : _user.email,
-            _user.username ?? '',
-            _user.studentID ?? '',
-            _user.phoneNumber ?? '',
-            _user.className ?? '',
-          ]);
-          for (var i = 0; i < controllers.length; i++) {
-            controllers[i].text = _inform[i] ?? '';
-          }
-          return SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: Dimensions.width5 * 4),
-              child: Column(
-                children: [
-                  SizedBox(height: Dimensions.height5 * 5),
-                  titleContainer(),
-                  SizedBox(height: Dimensions.height5 * 7),
-                  Container(
-                    width: Dimensions.screenWidth,
-                    height: Dimensions.height5 * 6,
-                    decoration: BoxDecoration(
-                      color: hintColor,
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(10),
-                      ),
+      body: GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: Dimensions.width5 * 4),
+            child: Column(
+              children: [
+                SizedBox(height: Dimensions.height5 * 5),
+                titleContainer(),
+                SizedBox(height: Dimensions.height5 * 7),
+                Container(
+                  width: Dimensions.screenWidth,
+                  height: Dimensions.height5 * 6,
+                  decoration: BoxDecoration(
+                    color: hintColor,
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(10),
                     ),
                   ),
-                  Column(
-                    children: List.generate(
-                      _list.length,
-                      (index) => Column(
-                        children: [
-                          inputWidget(
-                            _list[index],
-                            controllers[index],
-                            emptyInputs[index],
-                            index,
-                          ),
-                          SizedBox(height: Dimensions.height5 * 4),
-                        ],
-                      ),
+                ),
+                Column(
+                  children: List.generate(
+                    _list.length,
+                    (index) => Column(
+                      children: [
+                        inputWidget(
+                          _list[index],
+                          controllers[index],
+                          emptyInputs[index],
+                          index,
+                        ),
+                        SizedBox(height: Dimensions.height5 * 4),
+                      ],
                     ),
                   ),
-                  SizedBox(height: Dimensions.height5 * 0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      CupertinoButton(
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: Dimensions.width5 * 4,
-                            vertical: Dimensions.height5 * 2,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.grey,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: MediumText(
-                            color: Colors.white,
-                            size: 16,
-                            text: '取消',
-                          ),
+                ),
+                SizedBox(height: Dimensions.height5 * 0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    CupertinoButton(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: Dimensions.width5 * 4,
+                          vertical: Dimensions.height5 * 2,
                         ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: MediumText(
+                          color: Colors.white,
+                          size: 16,
+                          text: '取消',
+                        ),
                       ),
-                      CupertinoButton(
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: Dimensions.width5 * 4,
-                            vertical: Dimensions.height5 * 2,
-                          ),
-                          decoration: BoxDecoration(
-                            color: hintColor,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: MediumText(
-                            color: Colors.white,
-                            size: 16,
-                            text: '送出',
-                          ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    CupertinoButton(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: Dimensions.width5 * 4,
+                          vertical: Dimensions.height5 * 2,
                         ),
-                        onPressed: () async {
-                          String res = check();
-                          if (res == 'success') {
-                            String result = await sent(widget.post.postId);
-                            if (result == 'success') {
-                              Get.snackbar(
-                                "報名成功",
-                                "請記得出席",
-                                snackPosition: SnackPosition.TOP,
-                                duration: const Duration(
-                                  seconds: 2,
-                                ),
-                              );
-                              Navigator.pop(context);
-                            } else {
-                              Get.snackbar(
-                                "報名失敗",
-                                "請聯繫官方回報問題拿獎勵",
-                                snackPosition: SnackPosition.TOP,
-                                duration: const Duration(
-                                  seconds: 2,
-                                ),
-                              );
-                            }
+                        decoration: BoxDecoration(
+                          color: hintColor,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: MediumText(
+                          color: Colors.white,
+                          size: 16,
+                          text: '送出',
+                        ),
+                      ),
+                      onPressed: () async {
+                        String res = check();
+                        if (res == 'success') {
+                          String result = await sent(widget.post, widget.user);
+                          if (result == 'success') {
+                            Get.snackbar(
+                              "報名成功",
+                              "請記得出席",
+                              snackPosition: SnackPosition.TOP,
+                              duration: const Duration(
+                                seconds: 2,
+                              ),
+                            );
+                            Navigator.pop(context);
+                          } else {
+                            Get.snackbar(
+                              "報名失敗",
+                              result,
+                              snackPosition: SnackPosition.TOP,
+                              duration: const Duration(
+                                seconds: 2,
+                              ),
+                            );
                           }
-                        },
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: Dimensions.height5 * 5),
-                ],
-              ),
+                        }
+                      },
+                    ),
+                  ],
+                ),
+                SizedBox(height: Dimensions.height5 * 5),
+              ],
             ),
-          );
-        },
+          ),
+        ),
       ),
     );
   }
@@ -277,6 +280,7 @@ class _SignUpFormPageState extends State<SignUpFormPage> {
               horizontal: Dimensions.width5 * 5,
             ),
             child: TextField(
+              onSubmitted: (null),
               controller: controller,
               style: TextStyle(color: onSecondary),
               cursorColor: hintColor,

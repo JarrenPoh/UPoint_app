@@ -8,6 +8,7 @@ class User {
   String? className;
   String? phoneNumber;
   String? fcmToken;
+  List? signList;
 
   User({
     required this.email,
@@ -17,6 +18,7 @@ class User {
     this.className,
     this.username,
     this.fcmToken,
+    this.signList,
   });
 
   Map<String, dynamic> toJson() => {
@@ -27,6 +29,7 @@ class User {
         "className":className,
         "phoneNumber": phoneNumber,
         "fcmToken": fcmToken,
+        "signList":signList,
       };
 
   static User fromSnap(DocumentSnapshot snap) {
@@ -40,6 +43,7 @@ class User {
       className: snapshot['className'],
       phoneNumber: snapshot['phoneNumber'],
       fcmToken: snapshot['fcmToken'],
+      signList:snapshot['signList'],
     );
   }
 }

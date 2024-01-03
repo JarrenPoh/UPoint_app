@@ -6,6 +6,7 @@ import 'package:upoint/firebase/storage_methods.dart';
 import 'package:upoint/models/organizer_model.dart';
 import 'package:upoint/models/post_model.dart';
 import 'package:upoint/models/user_model.dart' as model;
+import 'package:upoint/models/user_model.dart';
 import 'package:uuid/uuid.dart';
 
 class FirestoreMethods {
@@ -56,10 +57,15 @@ class FirestoreMethods {
   }
 
   //送出報名表單（改現有post裡面的signList）
-  Future<String> sentSignForm(String postId, Map map) async {
+  Future<String> sentSignForm(
+    String postId,
+    Map postMap,
+    User user,
+    Map userMap,
+  ) async {
     String res = 'some error occur';
-    //捕獲最新表單
     try {
+      //捕獲最新表單
       QuerySnapshot<Map<String, dynamic>> fetchPost =
           await FirebaseFirestore.instance
               .collection('posts')
@@ -70,20 +76,33 @@ class FirestoreMethods {
               .get();
       PostModel _post = PostModel.fromSnap(fetchPost.docs.toList().first);
       List signList = _post.signList ?? [];
-      signList.add(map);
-      //更新
+      signList.add(postMap);
+      //更新貼文
       await _firestore.collection('posts').doc(postId).update({
-        "photos": [_post.photos!.first],
-        "organizer": _post.organizer,
-        "title": _post.title,
-        "date": _post.date,
-        "startTime": _post.startTime,
-        "endTime": _post.endTime,
-        "content": _post.content,
-        "reward": _post.reward,
-        "link": _post.link,
         "signList": signList,
       });
+      //更新用戶
+      signList = user.signList ?? [];
+      signList.add(userMap);
+      await _firestore.collection('users').doc(user.uuid).update({
+        "signList": signList,
+      });
+      res = 'success';
+    } catch (e) {
+      res = e.toString();
+    }
+    return res;
+  }
+
+  //修改個資
+  Future<String> updateProfile(
+    String uuid,
+    Map<Object, Object?> userMap,
+  ) async{
+    String res = 'some error occur';
+    try {
+      //更新用戶
+      await _firestore.collection('users').doc(uuid).update(userMap);
       res = 'success';
     } catch (e) {
       res = e.toString();

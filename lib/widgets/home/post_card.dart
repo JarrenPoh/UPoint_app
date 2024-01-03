@@ -79,7 +79,7 @@ class _PostCardState extends State<PostCard> {
             widget.post.photos!.first,
             widget.post.title,
             widget.post.organizer,
-            widget.post.datePublished,
+            widget.post.date,
             widget.post.startTime,
             widget.post.endTime,
           ),

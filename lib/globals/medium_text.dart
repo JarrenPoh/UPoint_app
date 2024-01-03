@@ -18,6 +18,7 @@ class MediumText extends StatelessWidget {
     return Text(
       text,
       maxLines: maxLines,
+      softWrap: true,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
         fontSize: size,
