@@ -264,7 +264,7 @@ class _ProfilePageState extends State<ProfilePage>
                                               Expanded(
                                                 child: BoldText(
                                                   color: onSecondary,
-                                                  size: 16,
+                                                  size: Dimensions.height2 * 8,
                                                   text: widget.isOrganizer
                                                       ? "Hi~ $username / 單位資料"
                                                       : "Hi~ $username / 個人資料",
@@ -335,7 +335,7 @@ class _ProfilePageState extends State<ProfilePage>
                                               vertical: 8.0, horizontal: 16.0),
                                           child: BoldText(
                                             color: onSecondary,
-                                            size: 16,
+                                            size: Dimensions.height2 * 8,
                                             text: "常用功能",
                                           ),
                                         ),
@@ -419,7 +419,7 @@ class _ProfilePageState extends State<ProfilePage>
                                                         vertical: 8.0),
                                                 child: RegularText(
                                                   color: onSecondary,
-                                                  size: 14,
+                                                  size: Dimensions.height2 * 7,
                                                   text: "歡迎登入，查看更多資訊",
                                                 ),
                                               ),
@@ -429,7 +429,7 @@ class _ProfilePageState extends State<ProfilePage>
                                                 },
                                                 child: MediumText(
                                                   color: onSecondary,
-                                                  size: 16,
+                                                  size: Dimensions.height2 * 8,
                                                   text: _user == null
                                                       ? "登入"
                                                       : "登出",
@@ -535,7 +535,7 @@ class _ProfilePageState extends State<ProfilePage>
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             MediumText(
               color: onSecondary,
-              size: 14,
+              size: Dimensions.height2 * 7,
               text: index == 0
                   ? "UPoints"
                   : isOrganizer
@@ -556,7 +556,7 @@ class _ProfilePageState extends State<ProfilePage>
                 SizedBox(width: index == 0 ? 8 : 0),
                 BoldText(
                   color: onSecondary,
-                  size: 18,
+                  size: Dimensions.height2 * 9,
                   text: str,
                 ),
               ],

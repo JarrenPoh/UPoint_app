@@ -110,7 +110,7 @@ class _SignUpFormPageState extends State<SignUpFormPage> {
         iconTheme: IconThemeData(color: onSecondary),
         title: MediumText(
           color: onSecondary,
-          size: 16,
+          size: Dimensions.height2 * 8,
           text: '報名表單',
         ),
       ),
@@ -166,7 +166,7 @@ class _SignUpFormPageState extends State<SignUpFormPage> {
                         ),
                         child: MediumText(
                           color: Colors.white,
-                          size: 16,
+                          size: Dimensions.height2 * 8,
                           text: '取消',
                         ),
                       ),
@@ -186,7 +186,7 @@ class _SignUpFormPageState extends State<SignUpFormPage> {
                         ),
                         child: MediumText(
                           color: Colors.white,
-                          size: 16,
+                          size: Dimensions.height2 * 8,
                           text: '送出',
                         ),
                       ),
@@ -263,12 +263,12 @@ class _SignUpFormPageState extends State<SignUpFormPage> {
               children: [
                 MediumText(
                   color: onSecondary,
-                  size: 15,
+                  size: Dimensions.height2 * 7.5,
                   text: str,
                 ),
                 MediumText(
                   color: Colors.red,
-                  size: 15,
+                  size: Dimensions.height2 * 7.5,
                   text: ' *',
                 ),
               ],
@@ -324,7 +324,7 @@ class _SignUpFormPageState extends State<SignUpFormPage> {
             ),
             child: MediumText(
               color: onSecondary,
-              size: 20,
+              size: Dimensions.height2 * 10,
               text: '${widget.post.organizer} - ${widget.post.title!}',
             ),
           ),
@@ -338,9 +338,9 @@ class _SignUpFormPageState extends State<SignUpFormPage> {
             padding: EdgeInsets.symmetric(
               horizontal: Dimensions.width5 * 5,
             ),
-            child: const MediumText(
+            child:  MediumText(
               color: Colors.grey,
-              size: 15,
+              size: Dimensions.height2 * 7.5,
               text: '報名完成後，我們將會有通知寄送給您～',
             ),
           ),
@@ -354,9 +354,9 @@ class _SignUpFormPageState extends State<SignUpFormPage> {
             padding: EdgeInsets.symmetric(
               horizontal: Dimensions.width5 * 5,
             ),
-            child: const MediumText(
+            child:  MediumText(
               color: Colors.red,
-              size: 15,
+              size: Dimensions.height2 * 7.5,
               text: '* 表示必填問題',
             ),
           ),

@@ -140,7 +140,7 @@ class _SearchPageState extends State<SearchPage>
                         ),
                         child: MediumText(
                           color: onSecondary,
-                          size: 16,
+                          size: Dimensions.height2 * 8,
                           text: isSearch ? "搜尋結果：" : "曾經搜尋：",
                         ),
                       )
@@ -155,7 +155,7 @@ class _SearchPageState extends State<SearchPage>
                             children: [
                               MediumText(
                                 color: onSecondary,
-                                size: 16,
+                                size: Dimensions.height2 * 8,
                                 text: "搜尋你想找的東西～",
                               ),
                             ],
@@ -208,7 +208,7 @@ class _SearchPageState extends State<SearchPage>
                                     ),
                                     title: MediumText(
                                       color: onSecondary,
-                                      size: 16,
+                                      size: Dimensions.height2 * 8,
                                       text: history[index],
                                     ),
                                     trailing: GestureDetector(

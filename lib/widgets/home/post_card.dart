@@ -151,7 +151,7 @@ class _PostCardState extends State<PostCard> {
                             ),
                             child: MediumText(
                               color: Colors.white,
-                              size: 16,
+                              size: Dimensions.height2 * 8,
                               text: widget.post.reward!,
                             ),
                           ),
@@ -177,9 +177,9 @@ class _PostCardState extends State<PostCard> {
                               ),
                               child: Row(
                                 children: [
-                                  const MediumText(
+                                   MediumText(
                                     color: Colors.white,
-                                    size: 16,
+                                    size: Dimensions.height2 * 8,
                                     text: '編輯',
                                   ),
                                   SizedBox(width: Dimensions.width5),
@@ -231,10 +231,10 @@ class _PostCardState extends State<PostCard> {
                               Radius.circular(10),
                             ),
                           ),
-                          child: const Center(
+                          child:  Center(
                             child: MediumText(
                               color: Colors.white,
-                              size: 16,
+                              size: Dimensions.height2 * 8,
                               text: '活動已結束',
                             ),
                           ),
@@ -264,25 +264,19 @@ class _PostCardState extends State<PostCard> {
                 children: [
                   Container(
                     width: Dimensions.screenWidth * 0.55,
-                    child: Text(
-                      title,
-                      style: TextStyle(
-                        color: onSecondary,
-                        fontSize: Dimensions.height2 * 8,
-                        fontFamily: "NotoSansMedium",
-                      ),
+                    child: MediumText(
+                      color: onSecondary,
+                      size: Dimensions.height2 * 8,
+                      text: title,
                     ),
                   ),
                   SizedBox(height: Dimensions.height5 * 2),
                   Container(
                     width: Dimensions.screenWidth * 0.55,
-                    child: Text(
-                      organizer,
-                      style: TextStyle(
-                        color: hintColor,
-                        fontSize: Dimensions.height2 * 7,
-                        fontFamily: "NotoSansMedium",
-                      ),
+                    child: MediumText(
+                      color: hintColor,
+                      size: Dimensions.height2 * 7,
+                      text: organizer,
                     ),
                   ),
                 ],

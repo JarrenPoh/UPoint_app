@@ -37,7 +37,7 @@ class _SignListPageState extends State<SignListPage> {
         iconTheme: IconThemeData(color: onSecondary),
         title: MediumText(
           color: onSecondary,
-          size: 16,
+          size:Dimensions.height2 * 8,
           text: '報名名單',
         ),
       ),
@@ -61,7 +61,7 @@ class _SignListPageState extends State<SignListPage> {
                   children: [
                     MediumText(
                       color: onSecondary,
-                      size: 20,
+                      size: Dimensions.height2 * 10,
                       text: '${widget.post.title} - 報名名單',
                     ),
                     SizedBox(height: Dimensions.height5 * 2),
@@ -75,7 +75,7 @@ class _SignListPageState extends State<SignListPage> {
                           ? [
                               MediumText(
                                 color: onSecondary,
-                                size: 16,
+                                size: Dimensions.height2 * 8,
                                 text: '還沒有人報名此活動！',
                               ),
                             ]
@@ -136,12 +136,12 @@ class _SignListPageState extends State<SignListPage> {
           ),
           MediumText(
             color: onSecondary,
-            size: 16,
+            size: Dimensions.height2 * 8,
             text: map['email'],
           ),
           MediumText(
             color: Colors.grey,
-            size: 13,
+            size: Dimensions.height2 * 6.5,
             text: relativeDateFormat(
               map['datePublished'].toDate(),
             ),
@@ -165,7 +165,7 @@ class _SignListPageState extends State<SignListPage> {
                         SizedBox(width: Dimensions.width5 * 10),
                         MediumText(
                           color: Colors.grey,
-                          size: 14,
+                          size: Dimensions.height2 * 7,
                           text: _list[index],
                         ),
                       ],
@@ -178,7 +178,7 @@ class _SignListPageState extends State<SignListPage> {
                         SizedBox(width: Dimensions.width5 * 4),
                         MediumText(
                           color: onSecondary,
-                          size: 14,
+                          size: Dimensions.height2 * 7,
                           text: map[_m[index]],
                         ),
                       ],

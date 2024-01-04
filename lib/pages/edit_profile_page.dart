@@ -66,14 +66,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
         iconTheme: IconThemeData(color: onSecondary),
         title: MediumText(
           color: onSecondary,
-          size: 16,
+          size: Dimensions.height2 * 8,
           text: '編輯個人資料',
         ),
         actions: [
           CupertinoButton(
             child: MediumText(
               color: hintColor,
-              size: 16,
+              size: Dimensions.height2 * 8,
               text: '修改',
             ),
             onPressed: () {
@@ -135,7 +135,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     ),
                     child: MediumText(
                       color: onSecondary,
-                      size: 16,
+                      size: Dimensions.height2 * 8,
                       text: '修改',
                     ),
                   ),

@@ -165,7 +165,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
         automaticallyImplyLeading: true,
         title: MediumText(
           color: onSecondary,
-          size: 18,
+          size: Dimensions.height2 * 9,
           text: '信箱驗證',
         ),
       ),
@@ -201,7 +201,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                           )
                         : MediumText(
                             color: Colors.white,
-                            size: 16,
+                            size: Dimensions.height2 * 8,
                             text:
                                 canResentEmail ? '重新發送' : resentTime.toString(),
                           ),

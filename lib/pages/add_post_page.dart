@@ -76,7 +76,7 @@ class _AddPostPageState extends State<AddPostPage>
           children: [
             BoldText(
                 color: onSecondary,
-                size: 16,
+                size: Dimensions.height2 * 8,
                 text: "發佈活動",
               ),
           ],

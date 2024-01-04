@@ -86,7 +86,7 @@ class ManagePageState extends State<ManagePage>
                               Center(
                                 child: MediumText(
                                   color: onSecondary,
-                                  size: 16,
+                                  size: Dimensions.height2 * 8,
                                   text: "管理系統",
                                 ),
                               ),
@@ -174,7 +174,7 @@ class ManagePageState extends State<ManagePage>
                                 children: [
                                   MediumText(
                                     color: onSecondary,
-                                    size: 16,
+                                    size: Dimensions.height2 * 8,
                                     text: "還沒有創建過貼文",
                                   ),
                                   CupertinoButton(

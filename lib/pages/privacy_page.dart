@@ -83,7 +83,7 @@ class PrivacyPage extends StatelessWidget {
           children: [
             MediumText(
               color: onSecondary,
-              size: 16,
+              size: Dimensions.height2 * 8,
               text: '隱私條款',
             ),
           ],
@@ -101,7 +101,7 @@ class PrivacyPage extends StatelessWidget {
             ),
             child: MediumText(
               color: onSecondary,
-              size: 14,
+              size: Dimensions.height2 * 7,
               text: values[index],
               maxLines: 5,
             ),

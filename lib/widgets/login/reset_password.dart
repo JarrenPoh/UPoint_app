@@ -87,7 +87,7 @@ class _ResetPasswordState extends State<ResetPassword> {
         elevation: 0,
         title: MediumText(
           color: onSecondary,
-          size: 18,
+          size: Dimensions.height2 * 9,
           text: '重置密碼',
         ),
         iconTheme: IconThemeData(color: hintColor),
@@ -133,9 +133,9 @@ class _ResetPasswordState extends State<ResetPassword> {
                               ? const Center(
                                   child: CircularProgressIndicator.adaptive(),
                                 )
-                              : const MediumText(
+                              :  MediumText(
                                   color: Colors.white,
-                                  size: 16,
+                                  size: Dimensions.height2 * 8,
                                   text: '重置密碼發送',
                                 ),
                         ),

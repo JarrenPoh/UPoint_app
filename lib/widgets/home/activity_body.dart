@@ -69,7 +69,7 @@ class _ActivityBodyState extends State<ActivityBody>
                           children: [
                             BoldText(
                               color: onSecondary,
-                              size: 19,
+                              size: Dimensions.height2 * 9.5,
                               text: '主辦方',
                             ),
                             // Text(
@@ -141,7 +141,7 @@ class _ActivityBodyState extends State<ActivityBody>
                       children: [
                         BoldText(
                           color: onSecondary,
-                          size: 19,
+                          size: Dimensions.height2 * 9.5,
                           text: '近期活動',
                         ),
                         SizedBox(height: Dimensions.height5 * 1),
@@ -163,7 +163,7 @@ class _ActivityBodyState extends State<ActivityBody>
                                       Center(
                                         child: MediumText(
                                           color: onSecondary,
-                                          size: 16,
+                                          size: Dimensions.height2 * 8,
                                           text: "還沒有創建過貼文",
                                         ),
                                       ),
@@ -221,14 +221,14 @@ class _ActivityBodyState extends State<ActivityBody>
           children: [
             MediumText(
               color: onSecondary,
-              size: 12,
+              size: Dimensions.height2 * 6,
               text: index == 0 ? '全部' : organList[index - 1].organizerName,
             ),
             SizedBox(width: Dimensions.width2),
             postLengthFromOrgan['all'] == null
                 ? MediumText(
                     color: hintColor,
-                    size: 12,
+                    size: Dimensions.height2 * 6,
                     text: '0',
                   )
                 : ValueListenableBuilder(
@@ -242,7 +242,7 @@ class _ActivityBodyState extends State<ActivityBody>
                     ) {
                       return MediumText(
                         color: hintColor,
-                        size: 12,
+                        size: Dimensions.height2 * 6,
                         text: value.toString(),
                       );
                     },
