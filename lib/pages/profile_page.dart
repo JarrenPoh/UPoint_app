@@ -10,7 +10,10 @@ import 'package:upoint/models/user_model.dart' as model;
 import 'package:upoint/pages/edit_profile_page.dart';
 import 'package:upoint/pages/login_page.dart';
 import 'package:upoint/pages/privacy_page.dart';
+import 'package:upoint/secret.dart';
 import 'package:upoint/value_notifier/list_value_notifier.dart';
+import 'package:upoint/widgets/custom_dialog.dart';
+import 'package:upoint/widgets/profile/profile_pic.dart';
 
 class ProfilePage extends StatefulWidget {
   final bool isOrganizer;
@@ -130,6 +133,38 @@ class _ProfilePageState extends State<ProfilePage>
     }
   }
 
+  logInOrOut() async {
+    Color onSecondary = Theme.of(context).colorScheme.onSecondary;
+    if (_user != null || widget.isOrganizer) {
+      await CustomDialog(
+        context,
+        '您要登出嗎？',
+        '要確定ㄟ',
+        onSecondary,
+        onSecondary,
+        () async {
+          await AuthMethods().signOut();
+          // ignore: use_build_context_synchronously
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => LoginPage(),
+            ),
+            (Route<dynamic> route) => false, // 不保留任何旧路由
+          );
+        },
+      );
+    } else {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LoginPage(),
+        ),
+        (Route<dynamic> route) => false, // 不保留任何旧路由
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -145,8 +180,8 @@ class _ProfilePageState extends State<ProfilePage>
             SliverPersistentHeader(
               pinned: true,
               delegate: MySliverDelegate(
-                minHeight: Dimensions.height5 * 28,
-                maxHeight: Dimensions.height5 * 28,
+                minHeight: Dimensions.height5 * 35,
+                maxHeight: Dimensions.height5 * 35,
                 child: firstContainer(),
               ),
             ),
@@ -159,278 +194,263 @@ class _ProfilePageState extends State<ProfilePage>
           onRefresh: () async {
             refresh();
           },
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 24.0, vertical: 8.0),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          scnContainer(
-                            0,
-                            "1,800",
-                            widget.isOrganizer,
-                          ),
-                          SizedBox(width: 16),
-                          !widget.isOrganizer
-                              ? scnContainer(
-                                  1,
-                                  '${countTime.toString()} 次',
-                                  widget.isOrganizer,
-                                )
-                              : ValueListenableBuilder(
-                                  valueListenable: widget.valueListenable!,
-                                  builder: (context, value, builder) {
-                                    value as List;
-                                    return scnContainer(
-                                      1,
-                                      '${value.length.toString()} 次',
-                                      widget.isOrganizer,
-                                    );
-                                  },
-                                ),
-                        ],
-                      ),
-                      SizedBox(height: 16),
-                      widget.user != null || widget.organizer != null
-                          ? Container(
-                              decoration: BoxDecoration(
-                                color: appBarColor,
-                                borderRadius: BorderRadius.circular(16),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Color.fromRGBO(0, 0, 0, 0.05),
-                                    offset: Offset(2, 2),
-                                    blurRadius: 3,
-                                    spreadRadius: 0,
+          child: ListView(
+            padding: EdgeInsets.symmetric(vertical: Dimensions.height5 * 4),
+            children: [
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24.0,
+                      vertical: 0.0,
+                    ),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            scnContainer(
+                              0,
+                              "0",
+                              widget.isOrganizer,
+                            ),
+                            SizedBox(width: 16),
+                            !widget.isOrganizer
+                                ? scnContainer(
+                                    1,
+                                    '${countTime.toString()} 次',
+                                    widget.isOrganizer,
                                   )
-                                ],
-                              ),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 8.0),
-                                child: Center(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 8.0, horizontal: 16.0),
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                              child: BoldText(
-                                                color: onSecondary,
-                                                size: 16,
-                                                text: widget.isOrganizer
-                                                    ? "Hi~ $username / 單位資料"
-                                                    : "Hi~ $username / 個人資料",
-                                              ),
-                                            ),
-                                            if (!widget.isOrganizer)
-                                              GestureDetector(
-                                                onTap: () {
-                                                  editProfile();
-                                                },
-                                                child: Icon(
-                                                  Icons.edit,
-                                                  color: Colors.grey,
-                                                ),
-                                              )
-                                          ],
-                                        ),
-                                      ),
-                                      Divider(thickness: 1, color: Colors.grey),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          profileRow("學校：中原大學"),
-                                          widget.isOrganizer
-                                              ? Container()
-                                              : profileRow("系級：$className"),
-                                          widget.isOrganizer
-                                              ? Container()
-                                              : profileRow("學號：$studentID"),
-                                          profileRow("連絡電話：$phoneNumber"),
-                                          profileRow("電子郵件：$email"),
-                                        ],
-                                      )
-                                    ],
+                                : ValueListenableBuilder(
+                                    valueListenable: widget.valueListenable!,
+                                    builder: (context, value, builder) {
+                                      value as List;
+                                      return scnContainer(
+                                        1,
+                                        '${value.length.toString()} 次',
+                                        widget.isOrganizer,
+                                      );
+                                    },
                                   ),
+                          ],
+                        ),
+                        SizedBox(height: 16),
+                        widget.user != null || widget.organizer != null
+                            ? Container(
+                                decoration: BoxDecoration(
+                                  color: appBarColor,
+                                  borderRadius: BorderRadius.circular(16),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Color.fromRGBO(0, 0, 0, 0.05),
+                                      offset: Offset(2, 2),
+                                      blurRadius: 3,
+                                      spreadRadius: 0,
+                                    )
+                                  ],
                                 ),
-                              ),
-                            )
-                          : Container(),
-                      SizedBox(height: 16),
-                      widget.user != null || widget.organizer != null
-                          ? Container(
-                              // height: Dimensions.width2 * 85,
-                              decoration: BoxDecoration(
-                                color: appBarColor,
-                                borderRadius: BorderRadius.circular(16),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Color.fromRGBO(0, 0, 0, 0.05),
-                                    offset: Offset(2, 2),
-                                    blurRadius: 3,
-                                    spreadRadius: 0,
-                                  )
-                                ],
-                              ),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 8.0),
-                                child: Center(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 8.0, horizontal: 16.0),
-                                        child: BoldText(
-                                          color: onSecondary,
-                                          size: 16,
-                                          text: "常用功能",
-                                        ),
-                                      ),
-                                      Divider(thickness: 1, color: Colors.grey),
-                                      Column(
-                                        children: [
-                                          if (!widget.isOrganizer)
-                                            funcBtn(
-                                              () => editProfile(),
-                                              Icons.edit_note_outlined,
-                                              "編輯個人資料",
-                                            ),
-                                          funcBtn(
-                                            () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) {
-                                                    return PrivacyPage();
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8.0),
+                                  child: Center(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 8.0, horizontal: 16.0),
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: BoldText(
+                                                  color: onSecondary,
+                                                  size: 16,
+                                                  text: widget.isOrganizer
+                                                      ? "Hi~ $username / 單位資料"
+                                                      : "Hi~ $username / 個人資料",
+                                                ),
+                                              ),
+                                              if (!widget.isOrganizer)
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    editProfile();
                                                   },
-                                                ),
-                                              );
-                                            },
-                                            Icons.library_books_outlined,
-                                            "隱私條約",
+                                                  child: Icon(
+                                                    Icons.edit,
+                                                    color: Colors.grey,
+                                                  ),
+                                                )
+                                            ],
                                           ),
-                                          funcBtn(
-                                            () {
-                                              if (_user != null ||
-                                                  widget.isOrganizer) {
-                                                AuthMethods().signOut();
-                                              }
-                                              Navigator.pushAndRemoveUntil(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      LoginPage(),
-                                                ),
-                                                (Route<dynamic> route) =>
-                                                    false, // 不保留任何旧路由
-                                              );
-                                            },
+                                        ),
+                                        Divider(
+                                            thickness: 1, color: Colors.grey),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            profileRow("學校：中原大學"),
                                             widget.isOrganizer
-                                                ? Icons.logout
-                                                : _user == null
-                                                    ? Icons.login
-                                                    : Icons.logout,
+                                                ? Container()
+                                                : profileRow("系級：$className"),
                                             widget.isOrganizer
-                                                ? '登出'
-                                                : _user == null
-                                                    ? "登入"
-                                                    : '登出',
-                                          ),
-                                        ],
-                                      )
-                                    ],
+                                                ? Container()
+                                                : profileRow("學號：$studentID"),
+                                            profileRow("連絡電話：$phoneNumber"),
+                                            profileRow("電子郵件：$email"),
+                                          ],
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            )
-                          : Container(),
-                      SizedBox(height: 16),
-                      widget.user == null && !widget.isOrganizer
-                          ? Container(
-                              // height: Dimensions.width2 * 85,
-                              decoration: BoxDecoration(
-                                color: appBarColor,
-                                borderRadius: BorderRadius.circular(16),
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: Color.fromRGBO(0, 0, 0, 0.05),
-                                    offset: Offset(2, 2),
-                                    blurRadius: 3,
-                                    spreadRadius: 0,
-                                  )
-                                ],
-                              ),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16.0),
-                                child: Center(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Center(
-                                        child: Column(
+                              )
+                            : Container(),
+                        SizedBox(height: 16),
+                        widget.user != null || widget.organizer != null
+                            ? Container(
+                                // height: Dimensions.width2 * 85,
+                                decoration: BoxDecoration(
+                                  color: appBarColor,
+                                  borderRadius: BorderRadius.circular(16),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Color.fromRGBO(0, 0, 0, 0.05),
+                                      offset: Offset(2, 2),
+                                      blurRadius: 3,
+                                      spreadRadius: 0,
+                                    )
+                                  ],
+                                ),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8.0),
+                                  child: Center(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 8.0, horizontal: 16.0),
+                                          child: BoldText(
+                                            color: onSecondary,
+                                            size: 16,
+                                            text: "常用功能",
+                                          ),
+                                        ),
+                                        Divider(
+                                            thickness: 1, color: Colors.grey),
+                                        Column(
                                           children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 8.0),
-                                              child: RegularText(
-                                                color: onSecondary,
-                                                size: 14,
-                                                text: "歡迎登入，查看更多資訊",
+                                            if (!widget.isOrganizer)
+                                              funcBtn(
+                                                () => editProfile(),
+                                                Icons.edit_note_outlined,
+                                                "編輯個人資料",
                                               ),
-                                            ),
-                                            MaterialButton(
-                                              onPressed: () {
-                                                if (_user != null) {
-                                                  AuthMethods().signOut();
-                                                }
-                                                Navigator.pushAndRemoveUntil(
+                                            funcBtn(
+                                              () {
+                                                Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        LoginPage(),
+                                                    builder: (context) {
+                                                      return PrivacyPage();
+                                                    },
                                                   ),
-                                                  (Route<dynamic> route) =>
-                                                      false, // 不保留任何旧路由
                                                 );
                                               },
-                                              child: MediumText(
-                                                color: onSecondary,
-                                                size: 16,
-                                                text:
-                                                    _user == null ? "登入" : "登出",
-                                              ),
+                                              Icons.library_books_outlined,
+                                              "隱私條約",
+                                            ),
+                                            funcBtn(
+                                              () {
+                                                logInOrOut();
+                                              },
+                                              widget.isOrganizer
+                                                  ? Icons.logout
+                                                  : _user == null
+                                                      ? Icons.login
+                                                      : Icons.logout,
+                                              widget.isOrganizer
+                                                  ? '登出'
+                                                  : _user == null
+                                                      ? "登入"
+                                                      : '登出',
                                             ),
                                           ],
-                                        ),
-                                      ),
-                                    ],
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            )
-                          : Container(),
-                      SizedBox(height: 16),
-                    ],
+                              )
+                            : Container(),
+                        SizedBox(height: 16),
+                        widget.user == null && !widget.isOrganizer
+                            ? Container(
+                                // height: Dimensions.width2 * 85,
+                                decoration: BoxDecoration(
+                                  color: appBarColor,
+                                  borderRadius: BorderRadius.circular(16),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Color.fromRGBO(0, 0, 0, 0.05),
+                                      offset: Offset(2, 2),
+                                      blurRadius: 3,
+                                      spreadRadius: 0,
+                                    )
+                                  ],
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 16.0),
+                                  child: Center(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Center(
+                                          child: Column(
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 8.0),
+                                                child: RegularText(
+                                                  color: onSecondary,
+                                                  size: 14,
+                                                  text: "歡迎登入，查看更多資訊",
+                                                ),
+                                              ),
+                                              MaterialButton(
+                                                onPressed: () {
+                                                  logInOrOut();
+                                                },
+                                                child: MediumText(
+                                                  color: onSecondary,
+                                                  size: 16,
+                                                  text: _user == null
+                                                      ? "登入"
+                                                      : "登出",
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Container(),
+                        SizedBox(height: 16),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
+            ],
           ),
         ),
       ),
@@ -573,80 +593,14 @@ class _ProfilePageState extends State<ProfilePage>
             ),
           ),
         ),
-        Positioned(
-          bottom: 10,
-          child: Stack(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  print('asd');
-                },
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Container(
-                      width: Dimensions.width2 * 42,
-                      height: Dimensions.width2 * 42,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Color.fromRGBO(0, 0, 0, 0.05),
-                            offset: Offset(2, 2),
-                            blurRadius: 3,
-                            spreadRadius: 0,
-                          )
-                        ],
-                      ),
-                    ),
-                    ClipOval(
-                      child: Image.asset(
-                        'assets/profile.png',
-                        width: Dimensions.width2 * 38,
-                        height: Dimensions.width2 * 38,
-                        fit: BoxFit.cover,
-                        errorBuilder: (BuildContext context, Object exception,
-                            StackTrace? stackTrace) {
-                          return Icon(
-                            Icons.account_circle,
-                            size: Dimensions.width2 * 44,
-                            color: Colors.grey[600],
-                          );
-                        },
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Positioned(
-                right: Dimensions.width2 * 1,
-                bottom: Dimensions.width2 * 1,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Container(
-                      width: Dimensions.width2 * 11,
-                      height: Dimensions.width2 * 11,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
-                        border: Border.all(
-                          color: Colors.grey,
-                          width: 3,
-                        ),
-                      ),
-                    ),
-                    Icon(
-                      Icons.edit,
-                      size: Dimensions.width2 * 7,
-                      color: Colors.grey,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+        ProfilePic(
+          picUri: widget.isOrganizer
+              ? widget.organizer!.pic
+              : widget.user != null
+                  ? widget.user!.pic ?? defaultUserPic
+                  : defaultUserPic,
+          isOrganizer: widget.isOrganizer,
+          id: widget.isOrganizer ? widget.organizer!.uid : widget.user!.uuid,
         ),
       ],
     );

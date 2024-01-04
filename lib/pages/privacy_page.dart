@@ -73,18 +73,31 @@ class PrivacyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
-    Color scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
+    Color appBarColor = Theme.of(context).appBarTheme.backgroundColor!;
 
     return Scaffold(
-      backgroundColor: scaffoldBackgroundColor,
+      backgroundColor: appBarColor,
+      appBar: AppBar(
+        title: Stack(
+          alignment: Alignment.center,
+          children: [
+            MediumText(
+              color: onSecondary,
+              size: 16,
+              text: '隱私條款',
+            ),
+          ],
+        ),
+        iconTheme: IconThemeData(color: onSecondary),
+      ),
       body: ListView.builder(
         itemCount: values.length,
         itemBuilder: ((context, index) {
           return Padding(
             padding: EdgeInsets.only(
-              left: Dimensions.width5,
-              right: Dimensions.width5,
-              top: Dimensions.height5,
+              left: Dimensions.width5 * 3,
+              right: Dimensions.width5 * 3,
+              top: Dimensions.height5*3,
             ),
             child: MediumText(
               color: onSecondary,

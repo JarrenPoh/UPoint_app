@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:upoint/bloc/home_page_bloc.dart';
+import 'package:upoint/globals/bold_text.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/globals/scroll_things_provider.dart';
@@ -35,7 +36,7 @@ class _ActivityBodyState extends State<ActivityBody>
     Color scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     Color onPrimary = Theme.of(context).colorScheme.onPrimary;
-    Color hintColor = Theme.of(context).hintColor;
+    // Color hintColor = Theme.of(context).hintColor;
 
     return RefreshIndicator(
       displacement: Dimensions.height5 * 3,
@@ -66,22 +67,19 @@ class _ActivityBodyState extends State<ActivityBody>
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              'Organizer',
-                              style: TextStyle(
-                                color: onSecondary,
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            BoldText(
+                              color: onSecondary,
+                              size: 19,
+                              text: '主辦方',
                             ),
-                            Text(
-                              'see all ',
-                              style: TextStyle(
-                                color: hintColor,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            // Text(
+                            //   'see all ',
+                            //   style: TextStyle(
+                            //     color: hintColor,
+                            //     fontSize: 14,
+                            //     fontWeight: FontWeight.bold,
+                            //   ),
+                            // ),
                           ],
                         ),
                         SizedBox(height: Dimensions.height5 * 3),
@@ -97,13 +95,13 @@ class _ActivityBodyState extends State<ActivityBody>
                               );
                             });
                             return SizedBox(
-                              height: Dimensions.height5 * 55,
+                              height: Dimensions.height5 * 50,
                               child: GridView(
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 2,
-                                  crossAxisSpacing: Dimensions.height5 * 4,
-                                  mainAxisSpacing: Dimensions.width5 * 4,
+                                  crossAxisSpacing: Dimensions.height5 * 2,
+                                  mainAxisSpacing: Dimensions.width5 * 6,
                                   childAspectRatio: 1.3,
                                 ),
                                 shrinkWrap: true,
@@ -141,13 +139,10 @@ class _ActivityBodyState extends State<ActivityBody>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Activity',
-                          style: TextStyle(
-                            color: onSecondary,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        BoldText(
+                          color: onSecondary,
+                          size: 19,
+                          text: '近期活動',
                         ),
                         SizedBox(height: Dimensions.height5 * 1),
                         ValueListenableBuilder(
@@ -239,7 +234,7 @@ class _ActivityBodyState extends State<ActivityBody>
                 : ValueListenableBuilder(
                     valueListenable: index == 0
                         ? postLengthFromOrgan['all']!
-                        : postLengthFromOrgan[organList[index-1].uid]!,
+                        : postLengthFromOrgan[organList[index - 1].uid]!,
                     builder: (
                       context,
                       dynamic value,

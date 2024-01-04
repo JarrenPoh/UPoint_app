@@ -417,30 +417,34 @@ class _ActivityPageState extends State<ActivityPage> {
                                     },
                                   );
                                 }
-                                // ignore: use_build_context_synchronously
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return FutureBuilder(
-                                        future: Provider.of<AuthMethods>(
-                                                context,
-                                                listen: false)
-                                            .getUserDetails(false),
-                                        builder: (context, snapshot) {
-                                          User _user = Provider.of<AuthMethods>(
+                                if (auth.FirebaseAuth.instance.currentUser !=
+                                    null) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return FutureBuilder(
+                                          future: Provider.of<AuthMethods>(
                                                   context,
                                                   listen: false)
-                                              .user!;
-                                          return SignUpFormPage(
-                                            post: widget.post,
-                                            user: _user,
-                                          );
-                                        },
-                                      );
-                                    },
-                                  ),
-                                );
+                                              .getUserDetails(false),
+                                          builder: (context, snapshot) {
+                                            User _user =
+                                                Provider.of<AuthMethods>(
+                                                        context,
+                                                        listen: false)
+                                                    .user!;
+                                            return SignUpFormPage(
+                                              post: widget.post,
+                                              user: _user,
+                                            );
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  );
+                                }
+                                ;
                               },
                     borderRadius: BorderRadius.circular(10),
                     color: widget.isOrganizer

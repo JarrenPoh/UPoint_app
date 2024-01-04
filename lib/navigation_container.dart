@@ -14,6 +14,7 @@ import 'package:upoint/pages/search_page.dart';
 import 'package:upoint/widgets/custom_bottom_naviagation_bar.dart';
 import 'package:upoint/pages/profile_page.dart';
 import 'package:provider/provider.dart';
+import 'package:upoint/widgets/custom_dialog.dart';
 
 class NavigationContainer extends StatefulWidget {
   const NavigationContainer({
@@ -124,74 +125,88 @@ class _NavigationContainerState extends State<NavigationContainer>
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     Color scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
     print('here');
-    return Scaffold(
-      backgroundColor: scaffoldBackgroundColor,
-      body: FutureBuilder(
-        future: userAccountManager.getUserDetails(isOrganizer),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-                child: CircularProgressIndicator.adaptive(
-              backgroundColor: onSecondary,
-            ));
-          }
-          if (isOrganizer) {
-            _managePageBloc = ManageBloc(userAccountManager.organizer!.uid);
-            _pages = [
-              ManagePage(
-                searchTapped: searchTapped,
-                organizer: userAccountManager.organizer,
-                bloc: _managePageBloc!,
-              ),
-              AddPostPage(
-                backToHome: () {
-                  onIconTapped(0);
-                  resetAddPostPage();
-                },
-                isEdit: false,
-                // key: _addPostPageKey,
-                organizer: userAccountManager.organizer,
-                bloc: bloc,
-              ),
-              ProfilePage(
-                isOrganizer: isOrganizer,
-                organizer: userAccountManager.organizer,
-                valueListenable: _managePageBloc!.postListNotifier,
-              ),
-            ];
-          } else {
-            _pages = [
-              HomePage(
-                bloc: _homePageBloc,
-                searchTapped: searchTapped,
-                user: userAccountManager.user,
-              ),
-              SearchPage(
-                bloc: _homePageBloc,
-                user: userAccountManager.user,
-              ),
-              Container(color: Colors.blue),
-              Container(),
-              ProfilePage(
-                isOrganizer: isOrganizer,
-                user: userAccountManager.user,
-              ),
-            ];
-          }
-          return PageView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            controller: _pageController,
-            itemCount: _pages.length,
-            itemBuilder: (context, index) {
-              return _pages[index];
-            },
-          );
-        },
-      ),
-      bottomNavigationBar: CustomBottomNavigationBar(
-        onIconTap: onIconTapped,
-        selectedPageIndex: _selectedPageIndex,
-        isOrganizer: isOrganizer,
+    return WillPopScope(
+      onWillPop: () async {
+        return await CustomDialog(
+          context,
+          '您要離開了嗎',
+          '要確定ㄟ',
+          onSecondary,
+          onSecondary,
+          () async {
+            Navigator.of(context).pop(true);
+          },
+        );
+      },
+      child: Scaffold(
+        backgroundColor: scaffoldBackgroundColor,
+        body: FutureBuilder(
+          future: userAccountManager.getUserDetails(isOrganizer),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                  child: CircularProgressIndicator.adaptive(
+                backgroundColor: onSecondary,
+              ));
+            }
+            if (isOrganizer) {
+              _managePageBloc = ManageBloc(userAccountManager.organizer!.uid);
+              _pages = [
+                ManagePage(
+                  searchTapped: searchTapped,
+                  organizer: userAccountManager.organizer,
+                  bloc: _managePageBloc!,
+                ),
+                AddPostPage(
+                  backToHome: () {
+                    onIconTapped(0);
+                    resetAddPostPage();
+                  },
+                  isEdit: false,
+                  // key: _addPostPageKey,
+                  organizer: userAccountManager.organizer,
+                  bloc: bloc,
+                ),
+                ProfilePage(
+                  isOrganizer: isOrganizer,
+                  organizer: userAccountManager.organizer,
+                  valueListenable: _managePageBloc!.postListNotifier,
+                ),
+              ];
+            } else {
+              _pages = [
+                HomePage(
+                  bloc: _homePageBloc,
+                  searchTapped: searchTapped,
+                  user: userAccountManager.user,
+                ),
+                SearchPage(
+                  bloc: _homePageBloc,
+                  user: userAccountManager.user,
+                ),
+                Container(color: Colors.blue),
+                Container(),
+                ProfilePage(
+                  isOrganizer: isOrganizer,
+                  user: userAccountManager.user,
+                ),
+              ];
+            }
+            return PageView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              controller: _pageController,
+              itemCount: _pages.length,
+              itemBuilder: (context, index) {
+                return _pages[index];
+              },
+            );
+          },
+        ),
+        bottomNavigationBar: CustomBottomNavigationBar(
+          onIconTap: onIconTapped,
+          selectedPageIndex: _selectedPageIndex,
+          isOrganizer: isOrganizer,
+        ),
       ),
     );
   }

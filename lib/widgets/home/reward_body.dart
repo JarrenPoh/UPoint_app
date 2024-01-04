@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:upoint/bloc/home_page_bloc.dart';
+import 'package:upoint/globals/bold_text.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/globals/scroll_things_provider.dart';
@@ -63,13 +64,10 @@ class _RewardBodyState extends State<RewardBody>
                         SizedBox(height: Dimensions.height5 * 2),
                         Row(
                           children: [
-                            Text(
-                              'Reward',
-                              style: TextStyle(
-                                color: onSecondary,
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            BoldText(
+                              color: onSecondary,
+                              size: 19,
+                              text: '獎勵',
                             ),
                           ],
                         ),
@@ -89,13 +87,13 @@ class _RewardBodyState extends State<RewardBody>
                               );
                             });
                             return SizedBox(
-                              height: Dimensions.height5 * 55,
+                              height: Dimensions.height5 * 50,
                               child: GridView(
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 2,
-                                  crossAxisSpacing: Dimensions.height5 * 4,
-                                  mainAxisSpacing: Dimensions.width5 * 4,
+                                  crossAxisSpacing: Dimensions.height5 * 2,
+                                  mainAxisSpacing: Dimensions.width5 * 6,
                                   childAspectRatio: 1.3,
                                 ),
                                 shrinkWrap: true,
@@ -133,13 +131,10 @@ class _RewardBodyState extends State<RewardBody>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Activity',
-                          style: TextStyle(
-                            color: onSecondary,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        BoldText(
+                          color: onSecondary,
+                          size: 19,
+                          text: '活動',
                         ),
                         SizedBox(height: Dimensions.height5 * 1),
                         ValueListenableBuilder(

@@ -86,7 +86,7 @@ class ManagePageState extends State<ManagePage>
                               Center(
                                 child: MediumText(
                                   color: onSecondary,
-                                  size: 18,
+                                  size: 16,
                                   text: "管理系統",
                                 ),
                               ),
@@ -165,6 +165,7 @@ class ManagePageState extends State<ManagePage>
                     return Padding(
                       padding: EdgeInsets.symmetric(
                         horizontal: Dimensions.width5 * 2,
+                        vertical:  Dimensions.height5,
                       ),
                       child: postList.isEmpty
                           ? Center(

@@ -47,7 +47,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         "email": controllers[4].text,
       },
     );
-    Navigator.pop(context,'success');
+    Navigator.pop(context, 'success');
     return 'success';
   }
 
@@ -83,44 +83,67 @@ class _EditProfilePageState extends State<EditProfilePage> {
         ],
       ),
       body: GestureDetector(
-        onTap: () =>  FocusScope.of(context).unfocus(),
+        onTap: () => FocusScope.of(context).unfocus(),
         child: Column(
           children: [
-            Expanded(
-              child: Padding(
-                padding:
-                    EdgeInsets.symmetric(horizontal: Dimensions.width5 * 2),
-                child: Container(
-                  color: appBarColor,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: Dimensions.width5 * 4,
-                    vertical: Dimensions.height5 * 2,
-                  ),
-                  child: Column(
-                    children: List.generate(
-                      _list.length,
-                      (index) {
-                        return TextField(
-                          onSubmitted: (null),
-                          controller: controllers[index],
-                          style: TextStyle(color: onSecondary),
-                          cursorColor: hintColor,
-                          decoration: InputDecoration(
-                            hintText: _list[index],
-                            hintStyle: TextStyle(color: primary),
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: Dimensions.height2 * 7,
-                            ),
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: primaryContainer),
-                            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: Dimensions.width5 * 2),
+              child: Container(
+                color: appBarColor,
+                padding: EdgeInsets.symmetric(
+                  horizontal: Dimensions.width5 * 4,
+                  vertical: Dimensions.height5 * 2,
+                ),
+                child: Column(
+                  children: List.generate(
+                    _list.length,
+                    (index) {
+                      return TextField(
+                        onSubmitted: (null),
+                        controller: controllers[index],
+                        style: TextStyle(color: onSecondary),
+                        cursorColor: hintColor,
+                        decoration: InputDecoration(
+                          hintText: _list[index],
+                          hintStyle: TextStyle(color: primary),
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: Dimensions.height2 * 7,
                           ),
-                        );
-                      },
-                    ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: primaryContainer),
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),
+            ),
+            SizedBox(height: Dimensions.height5 * 4),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CupertinoButton(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Dimensions.width5 * 7,
+                      vertical: Dimensions.height5 * 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: hintColor,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: MediumText(
+                      color: onSecondary,
+                      size: 16,
+                      text: '修改',
+                    ),
+                  ),
+                  onPressed: () {
+                    confirm();
+                  },
+                ),
+              ],
             ),
           ],
         ),

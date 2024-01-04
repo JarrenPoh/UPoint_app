@@ -98,7 +98,7 @@ class FirestoreMethods {
   Future<String> updateProfile(
     String uuid,
     Map<Object, Object?> userMap,
-  ) async{
+  ) async {
     String res = 'some error occur';
     try {
       //更新用戶
@@ -141,5 +141,20 @@ class FirestoreMethods {
       res = err.toString();
     }
     return res;
+  }
+
+  //更新照片
+  Future<String> updatePic(pic,bool isOrganizer, String doc) async {
+    String _picUrl = '';
+    String collection = isOrganizer ? 'organizers' : 'users';
+    try {
+      _picUrl = await StorageMethods()
+          .uploadImageToStorage(collection, pic, false, null);
+
+      await _firestore.collection(collection).doc(doc).update({
+        "pic": _picUrl,
+      });
+    } catch (err) {}
+    return _picUrl;
   }
 }

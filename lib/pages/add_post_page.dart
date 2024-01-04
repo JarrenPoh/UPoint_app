@@ -71,13 +71,15 @@ class _AddPostPageState extends State<AddPostPage>
       appBar: AppBar(
         iconTheme: IconThemeData(color: onSecondary),
         automaticallyImplyLeading: widget.isEdit ? true : false,
-        title: Padding(
-          padding: EdgeInsets.only(bottom: Dimensions.height5 * 5),
-          child: BoldText(
-            color: onSecondary,
-            size: 16,
-            text: "發佈活動",
-          ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            BoldText(
+                color: onSecondary,
+                size: 16,
+                text: "發佈活動",
+              ),
+          ],
         ),
         elevation: 0,
       ),

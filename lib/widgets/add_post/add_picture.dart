@@ -87,6 +87,7 @@ class _AddPictureState extends State<AddPicture>
         stream.listen((event) {
           widget.bloc.imgStreamController.add(event);
           List _photos = [];
+          print('1: ${event.croppedFiles.length}');
           for (var i in event.croppedFiles) {
             _photos.add(i.readAsBytes());
           }
