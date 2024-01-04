@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
-import 'package:get/get.dart';
+import 'package:upoint/widgets/custom_snackBar.dart';
 
 class ResetPassword extends StatefulWidget {
   const ResetPassword({super.key});
@@ -45,24 +45,10 @@ class _ResetPasswordState extends State<ResetPassword> {
         _emailController.text.trim(),
       );
       if (res == 'success') {
-        Get.snackbar(
-          "成功",
-          '重置密碼已寄至${_emailController.text.trim()}，請查閱',
-          snackPosition: SnackPosition.TOP,
-          duration: const Duration(
-            seconds: 3,
-          ),
-        );
+        showCustomSnackbar("成功", res.toString() + '重置密碼已寄至${_emailController.text.trim()}，請查閱', context);
         Navigator.of(context).pop();
       } else {
-        Get.snackbar(
-          "失敗",
-          res.toString() + ' ，請回報官方發現問題',
-          snackPosition: SnackPosition.TOP,
-          duration: const Duration(
-            seconds: 4,
-          ),
-        );
+        showCustomSnackbar("失敗", res.toString() + ' ，請回報官方發現問題', context);
       }
       setState(() {
         isLoading = false;
@@ -133,7 +119,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                               ? const Center(
                                   child: CircularProgressIndicator.adaptive(),
                                 )
-                              :  MediumText(
+                              : MediumText(
                                   color: Colors.white,
                                   size: Dimensions.height2 * 8,
                                   text: '重置密碼發送',

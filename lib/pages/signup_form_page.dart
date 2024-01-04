@@ -5,7 +5,7 @@ import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/models/post_model.dart';
 import 'package:upoint/models/user_model.dart';
-import 'package:get/get.dart';
+import 'package:upoint/widgets/custom_snackBar.dart';
 
 class SignUpFormPage extends StatefulWidget {
   final PostModel post;
@@ -195,24 +195,10 @@ class _SignUpFormPageState extends State<SignUpFormPage> {
                         if (res == 'success') {
                           String result = await sent(widget.post, widget.user);
                           if (result == 'success') {
-                            Get.snackbar(
-                              "報名成功",
-                              "請記得出席",
-                              snackPosition: SnackPosition.TOP,
-                              duration: const Duration(
-                                seconds: 2,
-                              ),
-                            );
+                            showCustomSnackbar("報名成功", "請記得出席", context);
                             Navigator.pop(context);
                           } else {
-                            Get.snackbar(
-                              "報名失敗",
-                              result,
-                              snackPosition: SnackPosition.TOP,
-                              duration: const Duration(
-                                seconds: 2,
-                              ),
-                            );
+                            showCustomSnackbar("報名失敗", "result", context);
                           }
                         }
                       },
@@ -338,7 +324,7 @@ class _SignUpFormPageState extends State<SignUpFormPage> {
             padding: EdgeInsets.symmetric(
               horizontal: Dimensions.width5 * 5,
             ),
-            child:  MediumText(
+            child: MediumText(
               color: Colors.grey,
               size: Dimensions.height2 * 7.5,
               text: '報名完成後，我們將會有通知寄送給您～',
@@ -354,7 +340,7 @@ class _SignUpFormPageState extends State<SignUpFormPage> {
             padding: EdgeInsets.symmetric(
               horizontal: Dimensions.width5 * 5,
             ),
-            child:  MediumText(
+            child: MediumText(
               color: Colors.red,
               size: Dimensions.height2 * 7.5,
               text: '* 表示必填問題',

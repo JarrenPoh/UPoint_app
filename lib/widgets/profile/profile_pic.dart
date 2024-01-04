@@ -101,7 +101,9 @@ class _ProfilePicState extends State<ProfilePic> {
       bottom: 10,
       child: GestureDetector(
         onTap: () async {
-          await callPicker();
+          if (widget.id != '') {
+            await callPicker();
+          }
         },
         child: Stack(
           children: [
@@ -142,32 +144,33 @@ class _ProfilePicState extends State<ProfilePic> {
                 )
               ],
             ),
-            Positioned(
-              right: Dimensions.width2 * 1,
-              bottom: Dimensions.width2 * 1,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    width: Dimensions.width2 * 11,
-                    height: Dimensions.width2 * 11,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                      border: Border.all(
-                        color: Colors.grey,
-                        width: 3,
+            if (widget.id != '')
+              Positioned(
+                right: Dimensions.width2 * 1,
+                bottom: Dimensions.width2 * 1,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      width: Dimensions.width2 * 11,
+                      height: Dimensions.width2 * 11,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                        border: Border.all(
+                          color: Colors.grey,
+                          width: 3,
+                        ),
                       ),
                     ),
-                  ),
-                  Icon(
-                    Icons.edit,
-                    size: Dimensions.width2 * 7,
-                    color: Colors.grey,
-                  ),
-                ],
+                    Icon(
+                      Icons.edit,
+                      size: Dimensions.width2 * 7,
+                      color: Colors.grey,
+                    ),
+                  ],
+                ),
               ),
-            ),
           ],
         ),
       ),

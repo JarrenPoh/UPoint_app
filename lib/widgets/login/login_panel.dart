@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/navigation_container.dart';
 import 'package:upoint/widgets/custom_dialog.dart';
+import 'package:upoint/widgets/custom_snackBar.dart';
 import 'package:upoint/widgets/login/reset_password.dart';
 
 class LoginPanel extends StatefulWidget {
@@ -88,8 +88,7 @@ class _LoginPanelState extends State<LoginPanel> {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (context) => NavigationContainer(
-            ),
+            builder: (context) => NavigationContainer(),
           ),
           (route) => false,
         );
@@ -112,14 +111,7 @@ class _LoginPanelState extends State<LoginPanel> {
         isLoading = false;
       });
       await AuthMethods().signOut();
-      Get.snackbar(
-        "失敗",
-        res.toString() + ' ，請回報官方發現問題',
-        snackPosition: SnackPosition.TOP,
-        duration: const Duration(
-          seconds: 4,
-        ),
-      );
+      showCustomSnackbar("失敗",  res.toString() + ' ，請回報官方發現問題', context);
       CustomDialog(
         context,
         '如有問題，請回報官方:service.upoint@gmail.com',

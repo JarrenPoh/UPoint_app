@@ -49,7 +49,7 @@ class _AddOtherState extends State<AddOther>
         focusNode: widget.bloc.linkFocusNode,
         textEditingController: widget.bloc.linkController,
         isDone: widget.bloc.isLink,
-        maxLength: 10,
+        maxLength: 40,
         maxLines: 1,
         onChanged: () {
           Provider.of<AddPostPageBloc>(context, listen: false).updateCart(
@@ -62,7 +62,7 @@ class _AddOtherState extends State<AddOther>
         focusNode: widget.bloc.rewardFocusNode,
         textEditingController: widget.bloc.rewardController,
         isDone: widget.bloc.isReward,
-        maxLength: 10,
+        maxLength: 20,
         maxLines: 1,
         onChanged: () {
           Provider.of<AddPostPageBloc>(context, listen: false).updateCart(

@@ -11,6 +11,7 @@ import 'package:upoint/pages/add_post_page.dart';
 import 'package:upoint/pages/home_page.dart';
 import 'package:upoint/pages/manage_page.dart';
 import 'package:upoint/pages/search_page.dart';
+import 'package:upoint/secret.dart';
 import 'package:upoint/widgets/custom_bottom_naviagation_bar.dart';
 import 'package:upoint/pages/profile_page.dart';
 import 'package:provider/provider.dart';
@@ -63,7 +64,7 @@ class _NavigationContainerState extends State<NavigationContainer>
     print('here1');
     if (FirebaseAuth.instance.currentUser != null) {
       String email = FirebaseAuth.instance.currentUser!.email!;
-      if (email == "jjpohhh@gmail.com") {
+      if(organList.contains(email)){
         isOrganizer = true;
       }
     }

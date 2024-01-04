@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/widgets/custom_dialog.dart';
+import 'package:upoint/widgets/custom_snackBar.dart';
 import 'package:upoint/widgets/login/verfify_email.dart';
 
 class RegisterPanel extends StatefulWidget {
   final Function() onTap;
-const RegisterPanel({
+  const RegisterPanel({
     super.key,
     required this.onTap,
   });
@@ -100,14 +100,7 @@ class _RegisterPanelState extends State<RegisterPanel> {
             isLoading = false;
           });
           // show the error
-          Get.snackbar(
-            "失敗",
-            res.toString() + ' ，請回報官方發現問題',
-            snackPosition: SnackPosition.TOP,
-            duration: const Duration(
-              seconds: 4,
-            ),
-          );
+          showCustomSnackbar("失敗", res.toString() + ' ，請回報官方發現問題', context);
           CustomDialog(
             context,
             '如有問題，請回報官方:service.upoint@gmail.com',

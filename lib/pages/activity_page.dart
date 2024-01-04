@@ -356,7 +356,7 @@ class _ActivityPageState extends State<ActivityPage> {
                             child: MediumText(
                               color: Colors.white,
                               size: Dimensions.height2 * 9,
-                              text: "查看更多報名資訊",
+                              text: "更多報名資訊",
                             ),
                           ),
                         ),
@@ -457,7 +457,7 @@ class _ActivityPageState extends State<ActivityPage> {
                         color: Colors.white,
                         size: Dimensions.height2 * 9,
                         text: widget.isOrganizer
-                            ? "查看報名名單"
+                            ? "報名名單"
                             : widget.isOver
                                 ? "已結束"
                                 : "報名",

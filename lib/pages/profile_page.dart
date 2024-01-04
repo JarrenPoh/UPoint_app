@@ -171,8 +171,10 @@ class _ProfilePageState extends State<ProfilePage>
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     Color appBarColor = Theme.of(context).appBarTheme.backgroundColor!;
     Color onPrimary = Theme.of(context).colorScheme.onPrimary;
+    Color scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
 
     return Scaffold(
+      backgroundColor: appBarColor,
       body: NestedScrollView(
         floatHeaderSlivers: true,
         headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -237,7 +239,7 @@ class _ProfilePageState extends State<ProfilePage>
                         widget.user != null || widget.organizer != null
                             ? Container(
                                 decoration: BoxDecoration(
-                                  color: appBarColor,
+                                  color: scaffoldBackgroundColor,
                                   borderRadius: BorderRadius.circular(16),
                                   boxShadow: [
                                     BoxShadow(
@@ -311,7 +313,7 @@ class _ProfilePageState extends State<ProfilePage>
                             ? Container(
                                 // height: Dimensions.width2 * 85,
                                 decoration: BoxDecoration(
-                                  color: appBarColor,
+                                  color: scaffoldBackgroundColor,
                                   borderRadius: BorderRadius.circular(16),
                                   boxShadow: [
                                     BoxShadow(
@@ -513,12 +515,12 @@ class _ProfilePageState extends State<ProfilePage>
 
   Widget scnContainer(int index, String str, bool isOrganizer) {
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
-    Color appBarColor = Theme.of(context).appBarTheme.backgroundColor!;
+    Color scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
     return Expanded(
       child: Container(
         // width: Dimensions.width2 * 20,
         decoration: BoxDecoration(
-          color: appBarColor,
+          color: scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -575,7 +577,7 @@ class _ProfilePageState extends State<ProfilePage>
         ClipPath(
           clipper: MyClipper(),
           child: Container(
-            height: Dimensions.height2 * 70,
+            height: Dimensions.height2 * 85,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
@@ -600,7 +602,11 @@ class _ProfilePageState extends State<ProfilePage>
                   ? widget.user!.pic ?? defaultUserPic
                   : defaultUserPic,
           isOrganizer: widget.isOrganizer,
-          id: widget.isOrganizer ? widget.organizer!.uid : widget.user!.uuid,
+          id: widget.isOrganizer
+              ? widget.organizer!.uid
+              : widget.user != null
+                  ? widget.user!.uuid
+                  : '',
         ),
       ],
     );

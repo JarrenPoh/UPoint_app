@@ -3,12 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/firebase/firestore_methods.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/pages/login_page.dart';
+import 'package:upoint/widgets/custom_snackBar.dart';
 
 class VerifyEmail extends StatefulWidget {
   final String email;
@@ -52,13 +52,10 @@ class _VerifyEmailState extends State<VerifyEmail> {
       String res = await AuthMethods().sendVerificationEmail();
 
       if (res == 'success') {
-        Get.snackbar(
+        showCustomSnackbar(
           "成功",
-          '驗證信箱已送出，請查閱',
-          snackPosition: SnackPosition.TOP,
-          duration: const Duration(
-            seconds: 3,
-          ),
+          res.toString() + '驗證信箱已送出，請查閱',
+          context,
         );
         timer =
             Timer.periodic(Duration(seconds: 3), (_) => checkEmailVerified());
@@ -74,13 +71,10 @@ class _VerifyEmailState extends State<VerifyEmail> {
           });
         });
       } else {
-        Get.snackbar(
+        showCustomSnackbar(
           "失敗",
           res.toString() + ' ，請回報官方發現問題',
-          snackPosition: SnackPosition.TOP,
-          duration: const Duration(
-            seconds: 4,
-          ),
+          context,
         );
       }
     } else {
@@ -114,30 +108,23 @@ class _VerifyEmailState extends State<VerifyEmail> {
       String res = await FirestoreMethods()
           .signUpUser(widget.email, auth.FirebaseAuth.instance.currentUser!);
       if (res == 'success') {
-        Get.snackbar(
-          "成功",
-          '歡迎加入，趕快發一則貼文吧!',
-          snackPosition: SnackPosition.TOP,
-          duration: const Duration(
-            seconds: 3,
-          ),
+        showCustomSnackbar(
+           "成功",
+         '歡迎加入，趕快發一則貼文吧!',
+          context,
         );
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (context) => LoginPage(
-            ),
+            builder: (context) => LoginPage(),
           ),
           (route) => false,
         );
       } else {
-        Get.snackbar(
+        showCustomSnackbar(
           "失敗",
           res.toString() + ' ，請回報官方發現問題',
-          snackPosition: SnackPosition.TOP,
-          duration: const Duration(
-            seconds: 4,
-          ),
+          context,
         );
       }
     }

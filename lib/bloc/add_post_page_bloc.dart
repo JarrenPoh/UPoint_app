@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:insta_assets_picker/insta_assets_picker.dart';
 import 'package:upoint/firebase/firestore_methods.dart';
 import 'package:upoint/models/organizer_model.dart';
 import 'package:upoint/models/post_model.dart';
 import 'package:upoint/value_notifier/bool_value_notifier.dart';
+import 'package:upoint/widgets/custom_snackBar.dart';
 
 class AddPostPageBloc with ChangeNotifier {
   String initText = "";
@@ -92,7 +92,7 @@ class AddPostPageBloc with ChangeNotifier {
 
   /*  addOthers  */
   List<Map<String, dynamic>> others = [
-    {"type": "IG連結", "bool": false},
+    {"type": "詳細資訊連結", "bool": false},
     {"type": "獎勵", "bool": false},
     {"type": "獎勵的類別", "bool": false}
   ];
@@ -107,9 +107,7 @@ class AddPostPageBloc with ChangeNotifier {
   bool isReward = false;
   //rewardTagId
   String unitOfRewardTagId = "類";
-  List rewardTagIdList = [
-    "無","麥當勞","中式便當","100元餐券","麵包餐盒","飲料"
-  ];
+  List rewardTagIdList = ["無", "麥當勞", "中式便當", "100元餐券", "麵包餐盒", "飲料"];
   ChooseModelValueNotifier rewardTagIdValueNotifier = ChooseModelValueNotifier(
     ChooseModel(
       chose: "無",
@@ -168,23 +166,9 @@ class AddPostPageBloc with ChangeNotifier {
     try {
       _cart.organizer = _organizer?.organizerName;
       res = await FirestoreMethods().uploadPost(_cart, _organizer!);
-      Get.snackbar(
-        "上傳成功",
-        "你的貼文已成功上傳",
-        snackPosition: SnackPosition.TOP,
-        duration: const Duration(
-          seconds: 2,
-        ),
-      );
+      showCustomSnackbar("上傳成功", "你的貼文已成功上傳", context);
     } catch (e) {
-      Get.snackbar(
-        "上傳失敗",
-        "請聯繫官方回報問題拿獎勵",
-        snackPosition: SnackPosition.TOP,
-        duration: const Duration(
-          seconds: 2,
-        ),
-      );
+      showCustomSnackbar("上傳失敗", "請聯繫官方回報問題拿獎勵", context);
       res = e.toString();
     }
     return res;
@@ -195,23 +179,9 @@ class AddPostPageBloc with ChangeNotifier {
     String res = 'some error occur';
     try {
       res = await FirestoreMethods().updatePost(_cart);
-      Get.snackbar(
-        "更新成功",
-        "你的貼文已成功更新",
-        snackPosition: SnackPosition.TOP,
-        duration: const Duration(
-          seconds: 2,
-        ),
-      );
+      showCustomSnackbar("更新成功", "你的貼文已成功更新", context);
     } catch (e) {
-      Get.snackbar(
-        "更新失敗",
-        "請聯繫官方回報問題拿獎勵",
-        snackPosition: SnackPosition.TOP,
-        duration: const Duration(
-          seconds: 2,
-        ),
-      );
+      showCustomSnackbar("更新失敗", "請聯繫官方回報問題拿獎勵", context);
       res = e.toString();
     }
     return res;
