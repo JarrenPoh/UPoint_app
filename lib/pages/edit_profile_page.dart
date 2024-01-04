@@ -83,7 +83,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         ],
       ),
       body: GestureDetector(
-        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        onTap: () =>  FocusScope.of(context).unfocus(),
         child: Column(
           children: [
             Expanded(

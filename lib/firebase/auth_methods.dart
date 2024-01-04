@@ -18,8 +18,8 @@ class AuthMethods with ChangeNotifier {
   OrganModel? organizer;
   Future<void> getUserDetails(isOrganizer) async {
     if (isOrganizer) {
-      print('拿了organizer 資料');
       if (_auth.currentUser != null) {
+        print('拿了organizer 資料');
         User currentUser = _auth.currentUser!;
         DocumentSnapshot snap = await _firestore
             .collection('organizers')
@@ -28,8 +28,8 @@ class AuthMethods with ChangeNotifier {
         organizer = OrganModel.fromSnap(snap);
       }
     } else {
-      print('拿了user from 資料');
       if (_auth.currentUser != null) {
+        print('拿了user from 資料');
         User currentUser = _auth.currentUser!;
         DocumentSnapshot snap =
             await _firestore.collection('users').doc(currentUser.uid).get();
@@ -153,6 +153,7 @@ class AuthMethods with ChangeNotifier {
           FirebaseAuth.instance.currentUser!,
         );
       }
+      res = 'success';
     } catch (e) {
       print(e);
       res = e.toString();
@@ -189,6 +190,7 @@ class AuthMethods with ChangeNotifier {
           FirebaseAuth.instance.currentUser!,
         );
       }
+      res = 'success';
     } on PlatformException catch (e) {
       res = e.toString();
       print(e);

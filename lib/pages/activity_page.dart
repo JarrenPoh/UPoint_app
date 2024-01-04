@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:upoint/bloc/uri_bloc.dart';
 import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
@@ -397,15 +398,18 @@ class _ActivityPageState extends State<ActivityPage> {
                                     onSecondary,
                                     onSecondary,
                                     () {
+                                      Provider.of<UriBloc>(context,
+                                              listen: false)
+                                          .setUri(
+                                        Uri(pathSegments: [
+                                          'activity',
+                                          widget.post.postId!
+                                        ]),
+                                      );
                                       Navigator.pushAndRemoveUntil(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => LoginPage(
-                                            uri: Uri(pathSegments: [
-                                              'activity',
-                                              widget.post.postId!,
-                                            ]),
-                                          ),
+                                          builder: (context) => LoginPage(),
                                         ),
                                         (Route<dynamic> route) =>
                                             false, // 不保留任何旧路由
@@ -419,21 +423,21 @@ class _ActivityPageState extends State<ActivityPage> {
                                   MaterialPageRoute(
                                     builder: (context) {
                                       return FutureBuilder(
-                                          future: Provider.of<AuthMethods>(
+                                        future: Provider.of<AuthMethods>(
+                                                context,
+                                                listen: false)
+                                            .getUserDetails(false),
+                                        builder: (context, snapshot) {
+                                          User _user = Provider.of<AuthMethods>(
                                                   context,
                                                   listen: false)
-                                              .getUserDetails(false),
-                                          builder: (context, snapshot) {
-                                            User _user =
-                                                Provider.of<AuthMethods>(
-                                                        context,
-                                                        listen: false)
-                                                    .user!;
-                                            return SignUpFormPage(
-                                              post: widget.post,
-                                              user: _user,
-                                            );
-                                          });
+                                              .user!;
+                                          return SignUpFormPage(
+                                            post: widget.post,
+                                            user: _user,
+                                          );
+                                        },
+                                      );
                                     },
                                   ),
                                 );

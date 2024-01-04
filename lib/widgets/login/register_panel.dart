@@ -7,11 +7,9 @@ import 'package:upoint/widgets/login/verfify_email.dart';
 
 class RegisterPanel extends StatefulWidget {
   final Function() onTap;
-  final Uri uri;
-  const RegisterPanel({
+const RegisterPanel({
     super.key,
     required this.onTap,
-    required this.uri,
   });
 
   @override
@@ -93,7 +91,6 @@ class _RegisterPanelState extends State<RegisterPanel> {
               builder: (context) {
                 return VerifyEmail(
                   email: _emailController.text,
-                  uri: widget.uri,
                 );
               },
             ),

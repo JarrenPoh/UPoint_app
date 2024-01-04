@@ -64,7 +64,7 @@ class _RewardBodyState extends State<RewardBody>
                         Row(
                           children: [
                             Text(
-                              'Promo Today',
+                              'Reward',
                               style: TextStyle(
                                 color: onSecondary,
                                 fontSize: 24,

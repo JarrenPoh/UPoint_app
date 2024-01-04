@@ -93,7 +93,7 @@ class _ResetPasswordState extends State<ResetPassword> {
         iconTheme: IconThemeData(color: hintColor),
       ),
       body: GestureDetector(
-        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        onTap: () => FocusScope.of(context).unfocus(),
         child: Center(
           child: isLoading
               ? CircularProgressIndicator.adaptive()

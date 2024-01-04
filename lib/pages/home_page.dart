@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage>
     Color hintColor = Theme.of(context).hintColor;
 
     return GestureDetector(
-      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         body: Container(
           color: appBarColor,

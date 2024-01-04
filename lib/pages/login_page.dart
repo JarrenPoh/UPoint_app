@@ -4,10 +4,8 @@ import 'package:upoint/widgets/login/login_panel.dart';
 import 'package:upoint/widgets/login/register_panel.dart';
 
 class LoginPage extends StatefulWidget {
-  final Uri uri;
   const LoginPage({
     super.key,
-    required this.uri,
   });
 
   @override
@@ -46,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
         backgroundColor: appBarColor,
         body: GestureDetector(
-          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+          onTap: () => FocusScope.of(context).unfocus(),
           child: SafeArea(
             child: Center(
               child: SingleChildScrollView(
@@ -69,12 +67,10 @@ class _LoginPageState extends State<LoginPage> {
                             // Login Page
                             LoginPanel(
                               onTap: () => _navigateToPage(1),
-                              uri: widget.uri,
                             ),
                             // Register Page
                             RegisterPanel(
                               onTap: () => _navigateToPage(0),
-                              uri: widget.uri,
                             ),
                           ],
                         ),

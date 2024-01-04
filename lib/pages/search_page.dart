@@ -106,27 +106,27 @@ class _SearchPageState extends State<SearchPage>
     Color appBarColor = Theme.of(context).appBarTheme.backgroundColor!;
     Color primary = Theme.of(context).colorScheme.primary;
 
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onVerticalDragDown: (details) {
-        FocusScope.of(context).unfocus();
-      },
-      child: Scaffold(
-        backgroundColor: appBarColor,
-        appBar: AppBar(
-          elevation: 0,
-          title: SearchWidget(
-            text: query,
-            hintText: '輸入想搜尋的內容或標題',
-            onChanged: searchBook,
-            autoFocus: true,
-            controller: controller,
-            setState: () => setState(() {
-              history = UserSimplePreference.getSearchPostHistory() ?? [];
-            }),
-          ),
+    return Scaffold(
+      backgroundColor: appBarColor,
+      appBar: AppBar(
+        elevation: 0,
+        title: SearchWidget(
+          text: query,
+          hintText: '輸入想搜尋的內容或標題',
+          onChanged: searchBook,
+          autoFocus: true,
+          controller: controller,
+          setState: () => setState(() {
+            history = UserSimplePreference.getSearchPostHistory() ?? [];
+          }),
         ),
-        body: SingleChildScrollView(
+      ),
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onVerticalDragDown: (details) {
+          FocusScope.of(context).unfocus();
+        },
+        child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.only(top: Dimensions.height5 * 2),
             child: Column(

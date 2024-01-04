@@ -12,11 +12,9 @@ import 'package:upoint/pages/login_page.dart';
 
 class VerifyEmail extends StatefulWidget {
   final String email;
-  final Uri uri;
   const VerifyEmail({
     super.key,
     required this.email,
-    required this.uri,
   });
 
   @override
@@ -128,7 +126,6 @@ class _VerifyEmailState extends State<VerifyEmail> {
           context,
           MaterialPageRoute(
             builder: (context) => LoginPage(
-              uri: widget.uri,
             ),
           ),
           (route) => false,

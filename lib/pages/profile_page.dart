@@ -324,29 +324,30 @@ class _ProfilePageState extends State<ProfilePage>
                                           ),
                                           funcBtn(
                                             () {
-                                              print('hello');
-                                              if (_user != null) {
-                                                print('hello1');
+                                              if (_user != null ||
+                                                  widget.isOrganizer) {
                                                 AuthMethods().signOut();
                                               }
                                               Navigator.pushAndRemoveUntil(
                                                 context,
                                                 MaterialPageRoute(
                                                   builder: (context) =>
-                                                      LoginPage(
-                                                    uri: Uri(
-                                                      pathSegments: ['profile'],
-                                                    ),
-                                                  ),
+                                                      LoginPage(),
                                                 ),
                                                 (Route<dynamic> route) =>
                                                     false, // 不保留任何旧路由
                                               );
                                             },
-                                            _user == null
-                                                ? Icons.login
-                                                : Icons.logout,
-                                            _user == null ? "登入" : '登出',
+                                            widget.isOrganizer
+                                                ? Icons.logout
+                                                : _user == null
+                                                    ? Icons.login
+                                                    : Icons.logout,
+                                            widget.isOrganizer
+                                                ? '登出'
+                                                : _user == null
+                                                    ? "登入"
+                                                    : '登出',
                                           ),
                                         ],
                                       )
@@ -357,7 +358,7 @@ class _ProfilePageState extends State<ProfilePage>
                             )
                           : Container(),
                       SizedBox(height: 16),
-                      widget.user == null || widget.organizer != null
+                      widget.user == null && !widget.isOrganizer
                           ? Container(
                               // height: Dimensions.width2 * 85,
                               decoration: BoxDecoration(
@@ -402,13 +403,7 @@ class _ProfilePageState extends State<ProfilePage>
                                                   context,
                                                   MaterialPageRoute(
                                                     builder: (context) =>
-                                                        LoginPage(
-                                                      uri: Uri(
-                                                        pathSegments: [
-                                                          'profile'
-                                                        ],
-                                                      ),
-                                                    ),
+                                                        LoginPage(),
                                                   ),
                                                   (Route<dynamic> route) =>
                                                       false, // 不保留任何旧路由

@@ -115,7 +115,7 @@ class _SignUpFormPageState extends State<SignUpFormPage> {
         ),
       ),
       body: GestureDetector(
-        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        onTap: () => FocusScope.of(context).unfocus(),
         child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: Dimensions.width5 * 4),

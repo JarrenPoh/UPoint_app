@@ -47,7 +47,7 @@ class ManagePageState extends State<ManagePage>
     Color onPrimary = Theme.of(context).colorScheme.onPrimary;
 
     return GestureDetector(
-      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         body: Container(
           color: appBarColor,
@@ -95,61 +95,61 @@ class ManagePageState extends State<ManagePage>
                         ),
                       ),
                     ),
-                    SliverOverlapAbsorber(
-                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                          context),
-                      sliver: SliverAppBar(
-                          backgroundColor: appBarColor,
-                          expandedHeight: Dimensions.height5 * 6,
-                          forceElevated: innerBoxIsScrolled,
-                          pinned: false,
-                          floating: true,
-                          elevation: 0,
-                          bottom: PreferredSize(
-                            preferredSize: Size(
-                              Dimensions.screenWidth,
-                              Dimensions.height5 * 6,
-                            ),
-                            child: Container(
-                              color: scaffoldBackgroundColor,
-                              child: Container(
-                                width: Dimensions.screenWidth,
-                                decoration: BoxDecoration(
-                                  color: appBarColor,
-                                  borderRadius: const BorderRadius.vertical(
-                                    bottom: Radius.circular(20),
-                                  ),
-                                ),
-                                child: Container(
-                                  margin: EdgeInsets.only(
-                                    left: Dimensions.width5 * 4,
-                                    right: Dimensions.width5 * 4,
-                                    bottom: Dimensions.height5 * 3,
-                                  ),
-                                  padding: EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                    color: scaffoldBackgroundColor,
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  child: TextField(
-                                    decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      prefixIcon: Icon(
-                                        Icons.search,
-                                        color: onSecondary,
-                                      ),
-                                      hintText: "Search you're looking for",
-                                      hintStyle: TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: Dimensions.height5 * 3,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )),
-                    ),
+                    // SliverOverlapAbsorber(
+                    //   handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                    //       context),
+                    //   sliver: SliverAppBar(
+                    //       backgroundColor: appBarColor,
+                    //       expandedHeight: Dimensions.height5 * 6,
+                    //       forceElevated: innerBoxIsScrolled,
+                    //       pinned: false,
+                    //       floating: true,
+                    //       elevation: 0,
+                    //       bottom: PreferredSize(
+                    //         preferredSize: Size(
+                    //           Dimensions.screenWidth,
+                    //           Dimensions.height5 * 6,
+                    //         ),
+                    //         child: Container(
+                    //           color: scaffoldBackgroundColor,
+                    //           child: Container(
+                    //             width: Dimensions.screenWidth,
+                    //             decoration: BoxDecoration(
+                    //               color: appBarColor,
+                    //               borderRadius: const BorderRadius.vertical(
+                    //                 bottom: Radius.circular(20),
+                    //               ),
+                    //             ),
+                    //             child: Container(
+                    //               margin: EdgeInsets.only(
+                    //                 left: Dimensions.width5 * 4,
+                    //                 right: Dimensions.width5 * 4,
+                    //                 bottom: Dimensions.height5 * 3,
+                    //               ),
+                    //               padding: EdgeInsets.all(5),
+                    //               decoration: BoxDecoration(
+                    //                 color: scaffoldBackgroundColor,
+                    //                 borderRadius: BorderRadius.circular(15),
+                    //               ),
+                    //               child: TextField(
+                    //                 decoration: InputDecoration(
+                    //                   border: InputBorder.none,
+                    //                   prefixIcon: Icon(
+                    //                     Icons.search,
+                    //                     color: onSecondary,
+                    //                   ),
+                    //                   hintText: "Search you're looking for",
+                    //                   hintStyle: TextStyle(
+                    //                     color: Colors.grey,
+                    //                     fontSize: Dimensions.height5 * 3,
+                    //                   ),
+                    //                 ),
+                    //               ),
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       )),
+                    // ),
                   ];
                 },
                 body: ValueListenableBuilder(

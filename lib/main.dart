@@ -1,9 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:upoint/bloc/add_post_page_bloc.dart';
+import 'package:upoint/bloc/uri_bloc.dart';
 import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/globals/user_simple_preference.dart';
 import 'package:upoint/navigation_container.dart';
@@ -25,6 +25,7 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => AddPostPageBloc()),
         ChangeNotifierProvider(create: (context) => AuthMethods()),
+        ChangeNotifierProvider(create: (context) => UriBloc()),
       ],
       child: MyApp(),
     ),
@@ -40,21 +41,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: lightTheme,
       darkTheme: darkTheme,
-      home: Builder(
-        builder: (context) {
-          bool isOrganizer = false;
-          if (FirebaseAuth.instance.currentUser != null) {
-            String email = FirebaseAuth.instance.currentUser!.email!;
-            if (email == "jjpohhh@gmail.com") {
-              isOrganizer = true;
-            }
-          }
-          return NavigationContainer(
-            uri: null,
-            isOrganizer: isOrganizer,
-          );
-        },
-      ),
+      home: const NavigationContainer(),
     );
   }
 }

@@ -9,11 +9,9 @@ import 'package:upoint/widgets/login/reset_password.dart';
 
 class LoginPanel extends StatefulWidget {
   final Function() onTap;
-  final Uri? uri;
   const LoginPanel({
     super.key,
     required this.onTap,
-    required this.uri,
   });
 
   @override
@@ -68,7 +66,7 @@ class _LoginPanelState extends State<LoginPanel> {
       });
     } else {
       if (!isLoading) {
-        FocusManager.instance.primaryFocus?.unfocus();
+        FocusScope.of(context).unfocus();
         setState(() {
           isLoading = true;
         });
@@ -85,20 +83,12 @@ class _LoginPanelState extends State<LoginPanel> {
   void signIn(res) async {
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     if (res == "success") {
-      print(res);
       if (FirebaseAuth.instance.currentUser!.emailVerified) {
-        String email = FirebaseAuth.instance.currentUser!.email!;
-        bool isOrganizer = false;
-        if (email == "jjpohhh@gmail.com") {
-          isOrganizer = true;
-        }
         // ignore: use_build_context_synchronously
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
             builder: (context) => NavigationContainer(
-              uri: widget.uri,
-              isOrganizer: isOrganizer,
             ),
           ),
           (route) => false,
