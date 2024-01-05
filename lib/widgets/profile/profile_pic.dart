@@ -101,7 +101,7 @@ class _ProfilePicState extends State<ProfilePic> {
       bottom: 10,
       child: GestureDetector(
         onTap: () async {
-          if (widget.id != '') {
+          if (widget.id != '' && !widget.isOrganizer) {
             await callPicker();
           }
         },
@@ -144,7 +144,7 @@ class _ProfilePicState extends State<ProfilePic> {
                 )
               ],
             ),
-            if (widget.id != '')
+            if (widget.id != '' && !widget.isOrganizer)
               Positioned(
                 right: Dimensions.width2 * 1,
                 bottom: Dimensions.width2 * 1,

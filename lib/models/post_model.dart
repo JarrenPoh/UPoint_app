@@ -15,6 +15,7 @@ class PostModel {
   String? uid;
   List? signList;
   var datePublished;
+  String? pic;
 
   PostModel({
     this.photos,
@@ -31,6 +32,7 @@ class PostModel {
     this.datePublished,
     this.uid,
     this.signList,
+    this.pic,
   });
 
   static Map toMap(PostModel cart) {
@@ -43,16 +45,17 @@ class PostModel {
       "endTime": cart.endTime,
       "content": cart.content,
       "reward": cart.reward,
-      "rewardTagId":cart.rewardTagId,
+      "rewardTagId": cart.rewardTagId,
       "link": cart.link,
       "postId": cart.postId,
       "datePublished": cart.datePublished,
-      "uid":cart.uid,
-      "signList":cart.signList,
+      "uid": cart.uid,
+      "signList": cart.signList,
+      "pic": cart.pic,
     };
   }
 
-   static PostModel fromSnap(DocumentSnapshot snap) {
+  static PostModel fromSnap(DocumentSnapshot snap) {
     var snapshot = (snap.data()) as Map<String, dynamic>;
     // print('這是本帳用戶信息在 post.dart in model ${snapshot}');
     return PostModel(
@@ -68,8 +71,9 @@ class PostModel {
       link: snapshot['link'],
       postId: snapshot['postId'],
       datePublished: snapshot['datePublished'],
-      uid:snapshot['uid'],
-      signList:snapshot['signList'],
+      uid: snapshot['uid'],
+      signList: snapshot['signList'],
+      pic: snapshot['pic'],
     );
   }
 
@@ -82,11 +86,12 @@ class PostModel {
         "endTime": endTime,
         "content": content,
         "reward": reward,
-        "rewardTagId":rewardTagId,
+        "rewardTagId": rewardTagId,
         "link": link,
         "postId": postId,
         "datePublished": datePublished,
-        "uid":uid,
+        "uid": uid,
+        "pic": pic,
       };
 
   static PostModel fromMap(Map map) {
@@ -99,11 +104,12 @@ class PostModel {
       endTime: map['endTime'],
       content: map['content'],
       reward: map['reward'],
-      rewardTagId:map['rewardTagId'],
+      rewardTagId: map['rewardTagId'],
       link: map['link'],
       postId: map['postId'],
       datePublished: map['datePublished'],
-      uid:map['uid'],
+      uid: map['uid'],
+      pic: map['pic'],
     );
   }
 }

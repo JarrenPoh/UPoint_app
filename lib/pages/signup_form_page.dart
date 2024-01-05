@@ -78,7 +78,7 @@ class _SignUpFormPageState extends State<SignUpFormPage> {
   Future<String> sent(PostModel post, User user) async {
     DateTime _now = DateTime.now();
     String res = await FirestoreMethods().sentSignForm(
-      post.postId!,
+      post,
       {
         "email": controllers[0].text,
         "name": controllers[1].text,

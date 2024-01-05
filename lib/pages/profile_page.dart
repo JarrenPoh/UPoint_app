@@ -268,8 +268,8 @@ class _ProfilePageState extends State<ProfilePage>
                                                   color: onSecondary,
                                                   size: Dimensions.height2 * 8,
                                                   text: widget.isOrganizer
-                                                      ? "Hi~ $username / 單位資料"
-                                                      : "Hi~ $username / 個人資料",
+                                                      ? "$username / 單位資料"
+                                                      : "$username / 個人資料",
                                                 ),
                                               ),
                                               if (!widget.isOrganizer)
@@ -393,7 +393,7 @@ class _ProfilePageState extends State<ProfilePage>
                             ? Container(
                                 // height: Dimensions.width2 * 85,
                                 decoration: BoxDecoration(
-                                  color: appBarColor,
+                                  color: scaffoldBackgroundColor,
                                   borderRadius: BorderRadius.circular(16),
                                   boxShadow: const [
                                     BoxShadow(

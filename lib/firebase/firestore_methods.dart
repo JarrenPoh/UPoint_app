@@ -48,6 +48,7 @@ class FirestoreMethods {
       post.postId = postId;
       post.datePublished = DateTime.now();
       post.uid = organizer.uid;
+      post.pic = organizer.pic;
       await _firestore.collection('posts').doc(postId).set(post.toJson());
       res = 'success';
     } catch (err) {
@@ -58,7 +59,7 @@ class FirestoreMethods {
 
   //送出報名表單（改現有post裡面的signList）
   Future<String> sentSignForm(
-    String postId,
+    PostModel post,
     Map postMap,
     User user,
     Map userMap,
@@ -71,14 +72,14 @@ class FirestoreMethods {
               .collection('posts')
               .where(
                 'postId',
-                isEqualTo: postId,
+                isEqualTo: post.postId,
               )
               .get();
       PostModel _post = PostModel.fromSnap(fetchPost.docs.toList().first);
       List signList = _post.signList ?? [];
       signList.add(postMap);
       //更新貼文
-      await _firestore.collection('posts').doc(postId).update({
+      await _firestore.collection('posts').doc(post.postId).update({
         "signList": signList,
       });
       //更新用戶
@@ -87,6 +88,16 @@ class FirestoreMethods {
       await _firestore.collection('users').doc(user.uuid).update({
         "signList": signList,
       });
+      await uploadToInbox(
+        user.uuid,
+        post.organizer!,
+        post.pic,
+        "你已成功報名『${post.title}』，請記得出席 ${post.organizer}",
+        Uri(
+          pathSegments: ['activity'],
+          queryParameters: {"id": post.postId!},
+        ).toString(),
+      );
       res = 'success';
     } catch (e) {
       res = e.toString();
@@ -144,7 +155,7 @@ class FirestoreMethods {
   }
 
   //更新照片
-  Future<String> updatePic(pic,bool isOrganizer, String doc) async {
+  Future<String> updatePic(pic, bool isOrganizer, String doc) async {
     String _picUrl = '';
     String collection = isOrganizer ? 'organizers' : 'users';
     try {
@@ -156,5 +167,34 @@ class FirestoreMethods {
       });
     } catch (err) {}
     return _picUrl;
+  }
+
+  //發送Notification
+  Future<void> uploadToInbox(
+    String targetUserId,
+    String name,
+    String? pic,
+    String text,
+    String url,
+  ) async {
+    try {
+      String inboxId = const Uuid().v1();
+      //儲存通知
+      await _firestore
+          .collection('users')
+          .doc(targetUserId)
+          .collection('inboxs')
+          .doc(inboxId)
+          .set({
+        'inboxId': inboxId,
+        'datePublished': DateTime.now(),
+        'pic': pic,
+        'name': name,
+        'text': text,
+        'url': url,
+      });
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }

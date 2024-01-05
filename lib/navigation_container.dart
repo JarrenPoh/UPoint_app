@@ -9,6 +9,7 @@ import 'package:upoint/models/post_model.dart';
 import 'package:upoint/pages/activity_page.dart';
 import 'package:upoint/pages/add_post_page.dart';
 import 'package:upoint/pages/home_page.dart';
+import 'package:upoint/pages/inbox_page.dart';
 import 'package:upoint/pages/logo_page.dart';
 import 'package:upoint/pages/manage_page.dart';
 import 'package:upoint/pages/search_page.dart';
@@ -65,7 +66,7 @@ class _NavigationContainerState extends State<NavigationContainer>
     print('here1');
     if (FirebaseAuth.instance.currentUser != null) {
       String email = FirebaseAuth.instance.currentUser!.email!;
-      if(organList.contains(email)){
+      if (organList.contains(email)) {
         isOrganizer = true;
       }
     }
@@ -78,7 +79,7 @@ class _NavigationContainerState extends State<NavigationContainer>
       } else if (uri.pathSegments.isNotEmpty &&
           uri.pathSegments.first == 'activity') {
         _selectedPageIndex = 0;
-        findAndGoPost(uri.pathSegments[1]);
+        findAndGoPost(uri.queryParameters['id']);
       }
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Provider.of<UriBloc>(context, listen: false).setUri(null);
@@ -187,7 +188,9 @@ class _NavigationContainerState extends State<NavigationContainer>
                   user: userAccountManager.user,
                 ),
                 LogoPage(),
-                Container(),
+                InboxPage(
+                  user: userAccountManager.user,
+                ),
                 ProfilePage(
                   isOrganizer: isOrganizer,
                   user: userAccountManager.user,

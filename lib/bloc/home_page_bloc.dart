@@ -28,7 +28,7 @@ class HomePageBloc with ChangeNotifier {
         .collection('posts')
         .where('date',
             isGreaterThanOrEqualTo: Timestamp.fromDate(today))
-        .orderBy('date', descending: true)
+        .orderBy('date', descending: false)
         .get();
     print('找了${fetchPost.docs.length}則貼文');
     postListNotifier.addList(fetchPost.docs.toList()); //activity_body用的

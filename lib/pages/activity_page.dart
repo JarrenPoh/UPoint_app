@@ -401,10 +401,12 @@ class _ActivityPageState extends State<ActivityPage> {
                                       Provider.of<UriBloc>(context,
                                               listen: false)
                                           .setUri(
-                                        Uri(pathSegments: [
-                                          'activity',
-                                          widget.post.postId!
-                                        ]),
+                                        Uri(
+                                          pathSegments: ['activity'],
+                                          queryParameters: {
+                                            "id": widget.post.postId!
+                                          },
+                                        ),
                                       );
                                       Navigator.pushAndRemoveUntil(
                                         context,
