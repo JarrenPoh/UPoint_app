@@ -9,6 +9,7 @@ import 'package:upoint/models/post_model.dart';
 import 'package:upoint/pages/activity_page.dart';
 import 'package:upoint/pages/add_post_page.dart';
 import 'package:upoint/pages/home_page.dart';
+import 'package:upoint/pages/logo_page.dart';
 import 'package:upoint/pages/manage_page.dart';
 import 'package:upoint/pages/search_page.dart';
 import 'package:upoint/secret.dart';
@@ -185,7 +186,7 @@ class _NavigationContainerState extends State<NavigationContainer>
                   bloc: _homePageBloc,
                   user: userAccountManager.user,
                 ),
-                Container(color: Colors.blue),
+                LogoPage(),
                 Container(),
                 ProfilePage(
                   isOrganizer: isOrganizer,

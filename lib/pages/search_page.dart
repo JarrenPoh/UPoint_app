@@ -114,7 +114,7 @@ class _SearchPageState extends State<SearchPage>
           text: query,
           hintText: '輸入想搜尋的內容或標題',
           onChanged: searchBook,
-          autoFocus: true,
+          autoFocus: false,
           controller: controller,
           setState: () => setState(() {
             history = UserSimplePreference.getSearchPostHistory() ?? [];

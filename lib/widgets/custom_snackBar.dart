@@ -11,7 +11,7 @@ void showCustomSnackbar(String title, String message, BuildContext context) {
     message,
     snackPosition: SnackPosition.TOP,
     duration: const Duration(seconds: 2),
-    backgroundColor: onSecondary,
-    colorText: onPrimary,
+    backgroundColor: onPrimary,
+    colorText: onSecondary,
   );
 }
