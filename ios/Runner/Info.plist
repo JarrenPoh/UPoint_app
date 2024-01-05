@@ -34,6 +34,8 @@
 		<string>Main</string>
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>Replace with your permission description.</string>
+		<key>CFBundleURLName</key>
+		<string>nojoke.brandx.red</string>
 		<key>CFBundleURLTypes</key>
 		<array>
 			<dict>

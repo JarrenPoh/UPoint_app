@@ -67,28 +67,25 @@ class _SearchPageState extends State<SearchPage>
         PostModel.fromSnap(e),
       );
     });
-    if (query.runes.every(
-            (rune) => (rune >= 0x4e00 && rune <= 0x9fff) || rune == 0x3002) ||
-        query == '') {
-      if (query != '') {
-        return debounce(() async {
-          List<PostModel> book = postList.where((e) {
-            if (e.title!.contains(query) ||
-                e.organizer!.contains(query) ||
-                e.reward!.contains(query) ||
-                e.content!.contains(query)) {
-              return true;
-            }
-            return false;
-          }).toList();
 
-          setState(() {
-            isSearch = true;
-            this.query = query;
-            this.books = book;
-          });
+    if (query != '') {
+      return debounce(() async {
+        List<PostModel> book = postList.where((e) {
+          if (e.title!.contains(query) ||
+              e.organizer!.contains(query) ||
+              (e.reward?.contains(query) ?? false) ||
+              e.content!.contains(query)) {
+            return true;
+          }
+          return false;
+        }).toList();
+
+        setState(() {
+          isSearch = true;
+          this.query = query;
+          this.books = book;
         });
-      }
+      });
     }
   }
 
@@ -183,55 +180,62 @@ class _SearchPageState extends State<SearchPage>
                           );
                         }),
                       )
-                    : ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: history.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: Dimensions.width5 * 2),
-                            child: Column(
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      query = history[index];
-                                      controller.text = query;
-                                    });
-                                    searchBook(history[index]);
-                                  },
-                                  child: ListTile(
-                                    leading: Icon(
-                                      Icons.history,
-                                      color: primary,
-                                      size: 28,
-                                    ),
-                                    title: MediumText(
-                                      color: onSecondary,
-                                      size: Dimensions.height2 * 8,
-                                      text: history[index],
-                                    ),
-                                    trailing: GestureDetector(
-                                      onTap: () => clear(index),
-                                      child: Container(
-                                        width: Dimensions.width5 * 8,
-                                        height: Dimensions.height5 * 8,
-                                        child: Icon(
-                                          CupertinoIcons.clear_circled,
+                    : Column(
+                        children: [
+                          ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: history.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: Dimensions.width5 * 2),
+                                child: Column(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          query = history[index];
+                                          controller.text = query;
+                                        });
+                                        searchBook(history[index]);
+                                      },
+                                      child: ListTile(
+                                        leading: Icon(
+                                          Icons.history,
                                           color: primary,
-                                          size: 20,
+                                          size: 28,
+                                        ),
+                                        title: MediumText(
+                                          color: onSecondary,
+                                          size: Dimensions.height2 * 8,
+                                          text: history[index],
+                                        ),
+                                        trailing: GestureDetector(
+                                          onTap: () => clear(index),
+                                          child: Container(
+                                            width: Dimensions.width5 * 8,
+                                            height: Dimensions.height5 * 8,
+                                            child: Icon(
+                                              CupertinoIcons.clear_circled,
+                                              color: primary,
+                                              size: 20,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
+                                    Divider(
+                                      height: Dimensions.height5,
+                                    ),
+                                  ],
                                 ),
-                                Divider(
-                                  height: Dimensions.height5,
-                                ),
-                              ],
-                            ),
-                          );
-                        },
+                              );
+                            },
+                          ),
+                          Container(
+                            height: 500,
+                          ),
+                        ],
                       ),
               ],
             ),

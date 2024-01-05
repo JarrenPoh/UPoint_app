@@ -13,6 +13,7 @@ import 'package:upoint/overscroll_pop-main/lib/overscroll_pop.dart';
 import 'package:upoint/pages/login_page.dart';
 import 'package:upoint/pages/sign_list_page.dart';
 import 'package:upoint/pages/signup_form_page.dart';
+import 'package:upoint/secret.dart';
 import 'package:upoint/widgets/custom_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:upoint/globals/date_time_transfer.dart';
@@ -67,9 +68,7 @@ class _ActivityPageState extends State<ActivityPage> {
                   width: Dimensions.height2 * 23,
                   height: Dimensions.height2 * 23,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(
-                      40,
-                    ),
+                    borderRadius: BorderRadius.circular(40),
                     color: appBarColor,
                   ),
                   child: Align(
@@ -83,25 +82,25 @@ class _ActivityPageState extends State<ActivityPage> {
                 ),
               ),
               actions: [
-                CupertinoButton(
+                IconButton(
+                  padding: EdgeInsets.all(0),
                   onPressed: () async {
-                    String postLink = 'sadasfdafafsf';
+                    String postLink = 'https://$host/posts/?id=${widget.post.postId}';
                     try {
                       await Share.share(
-                        'text' + postLink,
-                        subject: 'subject',
+                        ' - ${widget.post!.title} ${widget.post.organizer}\n' + postLink,
+                        subject:
+                            '${widget.post.title}  ${widget.post.content!}...',
                       );
                     } catch (e) {
                       print(e.toString());
                     }
                   },
-                  child: Container(
+                  icon: Container(
                     width: Dimensions.height2 * 20,
                     height: Dimensions.height2 * 20,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                        40,
-                      ),
+                      borderRadius: BorderRadius.circular(40),
                       color: appBarColor,
                     ),
                     child: Icon(

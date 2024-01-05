@@ -24,7 +24,10 @@ class InboxPage extends StatefulWidget {
   State<InboxPage> createState() => _InboxPageState();
 }
 
-class _InboxPageState extends State<InboxPage> {
+class _InboxPageState extends State<InboxPage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
   late InboxPageBloc bloc;
 
   @override
@@ -75,6 +78,7 @@ class _InboxPageState extends State<InboxPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     Color primaryContainer = Theme.of(context).colorScheme.primaryContainer;
@@ -119,7 +123,9 @@ class _InboxPageState extends State<InboxPage> {
                       return _isLoading
                           //shimmer
                           ? Center(
-                              child: CircularProgressIndicator.adaptive(),
+                              child: CircularProgressIndicator.adaptive(
+                                backgroundColor: onSecondary,
+                              ),
                             )
                           : Column(
                               children: [
@@ -166,7 +172,9 @@ class _InboxPageState extends State<InboxPage> {
                                     )),
                                   ),
                                 if (_noMore == false)
-                                  CircularProgressIndicator.adaptive(),
+                                  CircularProgressIndicator.adaptive(
+                                    backgroundColor: onSecondary,
+                                  ),
                               ],
                             );
                     },
