@@ -238,4 +238,16 @@ class AuthMethods with ChangeNotifier {
     }
     return res;
   }
+
+  //刪除帳號
+  Future<void> deleteUser() async {
+    try {
+      await _auth.currentUser!.delete();
+      // 成功删除账户后的操作，比如返回登录页面
+    } on FirebaseAuthException catch (e) {
+      // 处理错误，可能是因为用户最近没有登录
+      print('删除账户出错: ${e.message}');
+      // 可以提示用户重新登录后再尝试删除账户
+    }
+  }
 }

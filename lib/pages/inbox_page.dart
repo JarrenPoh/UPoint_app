@@ -79,10 +79,7 @@ class _InboxPageState extends State<InboxPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
-    Color primaryContainer = Theme.of(context).colorScheme.primaryContainer;
-    Color hintColor = Theme.of(context).hintColor;
     Color onPrimary = Theme.of(context).colorScheme.onPrimary;
     Color appBarColor = Theme.of(context).appBarTheme.backgroundColor!;
 

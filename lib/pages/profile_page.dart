@@ -165,6 +165,28 @@ class _ProfilePageState extends State<ProfilePage>
     }
   }
 
+  deleteAccount() async {
+    Color onSecondary = Theme.of(context).colorScheme.onSecondary;
+    await CustomDialog(
+      context,
+      '確定要刪除帳號嗎！',
+      '一旦刪除後便永久無法復原！',
+      onSecondary,
+      onSecondary,
+      () async {
+        await AuthMethods().deleteUser();
+        // ignore: use_build_context_synchronously
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LoginPage(),
+          ),
+          (Route<dynamic> route) => false, // 不保留任何旧路由
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -380,6 +402,16 @@ class _ProfilePageState extends State<ProfilePage>
                                                       ? "登入"
                                                       : '登出',
                                             ),
+                                            if (widget.isOrganizer ||
+                                                (!widget.isOrganizer &&
+                                                    _user != null))
+                                              funcBtn(
+                                                () async {
+                                                  await deleteAccount();
+                                                },
+                                                Icons.key_off,
+                                                "註銷帳號",
+                                              ),
                                           ],
                                         )
                                       ],
