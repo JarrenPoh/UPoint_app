@@ -6,26 +6,19 @@ import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/globals/regular_text.dart';
 import 'package:upoint/models/organizer_model.dart';
-import 'package:upoint/models/user_model.dart' as model;
+import 'package:upoint/models/user_model.dart';
 import 'package:upoint/pages/edit_profile_page.dart';
 import 'package:upoint/pages/login_page.dart';
 import 'package:upoint/pages/privacy_page.dart';
 import 'package:upoint/secret.dart';
-import 'package:upoint/value_notifier/list_value_notifier.dart';
 import 'package:upoint/widgets/custom_dialog.dart';
 import 'package:upoint/widgets/profile/profile_pic.dart';
 
 class ProfilePage extends StatefulWidget {
-  final bool isOrganizer;
-  final model.User? user;
-  final OrganModel? organizer;
-  final ListValueNotifier? valueListenable;
+  final UserModel? user;
   const ProfilePage({
     super.key,
-    required this.isOrganizer,
-    this.organizer,
     this.user,
-    this.valueListenable,
   });
 
   @override
@@ -36,8 +29,8 @@ class _ProfilePageState extends State<ProfilePage>
     with AutomaticKeepAliveClientMixin {
   @override
   final bool wantKeepAlive = true;
-  model.User? _user;
-  OrganModel? _organizer;
+  UserModel? _user;
+  OrganizerModel? _organizer;
   int countTime = 0;
   String username = 'xxx';
   String className = '尚未編輯';
@@ -51,16 +44,13 @@ class _ProfilePageState extends State<ProfilePage>
     if (widget.user != null) {
       _user = widget.user;
     }
-    if (widget.organizer != null) {
-      _organizer = widget.organizer;
-    }
     initInform();
   }
 
   initInform() {
     if (_organizer != null) {
-      if (_organizer!.organizerName.isNotEmpty) {
-        username = _organizer!.organizerName;
+      if (_organizer!.username.isNotEmpty) {
+        username = _organizer!.username;
       }
       if (_organizer!.phoneNumber.isNotEmpty) {
         phoneNumber = _organizer!.phoneNumber;
@@ -107,7 +97,7 @@ class _ProfilePageState extends State<ProfilePage>
                 isEqualTo: widget.user!.uuid,
               )
               .get();
-      model.User _u = model.User.fromSnap(fetchUser.docs.toList().first);
+      UserModel _u = UserModel.fromSnap(fetchUser.docs.toList().first);
       _user = _u;
       setState(() {
         initInform();
@@ -135,7 +125,7 @@ class _ProfilePageState extends State<ProfilePage>
 
   logInOrOut() async {
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
-    if (_user != null || widget.isOrganizer) {
+    if (_user != null) {
       await CustomDialog(
         context,
         '您要登出嗎？',
@@ -235,30 +225,16 @@ class _ProfilePageState extends State<ProfilePage>
                             scnContainer(
                               0,
                               "0",
-                              widget.isOrganizer,
                             ),
                             SizedBox(width: 16),
-                            !widget.isOrganizer
-                                ? scnContainer(
-                                    1,
-                                    '${countTime.toString()} 次',
-                                    widget.isOrganizer,
-                                  )
-                                : ValueListenableBuilder(
-                                    valueListenable: widget.valueListenable!,
-                                    builder: (context, value, builder) {
-                                      value as List;
-                                      return scnContainer(
-                                        1,
-                                        '${value.length.toString()} 次',
-                                        widget.isOrganizer,
-                                      );
-                                    },
-                                  ),
+                            scnContainer(
+                              1,
+                              '${countTime.toString()} 次',
+                            )
                           ],
                         ),
                         SizedBox(height: 16),
-                        widget.user != null || widget.organizer != null
+                        widget.user != null
                             ? Container(
                                 decoration: BoxDecoration(
                                   color: scaffoldBackgroundColor,
@@ -289,21 +265,18 @@ class _ProfilePageState extends State<ProfilePage>
                                                 child: BoldText(
                                                   color: onSecondary,
                                                   size: Dimensions.height2 * 8,
-                                                  text: widget.isOrganizer
-                                                      ? "$username / 單位資料"
-                                                      : "$username / 個人資料",
+                                                  text: "$username / 個人資料",
                                                 ),
                                               ),
-                                              if (!widget.isOrganizer)
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    editProfile();
-                                                  },
-                                                  child: Icon(
-                                                    Icons.edit,
-                                                    color: Colors.grey,
-                                                  ),
-                                                )
+                                              GestureDetector(
+                                                onTap: () {
+                                                  editProfile();
+                                                },
+                                                child: Icon(
+                                                  Icons.edit,
+                                                  color: Colors.grey,
+                                                ),
+                                              )
                                             ],
                                           ),
                                         ),
@@ -314,12 +287,8 @@ class _ProfilePageState extends State<ProfilePage>
                                               CrossAxisAlignment.start,
                                           children: [
                                             profileRow("學校：中原大學"),
-                                            widget.isOrganizer
-                                                ? Container()
-                                                : profileRow("系級：$className"),
-                                            widget.isOrganizer
-                                                ? Container()
-                                                : profileRow("學號：$studentID"),
+                                            profileRow("系級：$className"),
+                                            profileRow("學號：$studentID"),
                                             profileRow("連絡電話：$phoneNumber"),
                                             profileRow("電子郵件：$email"),
                                           ],
@@ -331,7 +300,7 @@ class _ProfilePageState extends State<ProfilePage>
                               )
                             : Container(),
                         SizedBox(height: 16),
-                        widget.user != null || widget.organizer != null
+                        widget.user != null
                             ? Container(
                                 // height: Dimensions.width2 * 85,
                                 decoration: BoxDecoration(
@@ -367,12 +336,11 @@ class _ProfilePageState extends State<ProfilePage>
                                             thickness: 1, color: Colors.grey),
                                         Column(
                                           children: [
-                                            if (!widget.isOrganizer)
-                                              funcBtn(
-                                                () => editProfile(),
-                                                Icons.edit_note_outlined,
-                                                "編輯個人資料",
-                                              ),
+                                            funcBtn(
+                                              () => editProfile(),
+                                              Icons.edit_note_outlined,
+                                              "編輯個人資料",
+                                            ),
                                             funcBtn(
                                               () {
                                                 Navigator.push(
@@ -391,20 +359,12 @@ class _ProfilePageState extends State<ProfilePage>
                                               () {
                                                 logInOrOut();
                                               },
-                                              widget.isOrganizer
-                                                  ? Icons.logout
-                                                  : _user == null
-                                                      ? Icons.login
-                                                      : Icons.logout,
-                                              widget.isOrganizer
-                                                  ? '登出'
-                                                  : _user == null
-                                                      ? "登入"
-                                                      : '登出',
+                                              _user == null
+                                                  ? Icons.login
+                                                  : Icons.logout,
+                                              _user == null ? "登入" : '登出',
                                             ),
-                                            if (widget.isOrganizer ||
-                                                (!widget.isOrganizer &&
-                                                    _user != null))
+                                            if (_user != null)
                                               funcBtn(
                                                 () async {
                                                   await deleteAccount();
@@ -421,7 +381,7 @@ class _ProfilePageState extends State<ProfilePage>
                               )
                             : Container(),
                         SizedBox(height: 16),
-                        widget.user == null && !widget.isOrganizer
+                        widget.user == null
                             ? Container(
                                 // height: Dimensions.width2 * 85,
                                 decoration: BoxDecoration(
@@ -545,7 +505,7 @@ class _ProfilePageState extends State<ProfilePage>
     );
   }
 
-  Widget scnContainer(int index, String str, bool isOrganizer) {
+  Widget scnContainer(int index, String str) {
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     Color scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
     return Expanded(
@@ -570,11 +530,7 @@ class _ProfilePageState extends State<ProfilePage>
             MediumText(
               color: onSecondary,
               size: Dimensions.height2 * 7,
-              text: index == 0
-                  ? "UPoints"
-                  : isOrganizer
-                      ? "舉辦活動"
-                      : "活動紀錄",
+              text: index == 0 ? "UPoints" : "活動紀錄",
             ),
             SizedBox(height: 8),
             Row(
@@ -628,17 +584,10 @@ class _ProfilePageState extends State<ProfilePage>
           ),
         ),
         ProfilePic(
-          picUri: widget.isOrganizer
-              ? widget.organizer!.pic
-              : widget.user != null
-                  ? widget.user!.pic ?? defaultUserPic
-                  : defaultUserPic,
-          isOrganizer: widget.isOrganizer,
-          id: widget.isOrganizer
-              ? widget.organizer!.uid
-              : widget.user != null
-                  ? widget.user!.uuid
-                  : '',
+          picUri: widget.user != null
+              ? widget.user!.pic ?? defaultUserPic
+              : defaultUserPic,
+          id: widget.user != null ? widget.user!.uuid : '',
         ),
       ],
     );

@@ -6,7 +6,7 @@ import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/models/user_model.dart';
 
 class EditProfilePage extends StatefulWidget {
-  final User user;
+  final UserModel user;
   const EditProfilePage({
     super.key,
     required this.user,

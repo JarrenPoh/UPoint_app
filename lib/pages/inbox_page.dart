@@ -14,7 +14,7 @@ import 'package:upoint/pages/login_page.dart';
 import 'package:upoint/secret.dart';
 
 class InboxPage extends StatefulWidget {
-  final User? user;
+  final UserModel? user;
   const InboxPage({
     Key? key,
     required this.user,
@@ -56,7 +56,6 @@ class _InboxPageState extends State<InboxPage>
             post: _p,
             hero: "activity${_p.datePublished.toString()}",
             isOver: false,
-            isOrganizer: false,
           );
         },
       ),

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class User {
+class UserModel {
   final String email;
   final String uuid;
   String? username;
@@ -11,7 +11,7 @@ class User {
   List? signList;
   String? pic;
 
-  User({
+  UserModel({
     required this.email,
     required this.uuid,
     this.phoneNumber,
@@ -28,17 +28,17 @@ class User {
         "uuid": uuid,
         "username": username,
         "studentID": studentID,
-        "className":className,
+        "className": className,
         "phoneNumber": phoneNumber,
         "fcmToken": fcmToken,
-        "signList":signList,
-        "pic":pic,
+        "signList": signList,
+        "pic": pic,
       };
 
-  static User fromSnap(DocumentSnapshot snap) {
+  static UserModel fromSnap(DocumentSnapshot snap) {
     var snapshot = (snap.data()) as Map<String, dynamic>;
 
-    return User(
+    return UserModel(
       email: snapshot['email'],
       uuid: snapshot['uuid'],
       username: snapshot['username'],
@@ -46,8 +46,26 @@ class User {
       className: snapshot['className'],
       phoneNumber: snapshot['phoneNumber'],
       fcmToken: snapshot['fcmToken'],
-      signList:snapshot['signList'],
+      signList: snapshot['signList'],
       pic: snapshot['pic'],
     );
+  }
+
+  static UserModel? fromMap(Map? map) {
+    if (map == null) {
+      return null;
+    } else {
+      return UserModel(
+      email: map['email'],
+      uuid: map['uuid'],
+      username: map['username'],
+      studentID: map['studentID'],
+      className: map['className'],
+      phoneNumber: map['phoneNumber'],
+      fcmToken: map['fcmToken'],
+      signList: map['signList'],
+      pic: map['pic'],
+      );
+    }
   }
 }

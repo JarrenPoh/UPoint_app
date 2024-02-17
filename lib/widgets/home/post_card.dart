@@ -1,24 +1,19 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:upoint/bloc/add_post_page_bloc.dart';
-import 'package:upoint/globals/date_time_transfer.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/models/organizer_model.dart';
 import 'package:upoint/models/post_model.dart';
-import 'package:provider/provider.dart';
 import 'package:upoint/models/user_model.dart';
 import 'package:upoint/pages/activity_page.dart';
-import 'package:upoint/pages/add_post_page.dart';
-import 'package:upoint/global_key.dart' as globals;
 
 class PostCard extends StatefulWidget {
   final PostModel post;
-  final OrganModel? organizer;
+  final OrganizerModel? organizer;
   final String hero;
   final bool isOrganizer;
-  final User? user;
+  final UserModel? user;
   const PostCard({
     super.key,
     required this.post,
@@ -36,10 +31,10 @@ class _PostCardState extends State<PostCard> {
   @override
   void initState() {
     super.initState();
-    isOver = isOverTime(
-      widget.post.endTime!,
-      widget.post.date.toDate(),
-    );
+    // isOver = isOverTime(
+    //   widget.post.endTime!,
+    //   widget.post.date.toDate(),
+    // );
   }
 
   double _scale = 1.0;
@@ -58,7 +53,6 @@ class _PostCardState extends State<PostCard> {
               post: widget.post,
               hero: widget.hero,
               isOver: isOver,
-              isOrganizer: widget.isOrganizer,
             ),
           ),
         );
@@ -76,19 +70,19 @@ class _PostCardState extends State<PostCard> {
             vertical: Dimensions.height5 * 2,
           ),
           child: PostCard(
-            widget.post.photos!.first,
+            widget.post.photo,
             widget.post.title,
-            widget.post.organizer,
-            widget.post.date,
-            widget.post.startTime,
-            widget.post.endTime,
+            widget.post.organizerName,
+           " widget.post.date",
+            "widget.post.startTime",
+            "widget.post.endTime",
           ),
         ),
       ),
     );
   }
 
-  Widget PostCard(imageUrl, title, organizer, date, startTime, endTime) {
+  Widget PostCard(imageUrl, title, organizerName, date, startTime, endTime) {
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     Color hintColor = Theme.of(context).hintColor;
     Color primaryColor = Theme.of(context).primaryColor;
@@ -157,66 +151,6 @@ class _PostCardState extends State<PostCard> {
                           ),
                         )
                       : Container(),
-                  widget.isOrganizer && !isOver
-                      ? Positioned(
-                          right: 0,
-                          top: Dimensions.height2 * 7,
-                          child: CupertinoButton(
-                            padding: EdgeInsets.all(0),
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: Dimensions.width5 * 4,
-                                vertical: Dimensions.height5,
-                              ),
-                              decoration: BoxDecoration(
-                                color: primaryColor.withOpacity(1),
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  bottomLeft: Radius.circular(10),
-                                ),
-                              ),
-                              child: Row(
-                                children: [
-                                   MediumText(
-                                    color: Colors.white,
-                                    size: Dimensions.height2 * 8,
-                                    text: '編輯',
-                                  ),
-                                  SizedBox(width: Dimensions.width5),
-                                  Icon(
-                                    Icons.edit,
-                                    color: onSecondary,
-                                    size: 16,
-                                  )
-                                ],
-                              ),
-                            ),
-                            onPressed: () {
-                              final AddPostPageBloc bloc = AddPostPageBloc();
-                              Provider.of<AddPostPageBloc>(context,
-                                      listen: false)
-                                  .updateCart(widget.post);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return AddPostPage(
-                                      backToHome: () {
-                                        Navigator.pop(context);
-                                        globals.globalManagePage!.currentState!
-                                            .updatePost(widget.post.postId);
-                                      },
-                                      organizer: widget.organizer,
-                                      isEdit: widget.isOrganizer,
-                                      bloc: bloc,
-                                    );
-                                  },
-                                ),
-                              );
-                            },
-                          ),
-                        )
-                      : Container(),
                   isOver
                       ? Container(
                           width: Dimensions.width5 * 25,
@@ -276,7 +210,7 @@ class _PostCardState extends State<PostCard> {
                     child: MediumText(
                       color: hintColor,
                       size: Dimensions.height2 * 7,
-                      text: organizer,
+                      text: organizerName,
                     ),
                   ),
                 ],
@@ -289,7 +223,7 @@ class _PostCardState extends State<PostCard> {
                 Container(
                   width: Dimensions.screenWidth * 0.3,
                   child: Text(
-                    formatTimestamp(date),
+                    "formatTimestamp(date)",
                     style: TextStyle(
                       color: onSecondary,
                       fontSize: Dimensions.height2 * 7,

@@ -13,7 +13,7 @@ import 'package:upoint/widgets/home/promo_card.dart';
 class ActivityBody extends StatefulWidget {
   final int index;
   final HomePageBloc bloc;
-  final User? user;
+  final UserModel? user;
   const ActivityBody({
     super.key,
     required this.index,
@@ -88,12 +88,7 @@ class _ActivityBodyState extends State<ActivityBody>
                           builder: (BuildContext context, dynamic value,
                               Widget? child) {
                             value as List;
-                            List<OrganModel> organList = [];
-                            value.forEach((e) {
-                              organList.add(
-                                OrganModel.fromSnap(e),
-                              );
-                            });
+                            List<OrganizerModel> organList = widget.bloc.organListNotifier.value;
                             return SizedBox(
                               height: Dimensions.height5 * 50,
                               child: GridView(
@@ -150,12 +145,7 @@ class _ActivityBodyState extends State<ActivityBody>
                           builder: (BuildContext context, dynamic value,
                               Widget? child) {
                             value as List;
-                            List<PostModel> postList = [];
-                            value.forEach((e) {
-                              postList.add(
-                                PostModel.fromSnap(e),
-                              );
-                            });
+                            List<PostModel> postList = widget.bloc.postListNotifier.value;
                             return postList.isEmpty
                                 ? Column(
                                     children: [
@@ -199,7 +189,7 @@ class _ActivityBodyState extends State<ActivityBody>
   }
 
   Widget organizerContainer(
-    List<OrganModel> organList,
+    List<OrganizerModel> organList,
     int index,
     Function() filterFunc,
     Map<String, ValueNotifier<int>> postLengthFromOrgan,
@@ -222,7 +212,7 @@ class _ActivityBodyState extends State<ActivityBody>
             MediumText(
               color: onSecondary,
               size: Dimensions.height2 * 6,
-              text: index == 0 ? '全部' : organList[index - 1].organizerName,
+              text: index == 0 ? '全部' : organList[index - 1].username,
             ),
             SizedBox(width: Dimensions.width2),
             postLengthFromOrgan['all'] == null

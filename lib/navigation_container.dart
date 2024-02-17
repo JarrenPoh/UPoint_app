@@ -1,19 +1,13 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:upoint/bloc/add_post_page_bloc.dart';
 import 'package:upoint/bloc/home_page_bloc.dart';
-import 'package:upoint/bloc/manage_bloc.dart';
 import 'package:upoint/bloc/uri_bloc.dart';
 import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/models/post_model.dart';
 import 'package:upoint/pages/activity_page.dart';
-import 'package:upoint/pages/add_post_page.dart';
 import 'package:upoint/pages/home_page.dart';
 import 'package:upoint/pages/inbox_page.dart';
 import 'package:upoint/pages/logo_page.dart';
-import 'package:upoint/pages/manage_page.dart';
 import 'package:upoint/pages/search_page.dart';
-import 'package:upoint/secret.dart';
 import 'package:upoint/widgets/custom_bottom_naviagation_bar.dart';
 import 'package:upoint/pages/profile_page.dart';
 import 'package:provider/provider.dart';
@@ -34,10 +28,7 @@ class _NavigationContainerState extends State<NavigationContainer>
   bool get wantKeepAlive => true;
   List<Widget> _pages = [];
   PageController _pageController = PageController();
-  AddPostPageBloc bloc = AddPostPageBloc();
   final HomePageBloc _homePageBloc = HomePageBloc();
-  late bool isOrganizer = false;
-  ManageBloc? _managePageBloc;
 
   int _selectedPageIndex = 0;
   void onIconTapped(int index) {
@@ -53,24 +44,10 @@ class _NavigationContainerState extends State<NavigationContainer>
   }
 
   late ValueNotifier valueNotifier;
-  // Key _addPostPageKey = UniqueKey();
-  void resetAddPostPage() {
-    setState(() {
-      bloc = AddPostPageBloc();
-    });
-  }
 
   @override
   void initState() {
     super.initState();
-    print('here1');
-    if (FirebaseAuth.instance.currentUser != null) {
-      String email = FirebaseAuth.instance.currentUser!.email!;
-      if (organList.contains(email)) {
-        isOrganizer = true;
-      }
-    }
-    valueNotifier = ValueNotifier<AddPostPageBloc>(bloc);
     Uri? uri = Provider.of<UriBloc>(context, listen: false).uri;
     if (uri != null) {
       print('uri: $uri');
@@ -99,7 +76,6 @@ class _NavigationContainerState extends State<NavigationContainer>
             post: _p,
             hero: "activity${_p.datePublished.toString()}",
             isOver: false,
-            isOrganizer: isOrganizer,
           );
         },
       ),
@@ -144,7 +120,7 @@ class _NavigationContainerState extends State<NavigationContainer>
       child: Scaffold(
         backgroundColor: scaffoldBackgroundColor,
         body: FutureBuilder(
-          future: userAccountManager.getUserDetails(isOrganizer),
+          future: userAccountManager.getUserDetails(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(
@@ -152,31 +128,6 @@ class _NavigationContainerState extends State<NavigationContainer>
                 backgroundColor: onSecondary,
               ));
             }
-            if (isOrganizer) {
-              _managePageBloc = ManageBloc(userAccountManager.organizer!.uid);
-              _pages = [
-                ManagePage(
-                  searchTapped: searchTapped,
-                  organizer: userAccountManager.organizer,
-                  bloc: _managePageBloc!,
-                ),
-                AddPostPage(
-                  backToHome: () {
-                    onIconTapped(0);
-                    resetAddPostPage();
-                  },
-                  isEdit: false,
-                  // key: _addPostPageKey,
-                  organizer: userAccountManager.organizer,
-                  bloc: bloc,
-                ),
-                ProfilePage(
-                  isOrganizer: isOrganizer,
-                  organizer: userAccountManager.organizer,
-                  valueListenable: _managePageBloc!.postListNotifier,
-                ),
-              ];
-            } else {
               _pages = [
                 HomePage(
                   bloc: _homePageBloc,
@@ -192,11 +143,10 @@ class _NavigationContainerState extends State<NavigationContainer>
                   user: userAccountManager.user,
                 ),
                 ProfilePage(
-                  isOrganizer: isOrganizer,
                   user: userAccountManager.user,
                 ),
               ];
-            }
+            // }
             return PageView.builder(
               physics: const NeverScrollableScrollPhysics(),
               controller: _pageController,
@@ -210,7 +160,6 @@ class _NavigationContainerState extends State<NavigationContainer>
         bottomNavigationBar: CustomBottomNavigationBar(
           onIconTap: onIconTapped,
           selectedPageIndex: _selectedPageIndex,
-          isOrganizer: isOrganizer,
         ),
       ),
     );

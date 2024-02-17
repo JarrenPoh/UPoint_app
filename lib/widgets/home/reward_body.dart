@@ -13,7 +13,7 @@ import 'package:upoint/widgets/home/promo_card.dart';
 class RewardBody extends StatefulWidget {
   final int index;
   final HomePageBloc bloc;
-  final User? user;
+  final UserModel? user;
   const RewardBody({
     super.key,
     required this.index,
@@ -80,12 +80,7 @@ class _RewardBodyState extends State<RewardBody>
                             Widget? child,
                           ) {
                             value as List;
-                            List<RewardTagModel> rewardTagList = [];
-                            value.forEach((e) {
-                              rewardTagList.add(
-                                RewardTagModel.fromSnap(e),
-                              );
-                            });
+                            List<RewardTagModel> rewardTagList = widget.bloc.rewardTagListNotifier.value;
                             return SizedBox(
                               height: Dimensions.height5 * 50,
                               child: GridView(
@@ -142,12 +137,7 @@ class _RewardBodyState extends State<RewardBody>
                           builder: (BuildContext context, dynamic value,
                               Widget? child) {
                             value as List;
-                            List<PostModel> postList = [];
-                            value.forEach((e) {
-                              postList.add(
-                                PostModel.fromSnap(e),
-                              );
-                            });
+                            List<PostModel> postList =  widget.bloc.postList2Notifier.value;
                             return postList.isEmpty
                                 ? Center(
                                     child: Column(

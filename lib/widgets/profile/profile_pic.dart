@@ -6,12 +6,10 @@ import 'package:upoint/globals/dimension.dart';
 
 class ProfilePic extends StatefulWidget {
   final String picUri;
-  final bool isOrganizer;
   final String id;
   const ProfilePic({
     super.key,
     required this.picUri,
-    required this.isOrganizer,
     required this.id,
   });
 
@@ -38,7 +36,6 @@ class _ProfilePicState extends State<ProfilePic> {
   uploadPic(pic) async {
     _picUri = await FirestoreMethods().updatePic(
       pic,
-      widget.isOrganizer,
       widget.id,
     );
     setState(() {});
@@ -101,7 +98,7 @@ class _ProfilePicState extends State<ProfilePic> {
       bottom: 10,
       child: GestureDetector(
         onTap: () async {
-          if (widget.id != '' && !widget.isOrganizer) {
+          if (widget.id != '') {
             await callPicker();
           }
         },
@@ -144,7 +141,7 @@ class _ProfilePicState extends State<ProfilePic> {
                 )
               ],
             ),
-            if (widget.id != '' && !widget.isOrganizer)
+            if (widget.id != '' )
               Positioned(
                 right: Dimensions.width2 * 1,
                 bottom: Dimensions.width2 * 1,

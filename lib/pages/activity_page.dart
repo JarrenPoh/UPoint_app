@@ -4,32 +4,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:upoint/bloc/uri_bloc.dart';
-import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/models/post_model.dart';
-import 'package:upoint/models/user_model.dart';
 import 'package:upoint/overscroll_pop-main/lib/overscroll_pop.dart';
 import 'package:upoint/pages/login_page.dart';
-import 'package:upoint/pages/sign_list_page.dart';
-import 'package:upoint/pages/signup_form_page.dart';
 import 'package:upoint/secret.dart';
 import 'package:upoint/widgets/custom_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:upoint/globals/date_time_transfer.dart';
 import 'package:provider/provider.dart';
 
 class ActivityPage extends StatefulWidget {
   final PostModel post;
   final String hero;
   final bool isOver;
-  final bool isOrganizer;
   const ActivityPage({
     super.key,
     required this.post,
     required this.hero,
     required this.isOver,
-    required this.isOrganizer,
   });
 
   @override
@@ -88,7 +81,7 @@ class _ActivityPageState extends State<ActivityPage> {
                     String postLink = 'https://$host/posts/?id=${widget.post.postId}';
                     try {
                       await Share.share(
-                        ' - ${widget.post!.title} ${widget.post.organizer}\n' + postLink,
+                        ' - ${widget.post!.title} ${widget.post.organizerName}\n' + postLink,
                         subject:
                             '${widget.post.title}  ${widget.post.content!}...',
                       );
@@ -121,7 +114,7 @@ class _ActivityPageState extends State<ActivityPage> {
                   transitionOnUserGestures: true,
                   tag: widget.hero,
                   child: CachedNetworkImage(
-                    imageUrl: widget.post.photos!.first,
+                    imageUrl: widget.post.photo!,
                     imageBuilder: ((context, imageProvider) {
                       return Stack(
                         alignment: Alignment.topCenter,
@@ -256,7 +249,7 @@ class _ActivityPageState extends State<ActivityPage> {
                                       Container(
                                         width: Dimensions.screenWidth * 0.55,
                                         child: Text(
-                                          widget.post.organizer!,
+                                          widget.post.organizerName!,
                                           style: TextStyle(
                                             color: hintColor,
                                             fontSize: Dimensions.height2 * 8,
@@ -275,7 +268,7 @@ class _ActivityPageState extends State<ActivityPage> {
                                     Container(
                                       width: Dimensions.screenWidth * 0.3,
                                       child: Text(
-                                        formatTimestamp(widget.post.date),
+                                        "formatTimestamp(widget.post.date)",
                                         style: TextStyle(
                                           color: onSecondary,
                                           fontSize: Dimensions.height2 * 8,
@@ -285,7 +278,7 @@ class _ActivityPageState extends State<ActivityPage> {
                                     ),
                                     SizedBox(height: Dimensions.height5 * 2),
                                     Text(
-                                      '${widget.post.startTime}-${widget.post.endTime}',
+                                      'dfsfsdf',
                                       style: TextStyle(
                                         color: onSecondary,
                                         fontSize: Dimensions.height2 * 8,
@@ -372,20 +365,7 @@ class _ActivityPageState extends State<ActivityPage> {
                     padding: EdgeInsets.symmetric(
                       vertical: Dimensions.height5 * 3,
                     ),
-                    onPressed: widget.isOrganizer
-                        ? () async {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: ((context) {
-                                  return SignListPage(
-                                    post: widget.post,
-                                  );
-                                }),
-                              ),
-                            );
-                          }
-                        : widget.isOver
+                    onPressed: widget.isOver
                             ? () {}
                             : () async {
                                 if (auth.FirebaseAuth.instance.currentUser ==
@@ -418,48 +398,44 @@ class _ActivityPageState extends State<ActivityPage> {
                                     },
                                   );
                                 }
-                                if (auth.FirebaseAuth.instance.currentUser !=
-                                    null) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) {
-                                        return FutureBuilder(
-                                          future: Provider.of<AuthMethods>(
-                                                  context,
-                                                  listen: false)
-                                              .getUserDetails(false),
-                                          builder: (context, snapshot) {
-                                            User _user =
-                                                Provider.of<AuthMethods>(
-                                                        context,
-                                                        listen: false)
-                                                    .user!;
-                                            return SignUpFormPage(
-                                              post: widget.post,
-                                              user: _user,
-                                            );
-                                          },
-                                        );
-                                      },
-                                    ),
-                                  );
-                                }
-                                ;
+                                // if (auth.FirebaseAuth.instance.currentUser !=
+                                //     null) {
+                                //   Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //       builder: (context) {
+                                //         return FutureBuilder(
+                                //           future: Provider.of<AuthMethods>(
+                                //                   context,
+                                //                   listen: false)
+                                //               .getUserDetails(false),
+                                //           builder: (context, snapshot) {
+                                //             User _user =
+                                //                 Provider.of<AuthMethods>(
+                                //                         context,
+                                //                         listen: false)
+                                //                     .user!;
+                                //             return SignUpFormPage(
+                                //               post: widget.post,
+                                //               user: _user,
+                                //             );
+                                //           },
+                                //         );
+                                //       },
+                                //     ),
+                                //   );
+                                // }
+                                
                               },
                     borderRadius: BorderRadius.circular(10),
-                    color: widget.isOrganizer
-                        ? hintColor
-                        : widget.isOver
+                    color:  widget.isOver
                             ? Colors.grey
                             : hintColor,
                     child: Center(
                       child: MediumText(
                         color: Colors.white,
                         size: Dimensions.height2 * 9,
-                        text: widget.isOrganizer
-                            ? "報名名單"
-                            : widget.isOver
+                        text:  widget.isOver
                                 ? "已結束"
                                 : "報名",
                       ),

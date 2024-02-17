@@ -6,7 +6,7 @@ ThemeData lightTheme = ThemeData(
     backgroundColor: Colors.white,
   ),
   primaryColor: Color(0xFF011e2d),
-  hintColor: Color(0xFFF0A339),
+  hintColor: Color(0xFFF8791D),
   scaffoldBackgroundColor: Color.fromRGBO(244, 243, 243, 1),
   // dividerTheme: DividerThemeData(color: Colors.grey[400]),
   colorScheme: ColorScheme.light(

@@ -11,7 +11,7 @@ import 'package:upoint/global_key.dart' as globals;
 class HomePage extends StatefulWidget {
   final Function(int) searchTapped;
   final HomePageBloc bloc;
-  final User? user;
+  final UserModel? user;
   const HomePage({
     super.key,
     required this.searchTapped,

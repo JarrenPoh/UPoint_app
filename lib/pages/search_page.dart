@@ -12,7 +12,7 @@ import 'package:upoint/widgets/search/search_widget.dart';
 
 class SearchPage extends StatefulWidget {
   final HomePageBloc bloc;
-  final User? user;
+  final UserModel? user;
   const SearchPage({
     super.key,
     required this.bloc,
@@ -61,18 +61,13 @@ class _SearchPageState extends State<SearchPage>
   }
 
   void searchBook(String query) {
-    List<PostModel> postList = [];
-    widget.bloc.originList.value.forEach((e) {
-      postList.add(
-        PostModel.fromSnap(e),
-      );
-    });
+    List<PostModel> postList = widget.bloc.originList.value;
 
     if (query != '') {
       return debounce(() async {
         List<PostModel> book = postList.where((e) {
           if (e.title!.contains(query) ||
-              e.organizer!.contains(query) ||
+              e.organizerName!.contains(query) ||
               (e.reward?.contains(query) ?? false) ||
               e.content!.contains(query)) {
             return true;

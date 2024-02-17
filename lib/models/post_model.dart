@@ -1,57 +1,73 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PostModel {
-  List? photos;
-  String? organizer;
+  String? photo;
   String? title;
-  var date;
-  String? startTime;
-  String? endTime;
+  String? location;
+  var startDateTime;
+  var endDateTime;
+  var formDateTime;
+  String? introduction;
+  String? capacity;
   String? content;
   String? reward;
   String? rewardTagId;
+  List<dynamic>? tags;
   String? link;
+  //以下尚未填
+  String? form;
   String? postId;
-  String? uid;
-  List? signList;
+  String? organizerUid;
+  String? organizerName;
+  int? signFormsLength;
   var datePublished;
-  String? pic;
+  String? organizerPic;
 
   PostModel({
-    this.photos,
-    this.organizer,
+    this.photo,
+    this.organizerName,
+    this.location,
     this.title,
-    this.date,
-    this.startTime,
-    this.endTime,
+    this.startDateTime,
+    this.endDateTime,
+    this.introduction,
+    this.capacity,
     this.content,
     this.reward,
     this.rewardTagId,
     this.link,
     this.postId,
     this.datePublished,
-    this.uid,
-    this.signList,
-    this.pic,
+    this.organizerUid,
+    this.signFormsLength,
+    this.organizerPic,
+    this.form,
+    this.tags,
+    this.formDateTime,
   });
 
   static Map toMap(PostModel cart) {
     return {
-      "photos": cart.photos,
-      "organizer": cart.organizer,
+      "photo": cart.photo,
+      "organizerName": cart.organizerName,
       "title": cart.title,
-      "date": cart.date,
-      "startTime": cart.startTime,
-      "endTime": cart.endTime,
+      "startDateTime": cart.startDateTime,
+      "endDateTime": cart.endDateTime,
+      "location": cart.location,
+      "introduction": cart.introduction,
       "content": cart.content,
+      "capacity": cart.capacity,
       "reward": cart.reward,
       "rewardTagId": cart.rewardTagId,
       "link": cart.link,
       "postId": cart.postId,
       "datePublished": cart.datePublished,
-      "uid": cart.uid,
-      "signList": cart.signList,
-      "pic": cart.pic,
+      "organizerUid": cart.organizerUid,
+      "signFormsLength": cart.signFormsLength,
+      "organizerPic": cart.organizerPic,
+      "form": cart.form,
+      "tags": cart.tags,
+      "formDateTime":cart.formDateTime,
     };
   }
 
@@ -59,57 +75,74 @@ class PostModel {
     var snapshot = (snap.data()) as Map<String, dynamic>;
     // print('這是本帳用戶信息在 post.dart in model ${snapshot}');
     return PostModel(
-      photos: snapshot['photos'],
-      organizer: snapshot['organizer'],
+      photo: snapshot['photo'],
+      organizerName: snapshot['organizerName'],
       title: snapshot['title'],
-      date: snapshot['date'],
-      startTime: snapshot['startTime'],
-      endTime: snapshot['endTime'],
+      startDateTime: snapshot['startDateTime'],
+      endDateTime: snapshot['endDateTime'],
+      introduction: snapshot['introduction'],
       content: snapshot['content'],
+      capacity: snapshot['capacity'],
       reward: snapshot['reward'],
+      location: snapshot['location'],
       rewardTagId: snapshot['rewardTagId'],
       link: snapshot['link'],
       postId: snapshot['postId'],
       datePublished: snapshot['datePublished'],
-      uid: snapshot['uid'],
-      signList: snapshot['signList'],
-      pic: snapshot['pic'],
+      organizerUid: snapshot['organizerUid'],
+      signFormsLength: snapshot['signFormsLength'],
+      organizerPic: snapshot['organizerPic'],
+      form: snapshot['form'],
+      tags: snapshot['tags'],
+      formDateTime:snapshot['formDateTime'],
     );
   }
 
   Map<String, dynamic> toJson() => {
-        "photos": photos,
-        "organizer": organizer,
+        "photo": photo,
+        "organizerName": organizerName,
         "title": title,
-        "date": date,
-        "startTime": startTime,
-        "endTime": endTime,
+        "startDateTime": startDateTime,
+        "endDateTime": endDateTime,
+        "introduction": introduction,
         "content": content,
         "reward": reward,
+        "capacity": capacity,
         "rewardTagId": rewardTagId,
+        "location": location,
         "link": link,
         "postId": postId,
         "datePublished": datePublished,
-        "uid": uid,
-        "pic": pic,
+        "organizerUid": organizerUid,
+        "organizerPic": organizerPic,
+        "form": form,
+        "tags": tags,
+        "formDateTime":formDateTime,
+        "signFormsLength":signFormsLength,
       };
 
   static PostModel fromMap(Map map) {
     return PostModel(
-      photos: map['photos'],
-      organizer: map['organizer'],
+      photo: map['photo'],
+      organizerName: map['organizerName'],
       title: map['title'],
-      date: map['date'],
-      startTime: map['startTime'],
-      endTime: map['endTime'],
+      startDateTime: map['startDateTime'],
+      endDateTime: map['endDateTime'],
+      introduction: map["introduction"],
       content: map['content'],
+      capacity: map['capacity'],
+      location: map['location'],
       reward: map['reward'],
       rewardTagId: map['rewardTagId'],
       link: map['link'],
       postId: map['postId'],
       datePublished: map['datePublished'],
-      uid: map['uid'],
-      pic: map['pic'],
+      organizerUid: map['organizerUid'],
+      organizerPic: map['organizerPic'],
+      form: map['form'],
+      tags: map['tags'],
+      formDateTime:map['formDateTime'],
+      signFormsLength:map['signFormsLength'],
     );
   }
 }
