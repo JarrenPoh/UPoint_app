@@ -1,10 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:upoint/firebase/auth_methods.dart';
+import 'package:upoint/globals/custom_messengers.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/navigation_container.dart';
-import 'package:upoint/widgets/custom_dialog.dart';
-import 'package:upoint/widgets/custom_snackBar.dart';
 import 'package:upoint/widgets/login/reset_password.dart';
 
 class LoginPanel extends StatefulWidget {
@@ -81,7 +80,6 @@ class _LoginPanelState extends State<LoginPanel> {
   }
 
   void signIn(res) async {
-    Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     if (res == "success") {
       if (FirebaseAuth.instance.currentUser!.emailVerified) {
         // ignore: use_build_context_synchronously
@@ -95,15 +93,10 @@ class _LoginPanelState extends State<LoginPanel> {
       } else {
         await AuthMethods().signOut();
         // ignore: use_build_context_synchronously
-        CustomDialog(
-          context,
+        await Messenger.dialog(
           '如有問題，請回報官方:service.upoint@gmail.com',
           '你尚未驗證你的Gmail',
-          onSecondary,
-          onSecondary,
-          () {
-            Navigator.pop(context);
-          },
+          context,
         );
       }
     } else {
@@ -111,16 +104,13 @@ class _LoginPanelState extends State<LoginPanel> {
         isLoading = false;
       });
       await AuthMethods().signOut();
-      showCustomSnackbar("失敗",  res.toString() + ' ，請回報官方發現問題', context);
-      CustomDialog(
-        context,
+      // ignore: use_build_context_synchronously
+      Messenger.snackBar(context, "失敗", '$res ，請回報官方發現問題');
+      // ignore: use_build_context_synchronously
+      await Messenger.dialog(
+        '發生錯誤',
         '如有問題，請回報官方:service.upoint@gmail.com',
-        res,
-        onSecondary,
-        onSecondary,
-        () {
-          Navigator.pop(context);
-        },
+        context,
       );
     }
   }

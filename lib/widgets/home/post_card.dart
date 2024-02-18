@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:upoint/globals/dimension.dart';
@@ -6,7 +7,7 @@ import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/models/organizer_model.dart';
 import 'package:upoint/models/post_model.dart';
 import 'package:upoint/models/user_model.dart';
-import 'package:upoint/pages/activity_page.dart';
+import 'package:upoint/pages/activity_detail_page.dart';
 
 class PostCard extends StatefulWidget {
   final PostModel post;
@@ -31,38 +32,28 @@ class _PostCardState extends State<PostCard> {
   @override
   void initState() {
     super.initState();
-    // isOver = isOverTime(
-    //   widget.post.endTime!,
-    //   widget.post.date.toDate(),
-    // );
+    isOver = (widget.post.endDateTime as Timestamp)
+        .toDate()
+        .isBefore(DateTime.now());
   }
 
   double _scale = 1.0;
-  bool isOver = false;
+  late bool isOver;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      // onTapDown: (d) => setState(() {
-      //   _scale = 0.95;
-      // }),
       onTapUp: (d) {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ActivityPage(
+            builder: (context) => ActivityDetailPage(
               post: widget.post,
               hero: widget.hero,
-              isOver: isOver,
+              user: widget.user,
             ),
           ),
         );
-        // setState(() {
-        //   _scale = 1.0;
-        // });
       },
-      // onTapCancel: () => setState(() {
-      //   _scale = 1.0;
-      // }),
       child: Transform.scale(
         scale: _scale,
         child: Padding(
@@ -73,7 +64,7 @@ class _PostCardState extends State<PostCard> {
             widget.post.photo,
             widget.post.title,
             widget.post.organizerName,
-           " widget.post.date",
+            " widget.post.date",
             "widget.post.startTime",
             "widget.post.endTime",
           ),
@@ -165,7 +156,7 @@ class _PostCardState extends State<PostCard> {
                               Radius.circular(10),
                             ),
                           ),
-                          child:  Center(
+                          child: Center(
                             child: MediumText(
                               color: Colors.white,
                               size: Dimensions.height2 * 8,

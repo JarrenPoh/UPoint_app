@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:upoint/firebase/storage_methods.dart';
-import 'package:upoint/models/user_model.dart' ;
+import 'package:upoint/models/sign_form_model.dart';
+import 'package:upoint/models/user_model.dart';
 import 'package:uuid/uuid.dart';
 
 class FirestoreMethods {
@@ -29,53 +30,47 @@ class FirestoreMethods {
     return res;
   }
 
-  //送出報名表單（改現有post裡面的signList）
-  // Future<String> sentSignForm(
-  //   PostModel post,
-  //   Map postMap,
-  //   User user,
-  //   Map userMap,
-  // ) async {
-  //   String res = 'some error occur';
-  //   try {
-  //     //捕獲最新表單
-  //     QuerySnapshot<Map<String, dynamic>> fetchPost =
-  //         await FirebaseFirestore.instance
-  //             .collection('posts')
-  //             .where(
-  //               'postId',
-  //               isEqualTo: post.postId,
-  //             )
-  //             .get();
-  //     PostModel _post = PostModel.fromSnap(fetchPost.docs.toList().first);
-  //     List signList = _post.signList ?? [];
-  //     signList.add(postMap);
-  //     //更新貼文
-  //     await _firestore.collection('posts').doc(post.postId).update({
-  //       "signList": signList,
-  //     });
-  //     //更新用戶
-  //     signList = user.signList ?? [];
-  //     signList.add(userMap);
-  //     await _firestore.collection('users').doc(user.uuid).update({
-  //       "signList": signList,
-  //     });
-  //     await uploadToInbox(
-  //       user.uuid,
-  //       post.organizerName!,
-  //       post.organizerPic,
-  //       "你已成功報名『${post.title}』，請記得出席 ${post.organizerName}",
-  //       Uri(
-  //         pathSegments: ['activity'],
-  //         queryParameters: {"id": post.postId!},
-  //       ).toString(),
-  //     );
-  //     res = 'success';
-  //   } catch (e) {
-  //     res = e.toString();
-  //   }
-  //   return res;
-  // }
+  //上傳報名表單
+  Future<String> uploadSignForm(
+    UserModel user,
+    String postId,
+    String getSignFormBody,
+  ) async {
+    String res = "some error occur";
+    String signFormId = const Uuid().v1();
+    List<String> _signList = user.signList ?? [];
+    try {
+      //以下尚未填過
+      SignFormModel signForm = SignFormModel(
+        uuid: user.uuid,
+        fcmToken: user.fcmToken,
+        body: getSignFormBody,
+        datePublished: DateTime.now(),
+        signFormId: signFormId,
+      );
+      // 上傳到posts collection下的signForms collection
+      await _firestore
+          .collection('posts')
+          .doc(postId)
+          .collection('signForms')
+          .doc(signFormId)
+          .set(signForm.toJson());
+      // 幫posts文件的signFormsLength加一
+      await _firestore.collection('posts').doc(postId).update({
+        "signFormsLength": FieldValue.increment(1),
+      });
+      // 幫users文件的signList加上postId
+      _signList.add(postId);
+      await _firestore.collection('users').doc(user.uuid).update({
+        "signList": _signList,
+      });
+      res = 'success';
+    } catch (err) {
+      res = err.toString();
+      print('err${err.toString()}');
+    }
+    return res;
+  }
 
   //修改個資
   Future<String> updateProfile(
@@ -94,7 +89,7 @@ class FirestoreMethods {
   }
 
   //更新照片
-  Future<String> updatePic(pic,  String doc) async {
+  Future<String> updatePic(pic, String doc) async {
     String _picUrl = '';
     try {
       _picUrl = await StorageMethods()

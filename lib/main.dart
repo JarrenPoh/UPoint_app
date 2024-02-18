@@ -40,6 +40,22 @@ class MyApp extends StatelessWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       home: const NavigationContainer(),
+      // builder: (context, child) {
+      //   // 根据当前主题明暗来设置状态栏样式
+      //   final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+      //   SystemChrome.setSystemUIOverlayStyle(
+      //     isDarkMode
+      //         ? SystemUiOverlayStyle.light.copyWith(
+      //             statusBarIconBrightness: Brightness.light, // 暗黑模式下，状态栏图标为亮色
+      //             statusBarBrightness: Brightness.dark, // iOS上的状态栏背景为暗色
+      //           )
+      //         : SystemUiOverlayStyle.dark.copyWith(
+      //             statusBarIconBrightness: Brightness.dark, // 明亮模式下，状态栏图标为暗色
+      //             statusBarBrightness: Brightness.light, // iOS上的状态栏背景为亮色
+      //           ),
+      //   );
+      //   return child!;
+      // },
     );
   }
 }

@@ -11,8 +11,18 @@ ThemeData darkTheme = ThemeData(
   // dividerTheme: DividerThemeData(color: Colors.grey[400]),
   colorScheme: const ColorScheme.light(
     // background: Colors.black,
-    onPrimary: Color.fromARGB(255, 19, 19, 19),
+    onPrimary: Color(0xFF191919),
     onSecondary: Colors.white,
+    background: Color(0xFF343434),
+    onBackground: Color(0xFF9D9D9D),
+    onError: Color(0xFFCACACA),
+    onErrorContainer: Color(0xFFEAEAEA),
+    onInverseSurface: Color(0xFFF8F8F8),
+    onPrimaryContainer: Color(0xFFFFC169),
+
+
+
+
     primary: Colors.white54,
     secondary: Colors.white38,
     tertiary: Colors.white12,

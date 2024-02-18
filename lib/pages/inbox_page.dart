@@ -9,7 +9,7 @@ import 'package:upoint/globals/regular_text.dart';
 import 'package:upoint/models/inbox_model.dart';
 import 'package:upoint/models/post_model.dart';
 import 'package:upoint/models/user_model.dart';
-import 'package:upoint/pages/activity_page.dart';
+import 'package:upoint/pages/activity_detail_page.dart';
 import 'package:upoint/pages/login_page.dart';
 import 'package:upoint/secret.dart';
 
@@ -52,10 +52,10 @@ class _InboxPageState extends State<InboxPage>
       context,
       MaterialPageRoute(
         builder: (context) {
-          return ActivityPage(
+          return ActivityDetailPage(
             post: _p,
             hero: "activity${_p.datePublished.toString()}",
-            isOver: false,
+            user: widget.user,
           );
         },
       ),

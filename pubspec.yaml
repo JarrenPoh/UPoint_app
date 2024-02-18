@@ -41,7 +41,7 @@ dependencies:
   crypto: ^3.0.3
   sign_in_with_apple: ^5.0.0
   google_sign_in: ^6.1.4
-  uuid: ^3.0.7
+  uuid: ^4.3.3
   cupertino_icons: ^1.0.2
   font_awesome_flutter: ^9.0.0
   hidden_drawer_menu: ^3.0.1
@@ -55,8 +55,9 @@ dependencies:
   share_plus: ^7.2.1
   url_launcher: ^6.2.1
   camera: ^0.10.5+4
-  intl: ^0.17.0
+  intl: ^0.18.1
   expandable_text: ^2.3.0
+  dropdown_button2: ^2.3.9
   overscroll_pop: 
     path: lib/overscroll_pop-main
 

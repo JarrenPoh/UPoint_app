@@ -14,7 +14,7 @@ class AuthMethods with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   UserModel? user;
-  Future<void> getUserDetails() async {
+  Future<UserModel?> getUserDetails() async {
     if (_auth.currentUser != null) {
       print('拿了user from 資料');
       User currentUser = _auth.currentUser!;
@@ -23,6 +23,7 @@ class AuthMethods with ChangeNotifier {
       user = UserModel.fromSnap(snap);
       print('了user from 資料:${user?.toJson()}');
     }
+    return user;
     // notifyListeners();
   }
 

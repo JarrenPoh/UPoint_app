@@ -22,12 +22,11 @@ class HomePageBloc with ChangeNotifier {
     fetchPosts();
   }
   Future<List> fetchPosts() async {
-    DateTime now = DateTime.now();
     QuerySnapshot<Map<String, dynamic>> fetchPost = await FirebaseFirestore
         .instance
         .collection('posts')
         .where('endDateTime',
-            isGreaterThanOrEqualTo: DateTime(now.year, now.month, now.day - 5))
+            isGreaterThanOrEqualTo: DateTime.now())
         .orderBy('endDateTime', descending: false)
         .get();
     List<QueryDocumentSnapshot> _list = fetchPost.docs.toList();

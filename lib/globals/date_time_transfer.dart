@@ -1,56 +1,52 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-String formatDate(DateTime dateTime, bool isDate) {
-  // 定义日期格式
-  final DateFormat dateFormat = DateFormat('yyyy,MM,dd');
-  final DateFormat timeFormat = DateFormat('HH:mm');
+class TimeTransfer {
+  //將datePublished 變成 "01/01（週一）"
+  static String timeTrans01(Timestamp timestamp) {
+    DateTime dateTime = timestamp.toDate();
+    return DateFormat('MM/dd(E)', 'zh').format(dateTime);
+  }
 
-  // 将DateTime对象格式化为字符串
-  return isDate == true
-      ? dateFormat.format(dateTime)
-      : timeFormat.format(dateTime);
-}
+  //firebase TimeStamp to 13:20
+  static String timeTrans02(Timestamp timestamp) {
+    DateTime dateTime = timestamp.toDate();
+    DateFormat outputFormat = DateFormat("HH:mm");
+    String convertedTime = outputFormat.format(dateTime);
+    return convertedTime;
+  }
 
-DateTime parseDateString(String dateString, bool isDate) {
-  // 定义日期格式
-  final DateFormat dateFormat = DateFormat('yyyy,MM,dd');
-  final DateFormat timeFormat = DateFormat('HH:mm');
+  //start&end TimeStamp to 113/02/09 13:00~17:00
+  static String timeTrans03(Timestamp startTime, Timestamp endTime) {
+    String _start = TimeTransfer.timeTrans01(startTime);
+    String _end = TimeTransfer.timeTrans01(endTime);
+    if (_start == _end) {
+      return "$_start ${TimeTransfer.timeTrans02(startTime)}  ~  ${TimeTransfer.timeTrans02(endTime)}";
+    } else {
+      return "$_start ${TimeTransfer.timeTrans02(startTime)}  ~  $_end${TimeTransfer.timeTrans02(endTime)}";
+    }
+  }
 
-  // 尝试将字符串解析为DateTime对象
-  try {
-    return isDate == true
-        ? dateFormat.parse(dateString)
-        : timeFormat.parse(dateString);
-  } catch (e) {
-    print('Failed to parse date: $dateString');
-    return DateTime.now(); // 如果解析失败，返回当前时间
+  //時間模型-> 13:20 PM
+  static String timeTrans04(BuildContext context, TimeOfDay selectedTime) {
+    final MaterialLocalizations localizations =
+        MaterialLocalizations.of(context);
+    final String formattedTime = localizations.formatTimeOfDay(selectedTime,
+        alwaysUse24HourFormat: false);
+    return formattedTime;
+  }
+
+  //DateTime -> 91-09-15
+  static String convertToROC(DateTime date) {
+    // 计算民国年份
+    int rocYear = date.year - 1911;
+    // 格式化为 "民國年-MM-dd"
+    return '民國${rocYear}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
   }
 }
 
-//將datePublished 變成 "01/01（週一）"
-String formatTimestamp(Timestamp timestamp) {
-  DateTime dateTime = timestamp.toDate();
-  return DateFormat('MM/dd（E）', 'zh').format(dateTime);
-}
-
-bool isOverTime(
-  String timeString,
-  DateTime eventDate,
-) {
-  List<String> timeParts = timeString.split(':');
-  eventDate = DateTime(
-    eventDate.year,
-    eventDate.month,
-    eventDate.day,
-    int.parse(timeParts[0]),
-    int.parse(timeParts[1]),
-  );
-  return eventDate.isBefore(DateTime.now());
-}
-
 String relativeDateFormat(DateTime date) {
-
   num delta =
       DateTime.now().millisecondsSinceEpoch - date.millisecondsSinceEpoch;
   if (delta < 1 * ONE_MINUTE) {

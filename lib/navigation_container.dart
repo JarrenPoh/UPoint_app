@@ -1,9 +1,13 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:upoint/bloc/home_page_bloc.dart';
 import 'package:upoint/bloc/uri_bloc.dart';
 import 'package:upoint/firebase/auth_methods.dart';
+import 'package:upoint/globals/custom_messengers.dart';
 import 'package:upoint/models/post_model.dart';
-import 'package:upoint/pages/activity_page.dart';
+import 'package:upoint/models/user_model.dart';
+import 'package:upoint/pages/activity_detail_page.dart';
 import 'package:upoint/pages/home_page.dart';
 import 'package:upoint/pages/inbox_page.dart';
 import 'package:upoint/pages/logo_page.dart';
@@ -11,7 +15,6 @@ import 'package:upoint/pages/search_page.dart';
 import 'package:upoint/widgets/custom_bottom_naviagation_bar.dart';
 import 'package:upoint/pages/profile_page.dart';
 import 'package:provider/provider.dart';
-import 'package:upoint/widgets/custom_dialog.dart';
 
 class NavigationContainer extends StatefulWidget {
   const NavigationContainer({
@@ -67,15 +70,17 @@ class _NavigationContainerState extends State<NavigationContainer>
   }
 
   findAndGoPost(postId) async {
+    UserModel? user =
+        await Provider.of<AuthMethods>(context, listen: false).getUserDetails();
     PostModel _p = await _homePageBloc.fetchPostById(postId);
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) {
-          return ActivityPage(
+          return ActivityDetailPage(
             post: _p,
             hero: "activity${_p.datePublished.toString()}",
-            isOver: false,
+            user: user,
           );
         },
       ),
@@ -103,19 +108,13 @@ class _NavigationContainerState extends State<NavigationContainer>
     final userAccountManager = Provider.of<AuthMethods>(context, listen: false);
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     Color scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
-    print('here');
     return WillPopScope(
       onWillPop: () async {
-        return await CustomDialog(
-          context,
-          '您要離開了嗎',
-          '要確定ㄟ',
-          onSecondary,
-          onSecondary,
-          () async {
-            Navigator.of(context).pop(true);
-          },
-        );
+        String res = await Messenger.dialog("您要離開了嗎", "要確定ㄟ", context);
+        if (res == "success") {
+          return true;
+        }
+        return false;
       },
       child: Scaffold(
         backgroundColor: scaffoldBackgroundColor,
@@ -128,24 +127,24 @@ class _NavigationContainerState extends State<NavigationContainer>
                 backgroundColor: onSecondary,
               ));
             }
-              _pages = [
-                HomePage(
-                  bloc: _homePageBloc,
-                  searchTapped: searchTapped,
-                  user: userAccountManager.user,
-                ),
-                SearchPage(
-                  bloc: _homePageBloc,
-                  user: userAccountManager.user,
-                ),
-                LogoPage(),
-                InboxPage(
-                  user: userAccountManager.user,
-                ),
-                ProfilePage(
-                  user: userAccountManager.user,
-                ),
-              ];
+            _pages = [
+              HomePage(
+                bloc: _homePageBloc,
+                searchTapped: searchTapped,
+                user: userAccountManager.user,
+              ),
+              SearchPage(
+                bloc: _homePageBloc,
+                user: userAccountManager.user,
+              ),
+              LogoPage(),
+              InboxPage(
+                user: userAccountManager.user,
+              ),
+              ProfilePage(
+                user: userAccountManager.user,
+              ),
+            ];
             // }
             return PageView.builder(
               physics: const NeverScrollableScrollPhysics(),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/globals/dimension.dart';
-import 'package:upoint/widgets/custom_dialog.dart';
-import 'package:upoint/widgets/custom_snackBar.dart';
 import 'package:upoint/widgets/login/verfify_email.dart';
+
+import '../../globals/custom_messengers.dart';
 
 class RegisterPanel extends StatefulWidget {
   final Function() onTap;
@@ -59,7 +59,6 @@ class _RegisterPanelState extends State<RegisterPanel> {
   }
 
   void signUpUser() async {
-    Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     if (_emailController.text.trim() == '') {
       setState(() {
         emptyEmail = true;
@@ -100,16 +99,13 @@ class _RegisterPanelState extends State<RegisterPanel> {
             isLoading = false;
           });
           // show the error
-          showCustomSnackbar("失敗", res.toString() + ' ，請回報官方發現問題', context);
-          CustomDialog(
-            context,
+          // ignore: use_build_context_synchronously
+          Messenger.snackBar(context, "失敗", '$res ，請回報官方發現問題');
+          // ignore: use_build_context_synchronously
+          await Messenger.dialog(
+            '發生錯誤',
             '如有問題，請回報官方:service.upoint@gmail.com',
-            res,
-            onSecondary,
-            onSecondary,
-            () {
-              Navigator.pop(context);
-            },
+            context,
           );
         }
       }

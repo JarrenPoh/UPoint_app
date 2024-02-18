@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
-import 'package:upoint/widgets/custom_snackBar.dart';
+
+import '../../globals/custom_messengers.dart';
 
 class ResetPassword extends StatefulWidget {
   const ResetPassword({super.key});
@@ -45,10 +46,20 @@ class _ResetPasswordState extends State<ResetPassword> {
         _emailController.text.trim(),
       );
       if (res == 'success') {
-        showCustomSnackbar("成功", res.toString() + '重置密碼已寄至${_emailController.text.trim()}，請查閱', context);
+        // ignore: use_build_context_synchronously
+        Messenger.snackBar(
+          context,
+          "成功",
+          '$res重置密碼已寄至${_emailController.text.trim()}，請查閱',
+        );
         Navigator.of(context).pop();
       } else {
-        showCustomSnackbar("失敗", res.toString() + ' ，請回報官方發現問題', context);
+        // ignore: use_build_context_synchronously
+        Messenger.snackBar(
+          context,
+          "成功",
+          '$res重置密碼已寄至${_emailController.text.trim()}，請查閱',
+        );
       }
       setState(() {
         isLoading = false;

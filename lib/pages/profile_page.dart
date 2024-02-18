@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/globals/bold_text.dart';
+import 'package:upoint/globals/custom_messengers.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/globals/regular_text.dart';
@@ -11,7 +12,6 @@ import 'package:upoint/pages/edit_profile_page.dart';
 import 'package:upoint/pages/login_page.dart';
 import 'package:upoint/pages/privacy_page.dart';
 import 'package:upoint/secret.dart';
-import 'package:upoint/widgets/custom_dialog.dart';
 import 'package:upoint/widgets/profile/profile_pic.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -124,26 +124,23 @@ class _ProfilePageState extends State<ProfilePage>
   }
 
   logInOrOut() async {
-    Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     if (_user != null) {
-      await CustomDialog(
-        context,
+      String res = await Messenger.dialog(
         '您要登出嗎？',
         '要確定ㄟ',
-        onSecondary,
-        onSecondary,
-        () async {
-          await AuthMethods().signOut();
-          // ignore: use_build_context_synchronously
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => LoginPage(),
-            ),
-            (Route<dynamic> route) => false, // 不保留任何旧路由
-          );
-        },
+        context,
       );
+      if (res == "success") {
+        await AuthMethods().signOut();
+        // ignore: use_build_context_synchronously
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LoginPage(),
+          ),
+          (Route<dynamic> route) => false, // 不保留任何旧路由
+        );
+      }
     } else {
       Navigator.pushAndRemoveUntil(
         context,
@@ -156,25 +153,22 @@ class _ProfilePageState extends State<ProfilePage>
   }
 
   deleteAccount() async {
-    Color onSecondary = Theme.of(context).colorScheme.onSecondary;
-    await CustomDialog(
-      context,
+    String res = await Messenger.dialog(
       '確定要刪除帳號嗎！',
       '一旦刪除後便永久無法復原！',
-      onSecondary,
-      onSecondary,
-      () async {
-        await AuthMethods().deleteUser();
-        // ignore: use_build_context_synchronously
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => LoginPage(),
-          ),
-          (Route<dynamic> route) => false, // 不保留任何旧路由
-        );
-      },
+      context,
     );
+    if (res == "success") {
+      await AuthMethods().deleteUser();
+      // ignore: use_build_context_synchronously
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LoginPage(),
+        ),
+        (Route<dynamic> route) => false, // 不保留任何旧路由
+      );
+    }
   }
 
   @override

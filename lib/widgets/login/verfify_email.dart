@@ -1,3 +1,4 @@
+// ignore_for_file: use_build_context_synchronously
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
@@ -8,7 +9,7 @@ import 'package:upoint/firebase/firestore_methods.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/pages/login_page.dart';
-import 'package:upoint/widgets/custom_snackBar.dart';
+import '../../globals/custom_messengers.dart';
 
 class VerifyEmail extends StatefulWidget {
   final String email;
@@ -52,10 +53,10 @@ class _VerifyEmailState extends State<VerifyEmail> {
       String res = await AuthMethods().sendVerificationEmail();
 
       if (res == 'success') {
-        showCustomSnackbar(
-          "成功",
-          res.toString() + '驗證信箱已送出，請查閱',
+        Messenger.snackBar(
           context,
+          "成功",
+          '$res驗證信箱已送出，請查閱',
         );
         timer =
             Timer.periodic(Duration(seconds: 3), (_) => checkEmailVerified());
@@ -71,11 +72,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
           });
         });
       } else {
-        showCustomSnackbar(
-          "失敗",
-          res.toString() + ' ，請回報官方發現問題',
-          context,
-        );
+        Messenger.snackBar(context, "失敗", '$res ，請回報官方發現問題');
       }
     } else {
       bool exist = false;
@@ -108,24 +105,16 @@ class _VerifyEmailState extends State<VerifyEmail> {
       String res = await FirestoreMethods()
           .signUpUser(widget.email, auth.FirebaseAuth.instance.currentUser!);
       if (res == 'success') {
-        showCustomSnackbar(
-           "成功",
-         '歡迎加入，趕快發一則貼文吧!',
-          context,
-        );
+        Messenger.snackBar(context, "成功", '歡迎加入，趕快發一則貼文吧!');
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (context) => LoginPage(),
+            builder: (context) => const LoginPage(),
           ),
           (route) => false,
         );
       } else {
-        showCustomSnackbar(
-          "失敗",
-          res.toString() + ' ，請回報官方發現問題',
-          context,
-        );
+        Messenger.snackBar(context, "失敗", '$res ，請回報官方發現問題');
       }
     }
   }
