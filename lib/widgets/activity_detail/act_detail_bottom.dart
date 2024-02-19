@@ -27,6 +27,12 @@ class _ActDetailBottomBarState extends State<ActDetailBottomBar> {
   late CColor cColor;
   bool isOver = false;
   bool needSign = true;
+  late bool alreadySign = widget.user?.signList == null
+      ? false
+      : widget.user!.signList!.contains(widget.post.postId);
+  late bool isFull = widget.post.capacity == null
+      ? false
+      : widget.post.capacity! <= widget.post.signFormsLength!.toInt();
   @override
   void initState() {
     super.initState();
@@ -78,7 +84,7 @@ class _ActDetailBottomBarState extends State<ActDetailBottomBar> {
               SizedBox(width: Dimensions.width5 * 2),
             _buttonWidget(
               () {
-                if (!isOver && needSign) {
+                if (!isOver && needSign && !alreadySign && !isFull) {
                   widget.bloc.onTap(
                     true,
                     context,
@@ -91,8 +97,14 @@ class _ActDetailBottomBarState extends State<ActDetailBottomBar> {
                   ? "無需報名"
                   : isOver
                       ? "報名已結束"
-                      : "報名",
-              (isOver || !needSign) ? cColor.grey200 : cColor.primary,
+                      : alreadySign
+                          ? "已經報名"
+                          : isFull
+                              ? "報名已額滿"
+                              : "報名",
+              (isOver || !needSign || alreadySign || isFull)
+                  ? cColor.grey200
+                  : cColor.primary,
               true,
             )
           ],

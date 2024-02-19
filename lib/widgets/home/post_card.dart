@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:upoint/globals/colors.dart';
+import 'package:upoint/globals/date_time_transfer.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/models/organizer_model.dart';
@@ -64,19 +66,22 @@ class _PostCardState extends State<PostCard> {
             widget.post.photo,
             widget.post.title,
             widget.post.organizerName,
-            " widget.post.date",
-            "widget.post.startTime",
-            "widget.post.endTime",
+            widget.post.startDateTime,
+            widget.post.endDateTime,
           ),
         ),
       ),
     );
   }
 
-  Widget PostCard(imageUrl, title, organizerName, date, startTime, endTime) {
-    Color onSecondary = Theme.of(context).colorScheme.onSecondary;
-    Color hintColor = Theme.of(context).hintColor;
-    Color primaryColor = Theme.of(context).primaryColor;
+  Widget PostCard(
+    imageUrl,
+    title,
+    organizerName,
+    Timestamp startTime,
+    Timestamp endTime,
+  ) {
+    CColor cColor = CColor.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -100,22 +105,22 @@ class _PostCardState extends State<PostCard> {
                           image: imageProvider,
                         ),
                       ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: isOver ? Colors.black.withOpacity(0.8) : null,
-                          borderRadius: BorderRadius.circular(20),
-                          gradient: isOver
-                              ? null
-                              : LinearGradient(
-                                  begin: Alignment.bottomRight,
-                                  stops: const [0.3, 0.9],
-                                  colors: [
-                                    Colors.black.withOpacity(.8),
-                                    Colors.black.withOpacity(.2),
-                                  ],
-                                ),
-                        ),
-                      ),
+                      // child: Container(
+                      //   decoration: BoxDecoration(
+                      //     color: isOver ? Colors.black.withOpacity(0.8) : null,
+                      //     borderRadius: BorderRadius.circular(20),
+                      //     gradient: isOver
+                      //         ? null
+                      //         : LinearGradient(
+                      //             begin: Alignment.bottomRight,
+                      //             stops: const [0.3, 0.9],
+                      //             colors: [
+                      //               Colors.black.withOpacity(.8),
+                      //               Colors.black.withOpacity(.2),
+                      //             ],
+                      //           ),
+                      //   ),
+                      // ),
                     ),
                   ),
                   widget.post.reward != null
@@ -128,14 +133,14 @@ class _PostCardState extends State<PostCard> {
                               vertical: Dimensions.height5,
                             ),
                             decoration: BoxDecoration(
-                              color: hintColor.withOpacity(.65),
+                              color: cColor.primary.withOpacity(.65),
                               borderRadius: const BorderRadius.only(
                                 topRight: Radius.circular(10),
                                 bottomRight: Radius.circular(10),
                               ),
                             ),
                             child: MediumText(
-                              color: Colors.white,
+                              color: cColor.grey500,
                               size: Dimensions.height2 * 8,
                               text: widget.post.reward!,
                             ),
@@ -151,14 +156,14 @@ class _PostCardState extends State<PostCard> {
                             vertical: Dimensions.height5,
                           ),
                           decoration: BoxDecoration(
-                            color: primaryColor.withOpacity(1),
+                            color: cColor.primary,
                             borderRadius: const BorderRadius.all(
                               Radius.circular(10),
                             ),
                           ),
                           child: Center(
                             child: MediumText(
-                              color: Colors.white,
+                              color: cColor.grey500,
                               size: Dimensions.height2 * 8,
                               text: '活動已結束',
                             ),
@@ -172,7 +177,7 @@ class _PostCardState extends State<PostCard> {
           placeholder: (context, url) => SizedBox(
             height: Dimensions.height5 * 3,
             width: Dimensions.height5 * 3,
-            child: CircularProgressIndicator.adaptive(
+            child: const CircularProgressIndicator.adaptive(
               backgroundColor: Colors.grey,
             ),
           ),
@@ -182,56 +187,37 @@ class _PostCardState extends State<PostCard> {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: EdgeInsets.only(left: Dimensions.width5 * 2),
+            SizedBox(width: Dimensions.width2 * 5),
+            SizedBox(
+              width: Dimensions.screenWidth * 0.45,
+              height: Dimensions.height5 * 10,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    width: Dimensions.screenWidth * 0.55,
-                    child: MediumText(
-                      color: onSecondary,
-                      size: Dimensions.height2 * 8,
-                      text: title,
-                    ),
+                  MediumText(
+                    color: cColor.grey500,
+                    size: Dimensions.height2 * 8,
+                    text: widget.post.title!,
                   ),
-                  SizedBox(height: Dimensions.height5 * 2),
-                  Container(
-                    width: Dimensions.screenWidth * 0.55,
-                    child: MediumText(
-                      color: hintColor,
-                      size: Dimensions.height2 * 7,
-                      text: organizerName,
-                    ),
+                  SizedBox(height: Dimensions.height5 * 1),
+                  MediumText(
+                    color: cColor.primary,
+                    size: Dimensions.height2 * 7,
+                    text: organizerName,
                   ),
                 ],
               ),
             ),
             Expanded(child: Column(children: [])),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: Dimensions.screenWidth * 0.3,
-                  child: Text(
-                    "formatTimestamp(date)",
-                    style: TextStyle(
-                      color: onSecondary,
-                      fontSize: Dimensions.height2 * 7,
-                      fontFamily: "NotoSansMedium",
-                    ),
-                  ),
-                ),
-                SizedBox(height: Dimensions.height5 * 2),
-                Text(
-                  '$startTime-$endTime',
-                  style: TextStyle(
-                    color: onSecondary,
-                    fontSize: Dimensions.height2 * 7,
-                    fontFamily: "NotoSansMedium",
-                  ),
-                ),
-              ],
+            SizedBox(
+              height: Dimensions.height5 * 10,
+              width: Dimensions.screenWidth * 0.4,
+              child: MediumText(
+                maxLines: 2,
+                color: cColor.grey500,
+                size: Dimensions.height2 * 7,
+                text: TimeTransfer.timeTrans03(startTime, endTime),
+              ),
             ),
           ],
         ),

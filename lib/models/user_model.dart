@@ -8,7 +8,7 @@ class UserModel {
   String? className;
   String? phoneNumber;
   String? fcmToken;
-  List<String>? signList;
+  List? signList;
   String? pic;
 
   UserModel({
@@ -37,7 +37,6 @@ class UserModel {
 
   static UserModel fromSnap(DocumentSnapshot snap) {
     var snapshot = (snap.data()) as Map<String, dynamic>;
-
     return UserModel(
       email: snapshot['email'],
       uuid: snapshot['uuid'],

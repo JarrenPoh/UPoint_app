@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:upoint/globals/custom_messengers.dart';
 import 'package:upoint/models/post_model.dart';
@@ -26,7 +25,7 @@ class ActivityDetailPageBloc {
           await launch(url);
         }
       } else {
-        if (FirebaseAuth.instance.currentUser == null) {
+        if (user == null) {
           String res = await Messenger.dialog(
             '請先登入',
             '您尚未登入帳戶',
@@ -57,7 +56,7 @@ class ActivityDetailPageBloc {
               builder: (context) {
                 return SignFormPage(
                   post: post,
-                  user: user!,
+                  user: user,
                 );
               },
             ),

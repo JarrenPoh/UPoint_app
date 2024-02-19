@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:upoint/globals/dimension.dart';
 import '../../globals/colors.dart';
-import '../../globals/medium_text.dart';
 import '../../models/option_model.dart';
 
 class ShortField extends StatefulWidget {
@@ -20,9 +19,18 @@ class ShortField extends StatefulWidget {
 }
 
 class _ShortFieldState extends State<ShortField> {
+  @override
+  void initState() {
+    super.initState();
+    if (widget.option.other != null) {
+      widget.option.body.add(widget.option.other!);
+    }
+  }
+
   String choseText = "";
   List radioList = ["gender", "meal", "single"];
-  onTap(String text) {
+  onTap(String text, bool isOther) {
+    FocusScope.of(context).unfocus();
     if (radioList.contains(widget.option.type)) {
       //單選只能有一個
       widget.initList.clear();
@@ -41,6 +49,16 @@ class _ShortFieldState extends State<ShortField> {
     widget.onChanged(widget.initList);
   }
 
+  onOtherChenged(String text) {
+    widget.option.body.last = text;
+    if (radioList.contains(widget.option.type)) {
+      widget.initList.first = text;
+      widget.onChanged(widget.initList);
+    }else{
+      
+    }
+  }
+
   late CColor cColor;
   @override
   void didChangeDependencies() {
@@ -56,6 +74,11 @@ class _ShortFieldState extends State<ShortField> {
         widget.option.body.length,
         (index) {
           bool isActive = widget.initList.contains(widget.option.body[index]);
+          bool isOther = widget.option.other != null &&
+              index == widget.option.body.length - 1;
+          bool enabled = isActive && isOther;
+          final TextEditingController _controller =
+              TextEditingController(text: widget.option.body[index]);
           return Container(
             height: Dimensions.height2 * 22,
             margin: EdgeInsets.only(right: Dimensions.width2 * 11),
@@ -63,12 +86,12 @@ class _ShortFieldState extends State<ShortField> {
               border: Border.all(color: cColor.grey300),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                InkWell(
-                  onTap: () => onTap(widget.option.body[index]),
-                  child: Container(
+            child: InkWell(
+              onTap: () => onTap(widget.option.body[index], isOther),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
                     width: Dimensions.width2 * 10,
                     height: Dimensions.height2 * 10,
                     padding: const EdgeInsets.all(4),
@@ -90,14 +113,28 @@ class _ShortFieldState extends State<ShortField> {
                       color: isActive ? cColor.primary : Colors.transparent,
                     ),
                   ),
-                ),
-                MediumText(
-                  color: cColor.grey500,
-                  size: Dimensions.height2 * 8,
-                  text: widget.option.body[index],
-                ),
-                const SizedBox(width: 7),
-              ],
+                  IntrinsicWidth(
+                    child: TextField(
+                      controller: _controller,
+                      enabled: enabled,
+                      style: TextStyle(
+                        color: cColor.grey500,
+                        fontSize: Dimensions.height2 * 8,
+                        fontFamily: "NotoSansRegular",
+                      ),
+                      decoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.only(bottom: Dimensions.height5),
+                        enabledBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                      ),
+                      onChanged: (e) => onOtherChenged(e),
+                    ),
+                  ),
+                  const SizedBox(width: 7),
+                ],
+              ),
             ),
           );
         },

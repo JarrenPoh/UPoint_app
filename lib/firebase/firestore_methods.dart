@@ -38,7 +38,7 @@ class FirestoreMethods {
   ) async {
     String res = "some error occur";
     String signFormId = const Uuid().v1();
-    List<String> _signList = user.signList ?? [];
+    List _signList = user.signList ?? [];
     try {
       //以下尚未填過
       SignFormModel signForm = SignFormModel(
