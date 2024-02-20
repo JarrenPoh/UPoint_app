@@ -53,7 +53,6 @@ class _PostCardState extends State<PostCard> {
             builder: (context) => ActivityDetailPage(
               post: widget.post,
               hero: widget.hero,
-              user: widget.user,
             ),
           ),
         );
@@ -161,10 +160,13 @@ class _PostCardState extends State<PostCard> {
                       color: cColor.grey400,
                     ),
                     SizedBox(width: Dimensions.width2 * 4),
-                    RegularText(
-                      color: cColor.grey500,
-                      size: Dimensions.height2 * 7,
-                      text: inform["text"],
+                    SizedBox(
+                      width: Dimensions.width2 * 65,
+                      child: RegularText(
+                        color: cColor.grey500,
+                        size: Dimensions.height2 * 7,
+                        text: inform["text"],
+                      ),
                     ),
                   ],
                 ),

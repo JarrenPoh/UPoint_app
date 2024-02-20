@@ -13,18 +13,31 @@ import 'package:upoint/models/user_model.dart';
 class AuthMethods with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  UserModel? user;
+  UserModel? _user;
+  UserModel? get user => _user;
+
   Future<UserModel?> getUserDetails() async {
     if (_auth.currentUser != null) {
-      print('拿了user from 資料');
+      debugPrint('拿了user from 資料');
       User currentUser = _auth.currentUser!;
       DocumentSnapshot snap =
           await _firestore.collection('users').doc(currentUser.uid).get();
-      user = UserModel.fromSnap(snap);
-      print('了user from 資料:${user?.toJson()}');
+      _user = UserModel.fromSnap(snap);
+      setUser(_user);
+      debugPrint('了user from 資料:${_user?.toJson()}');
     }
-    return user;
+    return _user;
     // notifyListeners();
+  }
+
+  void setUser(UserModel? user) {
+    _user = user;
+    notifyListeners();
+  }
+
+  void clearUser() {
+    _user = null;
+    notifyListeners();
   }
 
   //註冊用戶
@@ -43,7 +56,7 @@ class AuthMethods with ChangeNotifier {
         );
 
         res = "success";
-        print(res);
+        debugPrint(res);
       }
     } on FirebaseAuthException catch (err) {
       if (err.code == 'invalid-email') {
@@ -74,7 +87,7 @@ class AuthMethods with ChangeNotifier {
       );
       res = "success";
     } on FirebaseAuthException catch (err) {
-      print('errorr');
+      debugPrint('errorr');
       if (err.code == 'unknown') {
         res = 'Please enter all the fields';
       } else if (err.code == 'wrong-password') {
@@ -87,10 +100,10 @@ class AuthMethods with ChangeNotifier {
         res = err.code.toString();
       }
     } on PlatformException catch (err) {
-      print('errorr');
+      debugPrint('errorr');
       res = err.toString();
     } catch (e) {
-      print('errorr');
+      debugPrint('errorr');
       res = e.toString();
     }
     return res;
@@ -143,7 +156,7 @@ class AuthMethods with ChangeNotifier {
       }
       res = 'success';
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
       res = e.toString();
     }
     return res;
@@ -181,7 +194,7 @@ class AuthMethods with ChangeNotifier {
       res = 'success';
     } on PlatformException catch (e) {
       res = e.toString();
-      print(e);
+      debugPrint(e.toString());
       res = e.toString();
     }
     return res;
@@ -203,7 +216,7 @@ class AuthMethods with ChangeNotifier {
         res = '該信箱尚未註冊';
       } else {
         res = 'error occur in FirebaseAuth';
-        print(err.toString());
+        debugPrint(err.toString());
       }
     } catch (e) {
       res = e.toString();
@@ -219,7 +232,7 @@ class AuthMethods with ChangeNotifier {
       await user.sendEmailVerification();
       res = 'success';
     } on FirebaseAuthException catch (err) {
-      print(err.toString());
+      debugPrint(err.toString());
       res = 'error occur in FirebaseAuth';
     } catch (err) {
       res = err.toString();
@@ -234,7 +247,7 @@ class AuthMethods with ChangeNotifier {
       // 成功删除账户后的操作，比如返回登录页面
     } on FirebaseAuthException catch (e) {
       // 处理错误，可能是因为用户最近没有登录
-      print('删除账户出错: ${e.message}');
+      debugPrint('删除账户出错: ${e.message}');
       // 可以提示用户重新登录后再尝试删除账户
     }
   }

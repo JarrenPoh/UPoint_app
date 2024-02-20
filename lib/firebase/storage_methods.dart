@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 
 class StorageMethods {
   final FirebaseStorage _storage = FirebaseStorage.instance;
@@ -22,7 +23,7 @@ class StorageMethods {
       String downloadUrl = await snap.ref.getDownloadURL();
       return downloadUrl;
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
     return "";
   }
@@ -35,10 +36,10 @@ class StorageMethods {
       if (isPost) {
         ref = ref.child(postId);
       }
-      print('ref: $ref');
+      debugPrint('ref: $ref');
       ref.delete();
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 }

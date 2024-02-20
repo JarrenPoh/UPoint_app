@@ -85,7 +85,7 @@ class _RegisterPanelState extends State<RegisterPanel> {
             isLoading = false;
           });
           // navigate to the home screen
-          Navigator.of(context).push(
+          Navigator.of(context).pushReplacement(
             MaterialPageRoute(
               builder: (context) {
                 return VerifyEmail(

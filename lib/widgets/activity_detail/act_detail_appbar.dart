@@ -1,10 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:upoint/models/post_model.dart';
 import '../../globals/colors.dart';
 import '../../globals/dimension.dart';
-import '../../secret.dart';
 
 class ActDetailAppBar extends StatefulWidget {
   final PostModel post;
@@ -45,46 +43,46 @@ class _ActDetailAppBarState extends State<ActDetailAppBar> {
           height: Dimensions.height2 * 23,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(40),
-            color: cColor.primary,
+            color: cColor.white,
           ),
           child: Align(
             alignment: Alignment.center,
             child: Icon(
               Icons.chevron_left_outlined,
-              color: Colors.white,
+              color: cColor.black,
               size: Dimensions.height2 * 18,
             ),
           ),
         ),
       ),
       actions: [
-        IconButton(
-          padding: EdgeInsets.all(0),
-          onPressed: () async {
-            String postLink = 'https://$host/posts/?id=${widget.post.postId}';
-            try {
-              await Share.share(
-                ' - ${widget.post.title} ${widget.post.organizerName}\n$postLink',
-                subject: '${widget.post.title}  ${widget.post.content!}...',
-              );
-            } catch (e) {
-              print(e.toString());
-            }
-          },
-          icon: Container(
-            width: Dimensions.height2 * 20,
-            height: Dimensions.height2 * 20,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(40),
-              color: cColor.primary,
-            ),
-            child: Icon(
-              Icons.share,
-              color: Colors.white,
-              size: Dimensions.height2 * 12,
-            ),
-          ),
-        ),
+        // IconButton(
+        //   padding: EdgeInsets.all(0),
+        //   onPressed: () async {
+        //     String postLink = 'https://$host/activity/?id=${widget.post.postId}';
+        //     try {
+        //       await Share.share(
+        //         ' - ${widget.post.title} ${widget.post.organizerName}\n$postLink',
+        //         subject: '${widget.post.title}  ${widget.post.content!}...',
+        //       );
+        //     } catch (e) {
+        //       print(e.toString());
+        //     }
+        //   },
+        //   icon: Container(
+        //     width: Dimensions.height2 * 20,
+        //     height: Dimensions.height2 * 20,
+        //     decoration: BoxDecoration(
+        //       borderRadius: BorderRadius.circular(40),
+        //       color: cColor.primary,
+        //     ),
+        //     child: Icon(
+        //       Icons.share,
+        //       color: Colors.white,
+        //       size: Dimensions.height2 * 12,
+        //     ),
+        //   ),
+        // ),
       ],
       automaticallyImplyLeading: false,
       flexibleSpace: FlexibleSpaceBar(

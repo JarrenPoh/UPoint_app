@@ -45,7 +45,7 @@ class SignFormBloc {
     //   _signForm = jsonDecode(UserSimplePreference.getSignForm());
     // }
     signForm[index]["value"] = text;
-    print('signForm:$signForm');
+    debugPrint('signForm:$signForm');
     // UserSimplePreference.setSignForm(jsonEncode(_signForm));
   }
 
@@ -55,7 +55,7 @@ class SignFormBloc {
     //   _signForm = jsonDecode(UserSimplePreference.getSignForm());
     // }
     signForm[index]["value"] = list;
-    print('signForm:$signForm');
+    debugPrint('signForm:$signForm');
     // UserSimplePreference.setSignForm(jsonEncode(_signForm));
   }
 
@@ -75,8 +75,8 @@ class SignFormBloc {
   }
 
   confirmSend(UserModel user, PostModel post, BuildContext context) async {
-    print('傳送報名表單');
-    print('signForm:$signForm');
+    debugPrint('傳送報名表單');
+    debugPrint('signForm:$signForm');
 
     String res = await FirestoreMethods().uploadSignForm(
       user,

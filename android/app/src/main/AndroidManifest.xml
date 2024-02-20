@@ -27,8 +27,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Accepts URIs that begin with YOUR_SCHEME://YOUR_HOST -->
                 <data
-                    android:scheme="upoint"
-                    android:host="nojoke.brandx.red" />
+                    android:scheme="https" android:host="upoint.tw" android:pathPrefix="/activity"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

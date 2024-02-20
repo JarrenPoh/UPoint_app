@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/globals/custom_messengers.dart';
 import 'package:upoint/globals/dimension.dart';
-import 'package:upoint/navigation_container.dart';
 import 'package:upoint/widgets/login/reset_password.dart';
 
 class LoginPanel extends StatefulWidget {
@@ -83,13 +82,7 @@ class _LoginPanelState extends State<LoginPanel> {
     if (res == "success") {
       if (FirebaseAuth.instance.currentUser!.emailVerified) {
         // ignore: use_build_context_synchronously
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => NavigationContainer(),
-          ),
-          (route) => false,
-        );
+        Navigator.pop(context, true);
       } else {
         await AuthMethods().signOut();
         // ignore: use_build_context_synchronously

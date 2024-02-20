@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:flutter/material.dart';
 import 'package:upoint/firebase/storage_methods.dart';
 import 'package:upoint/globals/date_time_transfer.dart';
 import 'package:upoint/models/post_model.dart';
 import 'package:upoint/models/sign_form_model.dart';
 import 'package:upoint/models/user_model.dart';
+import 'package:upoint/secret.dart';
 import 'package:uuid/uuid.dart';
-
-import '../globals/global.dart';
 
 class FirestoreMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -29,7 +29,7 @@ class FirestoreMethods {
       res = 'success';
     } catch (e) {
       res = e.toString();
-      print(res);
+      debugPrint(res);
     }
     return res;
   }
@@ -76,12 +76,12 @@ class FirestoreMethods {
         post.organizerPic,
         post.organizerUid!,
         "您報名了 ${post.title} ，請於${TimeTransfer.timeTrans01(post.startDateTime)}準時出席",
-        deepLink + "/activity?id=${postId}",
+        "https://$host/activity?id=$postId",
       );
       res = 'success';
     } catch (err) {
       res = err.toString();
-      print('err${err.toString()}');
+      debugPrint('err${err.toString()}');
     }
     return res;
   }
@@ -143,7 +143,7 @@ class FirestoreMethods {
         'url': url,
       });
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 }

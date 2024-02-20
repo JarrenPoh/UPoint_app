@@ -42,6 +42,7 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     super.build(context);
     CColor cColor = CColor.of(context);
+    Color bgColor = Theme.of(context).appBarTheme.foregroundColor!;
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -50,7 +51,7 @@ class _HomePageState extends State<HomePage>
           color: cColor.white,
           child: SafeArea(
             child: Scaffold(
-              backgroundColor: cColor.grey100,
+              backgroundColor: bgColor,
               body: NestedScrollView(
                 floatHeaderSlivers: true,
                 headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -60,38 +61,37 @@ class _HomePageState extends State<HomePage>
                           context),
                       sliver: SliverAppBar(
                         pinned: true,
+                        elevation: 0,
+                        backgroundColor: cColor.white,
                         title: PreferredSize(
                           preferredSize: Size(
                               Dimensions.screenWidth, Dimensions.height5 * 0),
-                          child: Container(
-                            color: cColor.white,
-                            child: TabBar(
-                              overlayColor: null,
-                              labelColor: cColor.grey500,
-                              labelStyle:
-                                  const TextStyle(fontWeight: FontWeight.w600),
-                              unselectedLabelColor: Colors.grey,
-                              indicatorSize: TabBarIndicatorSize.label,
-                              indicator: BoxDecoration(
-                                color: cColor.primary,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              indicatorPadding: EdgeInsets.only(
-                                bottom: Dimensions.height2 * 4,
-                                top: Dimensions.height2 * 18.5,
-                                left: Dimensions.width5 * 2,
-                                right: Dimensions.width5 * 2,
-                              ),
-                              indicatorWeight: 4,
-                              onTap: (value) {
-                                widget.bloc.tabController.index = value;
-                              },
-                              controller: widget.bloc.tabController,
-                              tabs: List.generate(
-                                widget.bloc.tabList.length,
-                                (index) => Tab(
-                                  child: Text(widget.bloc.tabList[index]),
-                                ),
+                          child: TabBar(
+                            dividerColor: Colors.transparent,
+                            labelColor: cColor.grey500,
+                            labelStyle:
+                                const TextStyle(fontWeight: FontWeight.w600),
+                            unselectedLabelColor: cColor.grey300,
+                            indicatorSize: TabBarIndicatorSize.label,
+                            indicator: BoxDecoration(
+                              color: cColor.primary,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            indicatorPadding: EdgeInsets.only(
+                              bottom: Dimensions.height2 * 4,
+                              top: Dimensions.height2 * 18.5,
+                              left: Dimensions.width5 * 2,
+                              right: Dimensions.width5 * 2,
+                            ),
+                            indicatorWeight: 4,
+                            onTap: (value) {
+                              widget.bloc.tabController.index = value;
+                            },
+                            controller: widget.bloc.tabController,
+                            tabs: List.generate(
+                              widget.bloc.tabList.length,
+                              (index) => Tab(
+                                child: Text(widget.bloc.tabList[index]),
                               ),
                             ),
                           ),

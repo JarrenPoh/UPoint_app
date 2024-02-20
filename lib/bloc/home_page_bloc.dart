@@ -30,7 +30,7 @@ class HomePageBloc with ChangeNotifier {
         .get();
     List<QueryDocumentSnapshot> _list = fetchPost.docs.toList();
     List<PostModel> _post = _list.map((e) => PostModel.fromSnap(e)).toList();
-    print('找了${fetchPost.docs.length}則貼文');
+    debugPrint('找了${fetchPost.docs.length}則貼文');
     postListNotifier.value = _post; //activity_body用的
     postList2Notifier.value = _post;
     originList.value = _post; //最願使數據要用的
@@ -85,7 +85,7 @@ class HomePageBloc with ChangeNotifier {
   Future<List> fetchOrganizers() async {
     QuerySnapshot<Map<String, dynamic>> fetchPost =
         await FirebaseFirestore.instance.collection('organizers').get();
-    print('找了${fetchPost.docs.length}個活動方');
+    debugPrint('找了${fetchPost.docs.length}個活動方');
     List<QueryDocumentSnapshot> _list = fetchPost.docs.toList();
     organListNotifier.value =
         _list.map((e) => OrganizerModel.fromSnap(e)).toList();
@@ -130,7 +130,7 @@ class HomePageBloc with ChangeNotifier {
   Future<List> fetchRewardTags() async {
     QuerySnapshot<Map<String, dynamic>> fetchPost =
         await FirebaseFirestore.instance.collection('rewardTags').get();
-    print('找了${fetchPost.docs.length}個獎勵標籤');
+    debugPrint('找了${fetchPost.docs.length}個獎勵標籤');
     List<QueryDocumentSnapshot> _list = fetchPost.docs.toList();
     rewardTagListNotifier.value =
         _list.map((e) => RewardTagModel.fromSnap(e)).toList();

@@ -42,7 +42,7 @@ class InboxPageBloc with ChangeNotifier {
     fireStoreQuery = fireStoreQuery.limit(limit);
     var snapshot = await fireStoreQuery.get();
     docs = snapshot.docs;
-    print('fetchInbox length: ${docs.length}');
+    debugPrint('fetchInbox length: ${docs.length}');
     if (docs.isNotEmpty) {
       noMore = docs.length < limit;
       lastDocs.addAll(docs);

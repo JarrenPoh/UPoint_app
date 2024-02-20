@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 ThemeData darkTheme = ThemeData(
   brightness: Brightness.light,
   appBarTheme: AppBarTheme(
+    foregroundColor: Color.fromARGB(255, 33, 33, 33),
     backgroundColor: Color.fromARGB(255, 25, 25, 25),
   ),
   primaryColor: Color(0xFF0a2e3f),
@@ -19,9 +20,6 @@ ThemeData darkTheme = ThemeData(
     onErrorContainer: Color(0xFFEAEAEA),
     onInverseSurface: Color(0xFFF8F8F8),
     onPrimaryContainer: Color(0xFFFFC169),
-
-
-
 
     primary: Colors.white54,
     secondary: Colors.white38,

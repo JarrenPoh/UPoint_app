@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:upoint/globals/colors.dart';
 
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/global_key.dart' as globals;
@@ -82,30 +83,37 @@ class CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         ? Theme.of(context).colorScheme.onSecondary
         : Theme.of(context).colorScheme.secondary;
 
-    return GestureDetector(
-      onTap: () {
-        widget.onIconTap(index);
-        onGlobalTap(index);
-      },
-      child: SizedBox(
-        width: Dimensions.width5 * 14,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(height: 0),
-            Icon(
-              iconList[index],
-              color: iconAndTextColor,
-              size: 28,
-            ),
-            Text(
-              labelText[index],
-              style: textStyle.copyWith(
-                color: iconAndTextColor,
-                fontWeight: FontWeight.normal,
+    return Expanded(
+      child: GestureDetector(
+        onTap: () {
+          widget.onIconTap(index);
+          onGlobalTap(index);
+        },
+        child: Container(
+          color: CColor.of(context).white,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 0),
+                  Icon(
+                    iconList[index],
+                    color: iconAndTextColor,
+                    size: 28,
+                  ),
+                  Text(
+                    labelText[index],
+                    style: textStyle.copyWith(
+                      color: iconAndTextColor,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

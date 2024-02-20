@@ -13,6 +13,7 @@ import 'package:upoint/pages/login_page.dart';
 import 'package:upoint/pages/privacy_page.dart';
 import 'package:upoint/secret.dart';
 import 'package:upoint/widgets/profile/profile_pic.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
   final UserModel? user;
@@ -32,7 +33,7 @@ class _ProfilePageState extends State<ProfilePage>
   UserModel? _user;
   OrganizerModel? _organizer;
   int countTime = 0;
-  String username = 'xxx';
+  String username = '使用者';
   String className = '尚未編輯';
   String studentID = '尚未編輯';
   String phoneNumber = '尚未編輯';
@@ -133,22 +134,27 @@ class _ProfilePageState extends State<ProfilePage>
       if (res == "success") {
         await AuthMethods().signOut();
         // ignore: use_build_context_synchronously
-        Navigator.pushAndRemoveUntil(
+        bool? back = await Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => LoginPage(),
           ),
-          (Route<dynamic> route) => false, // 不保留任何旧路由
         );
+        if (back == true) {
+          await Provider.of<AuthMethods>(context, listen: false)
+              .getUserDetails();
+        }
       }
     } else {
-      Navigator.pushAndRemoveUntil(
+      bool? back = await Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => LoginPage(),
         ),
-        (Route<dynamic> route) => false, // 不保留任何旧路由
       );
+      if (back == true) {
+        await Provider.of<AuthMethods>(context, listen: false).getUserDetails();
+      }
     }
   }
 
@@ -161,12 +167,11 @@ class _ProfilePageState extends State<ProfilePage>
     if (res == "success") {
       await AuthMethods().deleteUser();
       // ignore: use_build_context_synchronously
-      Navigator.pushAndRemoveUntil(
+      Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => LoginPage(),
         ),
-        (Route<dynamic> route) => false, // 不保留任何旧路由
       );
     }
   }

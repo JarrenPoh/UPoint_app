@@ -50,92 +50,87 @@ class _RewardBodyState extends State<RewardBody>
             handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
           ),
           SliverToBoxAdapter(
-            child: Container(
-              color: cColor.grey100,
-              child: Padding(
-                padding:
-                    EdgeInsets.symmetric(horizontal: Dimensions.width5 * 2),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // 篩選
-                    Container(
-                      margin: EdgeInsets.symmetric(
-                        vertical: Dimensions.height2 * 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: cColor.white,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: ValueListenableBuilder(
-                        valueListenable: widget.bloc.organListNotifier,
-                        builder: (context, value, child) {
-                          value as List;
-                          List<RewardTagModel> rewardList =
-                              widget.bloc.rewardTagListNotifier.value;
-                          if (rewardList.isEmpty) {
-                            return CircularProgressIndicator(
-                                color: cColor.black);
-                          }
-                          String searchText = rewardList.first.name;
-                          return RewardBodyFilter(
-                            bloc: widget.bloc,
-                            rewardList: rewardList,
-                            searchText: searchText,
-                          );
-                        },
-                      ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: Dimensions.width5 * 2),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // 篩選
+                  Container(
+                    margin: EdgeInsets.symmetric(
+                      vertical: Dimensions.height2 * 6,
                     ),
-                    //文章Ｆ
-                    ValueListenableBuilder(
-                      valueListenable: widget.bloc.postList2Notifier,
-                      builder:
-                          (BuildContext context, dynamic value, Widget? child) {
+                    decoration: BoxDecoration(
+                      color: cColor.white,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: ValueListenableBuilder(
+                      valueListenable: widget.bloc.organListNotifier,
+                      builder: (context, value, child) {
                         value as List;
-                        List<PostModel> postList =
-                            widget.bloc.postList2Notifier.value;
-                        return postList.isEmpty
-                            ? Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SizedBox(height: Dimensions.height5 * 16),
-                                    MediumText(
-                                      color: cColor.grey500,
-                                      size: Dimensions.height2 * 8,
-                                      text: "還沒有創建過貼文",
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : GridView.custom(
-                                shrinkWrap: true,
-                                physics: const ClampingScrollPhysics(),
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  mainAxisSpacing: Dimensions.height2 * 4,
-                                  childAspectRatio: 172 / 219,
-                                  crossAxisSpacing: Dimensions.width2 * 4,
-                                ),
-                                childrenDelegate: SliverChildBuilderDelegate(
-                                  (BuildContext context, int index) {
-                                    return PostCard(
-                                      post: postList[index],
-                                      organizer: null,
-                                      hero:
-                                          "activity${postList[index].datePublished.toString()}",
-                                      isOrganizer: false,
-                                      user: widget.user,
-                                    );
-                                  },
-                                  childCount: postList.length, // 10个网格项
-                                ),
-                              );
+                        List<RewardTagModel> rewardList =
+                            widget.bloc.rewardTagListNotifier.value;
+                        if (rewardList.isEmpty) {
+                          return CircularProgressIndicator(color: cColor.black);
+                        }
+                        String searchText = rewardList.first.name;
+                        return RewardBodyFilter(
+                          bloc: widget.bloc,
+                          rewardList: rewardList,
+                          searchText: searchText,
+                        );
                       },
                     ),
-                  ],
-                ),
+                  ),
+                  //文章Ｆ
+                  ValueListenableBuilder(
+                    valueListenable: widget.bloc.postList2Notifier,
+                    builder:
+                        (BuildContext context, dynamic value, Widget? child) {
+                      value as List;
+                      List<PostModel> postList =
+                          widget.bloc.postList2Notifier.value;
+                      return postList.isEmpty
+                          ? Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(height: Dimensions.height5 * 16),
+                                  MediumText(
+                                    color: cColor.grey500,
+                                    size: Dimensions.height2 * 8,
+                                    text: "還沒有創建過貼文",
+                                  ),
+                                ],
+                              ),
+                            )
+                          : GridView.custom(
+                              shrinkWrap: true,
+                              physics: const ClampingScrollPhysics(),
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                mainAxisSpacing: Dimensions.height2 * 4,
+                                childAspectRatio: 172 / 219,
+                                crossAxisSpacing: Dimensions.width2 * 4,
+                              ),
+                              childrenDelegate: SliverChildBuilderDelegate(
+                                (BuildContext context, int index) {
+                                  return PostCard(
+                                    post: postList[index],
+                                    organizer: null,
+                                    hero:
+                                        "activity${postList[index].datePublished.toString()}",
+                                    isOrganizer: false,
+                                    user: widget.user,
+                                  );
+                                },
+                                childCount: postList.length, // 10个网格项
+                              ),
+                            );
+                    },
+                  ),
+                ],
               ),
             ),
           ),

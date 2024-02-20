@@ -38,7 +38,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
 
   getUserEmailVerify() {
     isEmailVerified = auth.FirebaseAuth.instance.currentUser!.emailVerified;
-    print('信箱驗證 $isEmailVerified');
+    debugPrint('信箱驗證 $isEmailVerified');
     Send();
   }
 
@@ -64,7 +64,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
         resentTimer = Timer.periodic(Duration(seconds: 1), (_) {
           setState(() {
             resentTime--;
-            print('resenttTime$resentTime');
+            debugPrint('resenttTime$resentTime');
             if (resentTime == 0) {
               canResentEmail = true;
               resentTimer!.cancel();
@@ -96,7 +96,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
   checkEmailVerified() async {
     await auth.FirebaseAuth.instance.currentUser!.reload();
     isEmailVerified = auth.FirebaseAuth.instance.currentUser!.emailVerified;
-    print('after reload emailVerified $isEmailVerified');
+    debugPrint('after reload emailVerified $isEmailVerified');
 
     if (isEmailVerified) {
       resentTimer?.cancel();
@@ -106,12 +106,11 @@ class _VerifyEmailState extends State<VerifyEmail> {
           .signUpUser(widget.email, auth.FirebaseAuth.instance.currentUser!);
       if (res == 'success') {
         Messenger.snackBar(context, "成功", '歡迎加入，趕快發一則貼文吧!');
-        Navigator.pushAndRemoveUntil(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => const LoginPage(),
           ),
-          (route) => false,
         );
       } else {
         Messenger.snackBar(context, "失敗", '$res ，請回報官方發現問題');

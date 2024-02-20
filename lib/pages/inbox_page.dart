@@ -13,6 +13,9 @@ import 'package:upoint/models/user_model.dart';
 import 'package:upoint/pages/activity_detail_page.dart';
 import 'package:upoint/pages/login_page.dart';
 import 'package:upoint/secret.dart';
+import 'package:provider/provider.dart';
+
+import '../firebase/auth_methods.dart';
 
 class InboxPage extends StatefulWidget {
   final UserModel? user;
@@ -56,7 +59,6 @@ class _InboxPageState extends State<InboxPage>
           return ActivityDetailPage(
             post: _p,
             hero: "activity${_p.datePublished.toString()}",
-            user: widget.user,
           );
         },
       ),
@@ -312,14 +314,18 @@ class _InboxPageState extends State<InboxPage>
                           ),
                         ),
                         MaterialButton(
-                          onPressed: () {
-                            Navigator.pushAndRemoveUntil(
+                          onPressed: () async {
+                            bool? back = await Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => LoginPage(),
                               ),
-                              (Route<dynamic> route) => false, // 不保留任何旧路由
                             );
+                            if (back == true) {
+                              await Provider.of<AuthMethods>(context,
+                                      listen: false)
+                                  .getUserDetails();
+                            }
                           },
                           child: MediumText(
                             color: onSecondary,

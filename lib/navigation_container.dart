@@ -6,7 +6,6 @@ import 'package:upoint/bloc/uri_bloc.dart';
 import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/globals/custom_messengers.dart';
 import 'package:upoint/models/post_model.dart';
-import 'package:upoint/models/user_model.dart';
 import 'package:upoint/pages/activity_detail_page.dart';
 import 'package:upoint/pages/home_page.dart';
 import 'package:upoint/pages/inbox_page.dart';
@@ -15,6 +14,8 @@ import 'package:upoint/pages/search_page.dart';
 import 'package:upoint/widgets/custom_bottom_naviagation_bar.dart';
 import 'package:upoint/pages/profile_page.dart';
 import 'package:provider/provider.dart';
+
+import 'models/user_model.dart';
 
 class NavigationContainer extends StatefulWidget {
   const NavigationContainer({
@@ -29,7 +30,7 @@ class _NavigationContainerState extends State<NavigationContainer>
     with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   @override
   bool get wantKeepAlive => true;
-  List<Widget> _pages = [];
+  List<Widget> Function(UserModel?) _pages = (u) => [];
   PageController _pageController = PageController();
   final HomePageBloc _homePageBloc = HomePageBloc();
 
@@ -53,7 +54,7 @@ class _NavigationContainerState extends State<NavigationContainer>
     super.initState();
     Uri? uri = Provider.of<UriBloc>(context, listen: false).uri;
     if (uri != null) {
-      print('uri: $uri');
+      debugPrint('uri: $uri');
       if (uri.pathSegments.isNotEmpty && uri.pathSegments.first == 'profile') {
         _selectedPageIndex = 0;
       } else if (uri.pathSegments.isNotEmpty &&
@@ -70,8 +71,8 @@ class _NavigationContainerState extends State<NavigationContainer>
   }
 
   findAndGoPost(postId) async {
-    UserModel? user =
-        await Provider.of<AuthMethods>(context, listen: false).getUserDetails();
+    // UserModel? user =
+    //     await Provider.of<AuthMethods>(context, listen: false).getUserDetails();
     PostModel _p = await _homePageBloc.fetchPostById(postId);
     Navigator.push(
       context,
@@ -80,7 +81,6 @@ class _NavigationContainerState extends State<NavigationContainer>
           return ActivityDetailPage(
             post: _p,
             hero: "activity${_p.datePublished.toString()}",
-            user: user,
           );
         },
       ),
@@ -95,7 +95,7 @@ class _NavigationContainerState extends State<NavigationContainer>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    print('state : $state');
+    debugPrint('state : $state');
     if (state == AppLifecycleState.resumed) {
       // 应用从后台切换回前台
     }
@@ -127,31 +127,37 @@ class _NavigationContainerState extends State<NavigationContainer>
                 backgroundColor: onSecondary,
               ));
             }
-            _pages = [
-              HomePage(
-                bloc: _homePageBloc,
-                searchTapped: searchTapped,
-                user: userAccountManager.user,
-              ),
-              SearchPage(
-                bloc: _homePageBloc,
-                user: userAccountManager.user,
-              ),
-              LogoPage(),
-              InboxPage(
-                user: userAccountManager.user,
-              ),
-              ProfilePage(
-                user: userAccountManager.user,
-              ),
-            ];
+            _pages = (UserModel? _user) => [
+                  HomePage(
+                    bloc: _homePageBloc,
+                    searchTapped: searchTapped,
+                    user: _user,
+                  ),
+                  SearchPage(
+                    bloc: _homePageBloc,
+                    user: _user,
+                  ),
+                  LogoPage(),
+                  InboxPage(
+                    user: _user,
+                  ),
+                  ProfilePage(
+                    user: _user,
+                  ),
+                ];
             // }
-            return PageView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              controller: _pageController,
-              itemCount: _pages.length,
-              itemBuilder: (context, index) {
-                return _pages[index];
+            return Consumer<AuthMethods>(
+              builder: (context, userNotifier, child) {
+                UserModel? user = userNotifier.user;
+                print('這裡有改');
+                return PageView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: _pageController,
+                  itemCount: _pages(user).length,
+                  itemBuilder: (context, index) {
+                    return  _pages(user)[index];
+                  },
+                );
               },
             );
           },

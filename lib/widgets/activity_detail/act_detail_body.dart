@@ -27,7 +27,7 @@ class _ActDetailBodyState extends State<ActDetailBody> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     cColor = CColor.of(context);
-    print(widget.post.content!);
+    debugPrint(widget.post.content!);
     // _controller.document = Document.fromJson(jsonDecode(widget.post.content!));
     informList = [
       {
@@ -160,6 +160,23 @@ class _ActDetailBodyState extends State<ActDetailBody> {
                   ),
                 ),
                 Divider(color: cColor.grey200),
+                Container(
+                  height: Dimensions.height5*60,
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(
+                    vertical: Dimensions.height2 * 4,
+                    horizontal: Dimensions.width2 * 4,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    border: Border.all(color: cColor.grey200),
+                  ),
+                  child: RegularText(
+                    color: cColor.grey500,
+                    size: Dimensions.height2 * 7,
+                    text: "尚未開放",
+                  ),
+                ),
                 // Container(
                 //   padding: EdgeInsets.symmetric(
                 //     vertical: Dimensions.height2 * 9,
