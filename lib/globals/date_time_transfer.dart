@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class TimeTransfer {
-  //將datePublished 變成 "01/01（週一）"
+  //將datePublished 變成 "01/01（一）"
   static String timeTrans01(Timestamp timestamp) {
     DateTime dateTime = timestamp.toDate();
     List<String> weekdays = ["(日)", "(一)", "(二)", "(三)", "(四)", "(五)", "(六)"];

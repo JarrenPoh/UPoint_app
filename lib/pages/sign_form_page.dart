@@ -46,7 +46,7 @@ class _SignFormPageState extends State<SignFormPage> {
     if (errorText != null) {
       Messenger.dialog("有欄位尚未填寫完畢", errorText, context);
     } else {
-      _bloc.confirmSend(widget.user, widget.post.postId!, context);
+      _bloc.confirmSend(widget.user, widget.post, context);
     }
   }
 

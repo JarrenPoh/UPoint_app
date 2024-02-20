@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:upoint/globals/custom_messengers.dart';
+import 'package:upoint/models/post_model.dart';
 import '../firebase/firestore_methods.dart';
 import '../models/form_model.dart';
 import '../models/option_model.dart';
@@ -73,13 +74,13 @@ class SignFormBloc {
     return _errorText;
   }
 
-  confirmSend(UserModel user, String postId, BuildContext context) async {
+  confirmSend(UserModel user, PostModel post, BuildContext context) async {
     print('傳送報名表單');
     print('signForm:$signForm');
 
     String res = await FirestoreMethods().uploadSignForm(
       user,
-      postId,
+      post,
       jsonEncode(signForm),
     );
     Navigator.pushReplacement(

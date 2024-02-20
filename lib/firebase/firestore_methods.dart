@@ -1,9 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:upoint/firebase/storage_methods.dart';
+import 'package:upoint/globals/date_time_transfer.dart';
+import 'package:upoint/models/post_model.dart';
 import 'package:upoint/models/sign_form_model.dart';
 import 'package:upoint/models/user_model.dart';
 import 'package:uuid/uuid.dart';
+
+import '../globals/global.dart';
 
 class FirestoreMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -33,12 +37,13 @@ class FirestoreMethods {
   //上傳報名表單
   Future<String> uploadSignForm(
     UserModel user,
-    String postId,
+    PostModel post,
     String getSignFormBody,
   ) async {
     String res = "some error occur";
     String signFormId = const Uuid().v1();
     List _signList = user.signList ?? [];
+    String postId = post.postId!;
     try {
       //以下尚未填過
       SignFormModel signForm = SignFormModel(
@@ -64,6 +69,15 @@ class FirestoreMethods {
       await _firestore.collection('users').doc(user.uuid).update({
         "signList": _signList,
       });
+      //上傳去使用者inbox
+      uploadToInbox(
+        user.uuid,
+        post.organizerName!,
+        post.organizerPic,
+        post.organizerUid!,
+        "您報名了 ${post.title} ，請於${TimeTransfer.timeTrans01(post.startDateTime)}準時出席",
+        deepLink + "/activity?id=${postId}",
+      );
       res = 'success';
     } catch (err) {
       res = err.toString();
@@ -105,8 +119,9 @@ class FirestoreMethods {
   //發送Notification
   Future<void> uploadToInbox(
     String targetUserId,
-    String name,
-    String? pic,
+    String organizerName,
+    String? organizerPic,
+    String organizerUid,
     String text,
     String url,
   ) async {
@@ -121,8 +136,9 @@ class FirestoreMethods {
           .set({
         'inboxId': inboxId,
         'datePublished': DateTime.now(),
-        'pic': pic,
-        'name': name,
+        'pic': organizerPic,
+        "uid":organizerUid,
+        'name': organizerName,
         'text': text,
         'url': url,
       });

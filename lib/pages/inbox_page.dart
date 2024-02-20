@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:upoint/bloc/inbox_page_bloc.dart';
+import 'package:upoint/globals/colors.dart';
 import 'package:upoint/globals/date_time_transfer.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
@@ -182,9 +183,7 @@ class _InboxPageState extends State<InboxPage>
   }
 
   Widget listBuilder(List<dateGroup> _list, int lindex) {
-    Color onSecondary = Theme.of(context).colorScheme.onSecondary;
-    Color hintColor = Theme.of(context).hintColor;
-
+    CColor cColor = CColor.of(context);
     return ListView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
@@ -204,10 +203,10 @@ class _InboxPageState extends State<InboxPage>
               Row(
                 children: [
                   CircleAvatar(
-                    backgroundColor: onSecondary,
+                    backgroundColor: cColor.grey200,
                     radius: 24,
                     child: CircleAvatar(
-                      backgroundColor: onSecondary,
+                      backgroundColor: cColor.grey200,
                       radius: 23,
                       child: CircleAvatar(
                         backgroundColor: Colors.grey,
@@ -228,7 +227,7 @@ class _InboxPageState extends State<InboxPage>
                             text: inboxModel.name,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: onSecondary,
+                              color: cColor.grey500,
                             ),
                           ),
                           const TextSpan(
@@ -237,7 +236,7 @@ class _InboxPageState extends State<InboxPage>
                           TextSpan(
                             text: inboxModel.text,
                             style: TextStyle(
-                              color: onSecondary,
+                              color: cColor.grey500,
                             ),
                           ),
                           TextSpan(
@@ -245,7 +244,7 @@ class _InboxPageState extends State<InboxPage>
                               inboxModel.datePublished.toDate(),
                             )}',
                             style: TextStyle(
-                              color: Colors.grey,
+                              color: cColor.grey400,
                             ),
                           ),
                         ],
@@ -255,12 +254,12 @@ class _InboxPageState extends State<InboxPage>
                   SizedBox(width: Dimensions.width5 * 2),
                   CupertinoButton(
                     padding: EdgeInsets.symmetric(
-                      horizontal: Dimensions.width5 * 7,
+                      horizontal: Dimensions.width5 * 4,
                     ),
                     minSize: Dimensions.height5 * 7,
-                    color: hintColor,
+                    color: cColor.primary,
                     child: MediumText(
-                      color: onSecondary,
+                      color: Colors.white,
                       size: Dimensions.height2 * 8,
                       text: '前往',
                     ),

@@ -4,6 +4,7 @@ class InboxModel {
   final datePublished;
   final String name;
   final String inboxId;
+  final String uid;
   String? pic;
   final String text;
   final String url;
@@ -14,6 +15,7 @@ class InboxModel {
     required this.inboxId,
     required this.pic,
     required this.text,
+    required this.uid,
     required this.url,
   });
 
@@ -22,6 +24,7 @@ class InboxModel {
       datePublished: map['datePublished'],
       name: map['name'],
       inboxId: map['inboxId'],
+      uid:map['uid'],
       pic: map['pic'],
       text: map['text'],
       url: map['url'],

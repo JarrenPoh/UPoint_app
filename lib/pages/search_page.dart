@@ -69,7 +69,8 @@ class _SearchPageState extends State<SearchPage>
           if (e.title!.contains(query) ||
               e.organizerName!.contains(query) ||
               (e.reward?.contains(query) ?? false) ||
-              e.content!.contains(query)) {
+              e.content!.contains(query) ||
+              (e.tags?.any((e) => e.contains(query)) ?? false)) {
             return true;
           }
           return false;
@@ -156,24 +157,26 @@ class _SearchPageState extends State<SearchPage>
                       )
                     : Container(),
                 isSearch
-                    ? ListView.builder(
+                    ? GridView.builder(
                         itemCount: books.length,
                         shrinkWrap: true,
-                        itemBuilder: ((context, index) {
+                        physics: const ClampingScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: Dimensions.height2 * 4,
+                          childAspectRatio: 172 / 219,
+                          crossAxisSpacing: Dimensions.width2 * 4,
+                        ),
+                        itemBuilder: (context, index) {
                           PostModel model = books[index];
-                          return Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: Dimensions.width5 * 2,
-                            ),
-                            child: PostCard(
-                              post: model,
-                              organizer: null,
-                              hero: "search${model.title}",
-                              isOrganizer: false,
-                              user: widget.user,
-                            ),
+                          return PostCard(
+                            post: model,
+                            organizer: null,
+                            hero: "search${model.title}",
+                            isOrganizer: false,
+                            user: widget.user,
                           );
-                        }),
+                        },
                       )
                     : Column(
                         children: [
