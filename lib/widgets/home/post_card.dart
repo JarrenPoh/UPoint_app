@@ -11,6 +11,8 @@ import 'package:upoint/models/post_model.dart';
 import 'package:upoint/models/user_model.dart';
 import 'package:upoint/pages/activity_detail_page.dart';
 
+import '../../globals/regular_text.dart';
+
 class PostCard extends StatefulWidget {
   final PostModel post;
   final OrganizerModel? organizer;
@@ -39,10 +41,10 @@ class _PostCardState extends State<PostCard> {
         .isBefore(DateTime.now());
   }
 
-  double _scale = 1.0;
   late bool isOver;
   @override
   Widget build(BuildContext context) {
+    CColor cColor = CColor.of(context);
     return GestureDetector(
       onTapUp: (d) {
         Navigator.push(
@@ -56,19 +58,21 @@ class _PostCardState extends State<PostCard> {
           ),
         );
       },
-      child: Transform.scale(
-        scale: _scale,
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            vertical: Dimensions.height5 * 2,
-          ),
-          child: PostCard(
-            widget.post.photo,
-            widget.post.title,
-            widget.post.organizerName,
-            widget.post.startDateTime,
-            widget.post.endDateTime,
-          ),
+      child: Container(
+        decoration: BoxDecoration(
+          color: cColor.white,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        padding: EdgeInsets.symmetric(
+          vertical: Dimensions.height2 * 6,
+          horizontal: Dimensions.width2 * 6,
+        ),
+        child: PostCard(
+          widget.post.photo,
+          widget.post.title,
+          widget.post.organizerName,
+          widget.post.startDateTime,
+          widget.post.endDateTime,
         ),
       ),
     );
@@ -97,9 +101,8 @@ class _PostCardState extends State<PostCard> {
                   AspectRatio(
                     aspectRatio: 16 / 9,
                     child: Container(
-                      height: Dimensions.height5 * 35,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(10),
                         image: DecorationImage(
                           fit: BoxFit.cover,
                           image: imageProvider,
@@ -123,53 +126,6 @@ class _PostCardState extends State<PostCard> {
                       // ),
                     ),
                   ),
-                  widget.post.reward != null
-                      ? Positioned(
-                          left: 0,
-                          top: Dimensions.height2 * 10,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: Dimensions.width5 * 4,
-                              vertical: Dimensions.height5,
-                            ),
-                            decoration: BoxDecoration(
-                              color: cColor.primary.withOpacity(.65),
-                              borderRadius: const BorderRadius.only(
-                                topRight: Radius.circular(10),
-                                bottomRight: Radius.circular(10),
-                              ),
-                            ),
-                            child: MediumText(
-                              color: cColor.grey500,
-                              size: Dimensions.height2 * 8,
-                              text: widget.post.reward!,
-                            ),
-                          ),
-                        )
-                      : Container(),
-                  isOver
-                      ? Container(
-                          width: Dimensions.width5 * 25,
-                          height: Dimensions.height5 * 8,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: Dimensions.width5 * 4,
-                            vertical: Dimensions.height5,
-                          ),
-                          decoration: BoxDecoration(
-                            color: cColor.primary,
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(10),
-                            ),
-                          ),
-                          child: Center(
-                            child: MediumText(
-                              color: cColor.grey500,
-                              size: Dimensions.height2 * 8,
-                              text: '活動已結束',
-                            ),
-                          ),
-                        )
-                      : Container()
                 ],
               ),
             );
@@ -183,45 +139,78 @@ class _PostCardState extends State<PostCard> {
           ),
           errorWidget: (context, url, error) => Icon(Icons.error),
         ),
-        SizedBox(height: Dimensions.height5 * 2),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(width: Dimensions.width2 * 5),
-            SizedBox(
-              width: Dimensions.screenWidth * 0.45,
-              height: Dimensions.height5 * 10,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  MediumText(
-                    color: cColor.grey500,
-                    size: Dimensions.height2 * 8,
-                    text: widget.post.title!,
-                  ),
-                  SizedBox(height: Dimensions.height5 * 1),
-                  MediumText(
-                    color: cColor.primary,
-                    size: Dimensions.height2 * 7,
-                    text: organizerName,
-                  ),
-                ],
-              ),
-            ),
-            Expanded(child: Column(children: [])),
-            SizedBox(
-              height: Dimensions.height5 * 10,
-              width: Dimensions.screenWidth * 0.4,
-              child: MediumText(
-                maxLines: 2,
-                color: cColor.grey500,
-                size: Dimensions.height2 * 7,
-                text: TimeTransfer.timeTrans03(startTime, endTime),
-              ),
-            ),
-          ],
+        SizedBox(height: Dimensions.height2 * 5),
+        // 標題
+        MediumText(
+          color: cColor.grey500,
+          size: Dimensions.height2 * 8,
+          text: title,
+        ),
+        SizedBox(height: Dimensions.height2 * 5),
+        // 時間 地點 獎勵
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              for (var inform in informList)
+                Row(
+                  children: [
+                    Icon(
+                      inform["icon"],
+                      size: Dimensions.height2 * 9,
+                      color: cColor.grey400,
+                    ),
+                    SizedBox(width: Dimensions.width2 * 4),
+                    RegularText(
+                      color: cColor.grey500,
+                      size: Dimensions.height2 * 7,
+                      text: inform["text"],
+                    ),
+                  ],
+                ),
+            ],
+          ),
         ),
       ],
     );
   }
+
+  late List<Map> informList = [
+    {
+      "type": "front",
+      "icon": Icons.calendar_month,
+      "text": TimeTransfer.timeTrans05(
+        widget.post.startDateTime,
+        widget.post.endDateTime,
+      ),
+    },
+    {
+      "type": "front",
+      "icon": Icons.location_on,
+      "text": widget.post.location,
+    },
+    {
+      "type": "front",
+      "icon": Icons.local_play,
+      "text": widget.post.reward,
+    },
+    // {
+    //   "type": "latter",
+    //   "icon": Icons.home_filled,
+    //   "text": "主辦單位：",
+    // },
+    // {
+    //   "type":"latter",
+    //   "icon":Icons.person,
+    //   "text":"聯絡人：",
+    // },  {
+    //   "type":"latter",
+    //   "icon":Icons.phone,
+    //   "text":"聯絡電話：",
+    // },{
+    //   "type":"latter",
+    //   "icon":Icons.email,
+    //   "text":"Email：",
+    // },
+  ];
 }

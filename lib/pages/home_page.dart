@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:upoint/bloc/home_page_bloc.dart';
+import 'package:upoint/globals/colors.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/scroll_things_provider.dart';
 import 'package:upoint/models/user_model.dart';
 import 'package:upoint/widgets/home/activity_body.dart';
 import 'package:upoint/widgets/home/reward_body.dart';
-import 'package:upoint/global_key.dart' as globals;
 
 class HomePage extends StatefulWidget {
   final Function(int) searchTapped;
@@ -41,126 +41,62 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    Color appBarColor = Theme.of(context).appBarTheme.backgroundColor!;
-    Color onSecondary = Theme.of(context).colorScheme.onSecondary;
-    Color scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
-    Color hintColor = Theme.of(context).hintColor;
+    CColor cColor = CColor.of(context);
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         body: Container(
-          color: appBarColor,
+          color: cColor.white,
           child: SafeArea(
             child: Scaffold(
-              backgroundColor: scaffoldBackgroundColor,
+              backgroundColor: cColor.grey100,
               body: NestedScrollView(
                 floatHeaderSlivers: true,
                 headerSliverBuilder: (context, innerBoxIsScrolled) {
                   return <Widget>[
-                    SliverPersistentHeader(
-                      pinned: true,
-                      delegate: MySliverDelegate(
-                        minHeight: Dimensions.height5 * 10,
-                        maxHeight: Dimensions.height5 * 10,
-                        child: Container(
-                          color: appBarColor,
-                          child: TabBar(
-                            overlayColor: null,
-                            labelColor: onSecondary,
-                            labelStyle:
-                                const TextStyle(fontWeight: FontWeight.w600),
-                            unselectedLabelColor: Colors.grey,
-                            indicatorSize: TabBarIndicatorSize.label,
-                            indicator: BoxDecoration(
-                              color: hintColor,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            indicatorPadding: EdgeInsets.only(
-                              bottom: Dimensions.height2 * 4,
-                              top: Dimensions.height2 * 18.5,
-                              left: Dimensions.width5 * 2,
-                              right: Dimensions.width5 * 2,
-                            ),
-                            indicatorWeight: 4,
-                            onTap: (value) {
-                              widget.bloc.tabController.index = value;
-                            },
-                            controller: widget.bloc.tabController,
-                            tabs: List.generate(
-                              widget.bloc.tabList.length,
-                              (index) => Tab(
-                                child: Text(widget.bloc.tabList[index]),
+                    SliverOverlapAbsorber(
+                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                          context),
+                      sliver: SliverAppBar(
+                        pinned: true,
+                        title: PreferredSize(
+                          preferredSize: Size(
+                              Dimensions.screenWidth, Dimensions.height5 * 0),
+                          child: Container(
+                            color: cColor.white,
+                            child: TabBar(
+                              overlayColor: null,
+                              labelColor: cColor.grey500,
+                              labelStyle:
+                                  const TextStyle(fontWeight: FontWeight.w600),
+                              unselectedLabelColor: Colors.grey,
+                              indicatorSize: TabBarIndicatorSize.label,
+                              indicator: BoxDecoration(
+                                color: cColor.primary,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              indicatorPadding: EdgeInsets.only(
+                                bottom: Dimensions.height2 * 4,
+                                top: Dimensions.height2 * 18.5,
+                                left: Dimensions.width5 * 2,
+                                right: Dimensions.width5 * 2,
+                              ),
+                              indicatorWeight: 4,
+                              onTap: (value) {
+                                widget.bloc.tabController.index = value;
+                              },
+                              controller: widget.bloc.tabController,
+                              tabs: List.generate(
+                                widget.bloc.tabList.length,
+                                (index) => Tab(
+                                  child: Text(widget.bloc.tabList[index]),
+                                ),
                               ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    SliverOverlapAbsorber(
-                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                          context),
-                      sliver: SliverAppBar(
-                          backgroundColor: appBarColor,
-                          expandedHeight: Dimensions.height5 * 6,
-                          forceElevated: innerBoxIsScrolled,
-                          pinned: false,
-                          floating: true,
-                          elevation: 0,
-                          bottom: PreferredSize(
-                            preferredSize: Size(
-                              Dimensions.screenWidth,
-                              Dimensions.height5 * 6,
-                            ),
-                            child: Container(
-                              color: scaffoldBackgroundColor,
-                              child: Container(
-                                width: Dimensions.screenWidth,
-                                decoration: BoxDecoration(
-                                  color: appBarColor,
-                                  borderRadius: const BorderRadius.vertical(
-                                    bottom: Radius.circular(20),
-                                  ),
-                                ),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    widget.searchTapped(1);
-                                    globals
-                                        .globalBottomNavigation!.currentState!
-                                        .onGlobalTap(1);
-                                  },
-                                  child: Container(
-                                    margin: EdgeInsets.only(
-                                      left: Dimensions.width5 * 4,
-                                      right: Dimensions.width5 * 4,
-                                      bottom: Dimensions.height5 * 3,
-                                    ),
-                                    padding: EdgeInsets.all(5),
-                                    decoration: BoxDecoration(
-                                      color: scaffoldBackgroundColor,
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: IgnorePointer(
-                                      child: TextField(
-                                        decoration: InputDecoration(
-                                          border: InputBorder.none,
-                                          prefixIcon: Icon(
-                                            Icons.search,
-                                            color: onSecondary,
-                                          ),
-                                          hintText: "Search you're looking for",
-                                          hintStyle: TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: Dimensions.height5 * 3,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )),
                     ),
                   ];
                 },

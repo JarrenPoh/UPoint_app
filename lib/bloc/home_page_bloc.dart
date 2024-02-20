@@ -25,8 +25,7 @@ class HomePageBloc with ChangeNotifier {
     QuerySnapshot<Map<String, dynamic>> fetchPost = await FirebaseFirestore
         .instance
         .collection('posts')
-        .where('endDateTime',
-            isGreaterThanOrEqualTo: DateTime.now())
+        .where('endDateTime', isGreaterThanOrEqualTo: DateTime.now())
         .orderBy('endDateTime', descending: false)
         .get();
     List<QueryDocumentSnapshot> _list = fetchPost.docs.toList();
@@ -90,6 +89,21 @@ class HomePageBloc with ChangeNotifier {
     List<QueryDocumentSnapshot> _list = fetchPost.docs.toList();
     organListNotifier.value =
         _list.map((e) => OrganizerModel.fromSnap(e)).toList();
+    // 加入預設
+    organListNotifier.value.insert(
+      0,
+      OrganizerModel(
+        username: "全部",
+        uid: "all",
+        pic: "",
+        email: "",
+        phoneNumber: "",
+        bio: "",
+        unit: "",
+        contact: "",
+        postLength: 0,
+      ),
+    );
     organListNotifier.notifyListeners();
 
     //計算每個主辦方多少活動
@@ -107,9 +121,8 @@ class HomePageBloc with ChangeNotifier {
 
   /*  reward body  */
   void filterPostsByReward(id) {
-    List<PostModel> _list = originList.value 
-        .where((doc) => doc.rewardTagId == id)
-        .toList();
+    List<PostModel> _list =
+        originList.value.where((doc) => doc.rewardTagId == id).toList();
     postList2Notifier.value = _list;
     postList2Notifier.notifyListeners();
   }
@@ -121,15 +134,19 @@ class HomePageBloc with ChangeNotifier {
     List<QueryDocumentSnapshot> _list = fetchPost.docs.toList();
     rewardTagListNotifier.value =
         _list.map((e) => RewardTagModel.fromSnap(e)).toList();
+    // 加入預設
+    rewardTagListNotifier.value.insert(
+      0,
+      RewardTagModel(name: "全部", id: "all", pic: ""),
+    );
     rewardTagListNotifier.notifyListeners();
 
     //計算每個獎勵標籤多少活動
     for (var doc in rewardTagListNotifier.value) {
       String tag = doc.id;
       postLengthFromReward[tag] = ValueNotifier<int>(0);
-      int count = originList.value
-          .where((post) => post.rewardTagId == tag)
-          .length;
+      int count =
+          originList.value.where((post) => post.rewardTagId == tag).length;
       postLengthFromReward[tag]?.value = count;
     }
     postLengthFromReward['all'] = ValueNotifier<int>(0);

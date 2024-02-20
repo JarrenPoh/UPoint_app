@@ -6,7 +6,10 @@ class TimeTransfer {
   //將datePublished 變成 "01/01（週一）"
   static String timeTrans01(Timestamp timestamp) {
     DateTime dateTime = timestamp.toDate();
-    return DateFormat('MM/dd(E)', 'zh').format(dateTime);
+    List<String> weekdays = ["(日)", "(一)", "(二)", "(三)", "(四)", "(五)", "(六)"];
+    String formattedDate =
+        DateFormat('MM/dd').format(dateTime) + weekdays[dateTime.weekday % 7];
+    return formattedDate;
   }
 
   //firebase TimeStamp to 13:20
@@ -35,6 +38,17 @@ class TimeTransfer {
     final String formattedTime = localizations.formatTimeOfDay(selectedTime,
         alwaysUse24HourFormat: false);
     return formattedTime;
+  }
+
+  //start&end TimeStamp to 02/09 ~ 02/10
+  static String timeTrans05(Timestamp startTime, Timestamp endTime) {
+    String _start = TimeTransfer.timeTrans01(startTime);
+    String _end = TimeTransfer.timeTrans01(endTime);
+    if (_start == _end) {
+      return _start;
+    } else {
+      return "$_start ~ $_end";
+    }
   }
 
   //DateTime -> 91-09-15

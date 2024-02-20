@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:upoint/bloc/home_page_bloc.dart';
-import 'package:upoint/globals/bold_text.dart';
+import 'package:upoint/globals/colors.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/globals/scroll_things_provider.dart';
@@ -9,6 +9,8 @@ import 'package:upoint/models/post_model.dart';
 import 'package:upoint/models/user_model.dart';
 import 'package:upoint/widgets/home/post_card.dart';
 import 'package:upoint/widgets/home/promo_card.dart';
+
+import 'activity_body_filter.dart';
 
 class ActivityBody extends StatefulWidget {
   final int index;
@@ -33,15 +35,12 @@ class _ActivityBodyState extends State<ActivityBody>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    Color scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
-    Color onSecondary = Theme.of(context).colorScheme.onSecondary;
-    Color onPrimary = Theme.of(context).colorScheme.onPrimary;
-    // Color hintColor = Theme.of(context).hintColor;
+    CColor cColor = CColor.of(context);
 
     return RefreshIndicator(
-      displacement: Dimensions.height5 * 3,
-      backgroundColor: onPrimary,
-      color: onSecondary,
+      displacement: Dimensions.height5 * 14,
+      backgroundColor: cColor.white,
+      color: cColor.black,
       onRefresh: () async {
         await widget.bloc.refreshBody(0);
       },
@@ -54,132 +53,90 @@ class _ActivityBodyState extends State<ActivityBody>
           ),
           SliverToBoxAdapter(
             child: Container(
-              color: scaffoldBackgroundColor,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: Dimensions.width5 * 1.5,
+              color: cColor.grey100,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: Dimensions.width5 * 2,
+                ),
+                child: Column(
+                  children: [
+                    // 篩選
+                    Container(
+                      margin: EdgeInsets.symmetric(
+                        vertical: Dimensions.height2 * 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: cColor.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: ValueListenableBuilder(
+                        valueListenable: widget.bloc.organListNotifier,
+                        builder: (context, value, child) {
+                          value as List;
+                          List<OrganizerModel> organList =
+                              widget.bloc.organListNotifier.value;
+                          if (organList.isEmpty) {
+                            return CircularProgressIndicator(
+                                color: cColor.black);
+                          }
+                          String searchText = organList.first.username;
+                          return ActivityBodyFilter(
+                            bloc: widget.bloc,
+                            organList: organList,
+                            searchText: searchText,
+                          );
+                        },
+                      ),
                     ),
-                    child: Column(
-                      children: [
-                        SizedBox(height: Dimensions.height5 * 2),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            BoldText(
-                              color: onSecondary,
-                              size: Dimensions.height2 * 9.5,
-                              text: '主辦方',
-                            ),
-                            // Text(
-                            //   'see all ',
-                            //   style: TextStyle(
-                            //     color: hintColor,
-                            //     fontSize: 14,
-                            //     fontWeight: FontWeight.bold,
-                            //   ),
-                            // ),
-                          ],
-                        ),
-                        SizedBox(height: Dimensions.height5 * 3),
-                        ValueListenableBuilder(
-                          valueListenable: widget.bloc.organListNotifier,
-                          builder: (BuildContext context, dynamic value,
-                              Widget? child) {
-                            value as List;
-                            List<OrganizerModel> organList = widget.bloc.organListNotifier.value;
-                            return SizedBox(
-                              height: Dimensions.height5 * 50,
-                              child: GridView(
+                    //文章
+                    ValueListenableBuilder(
+                      valueListenable: widget.bloc.postListNotifier,
+                      builder:
+                          (BuildContext context, dynamic value, Widget? child) {
+                        value as List;
+                        List<PostModel> postList =
+                            widget.bloc.postListNotifier.value;
+                        return postList.isEmpty
+                            ? Column(
+                                children: [
+                                  SizedBox(height: Dimensions.height5 * 16),
+                                  Center(
+                                    child: MediumText(
+                                      color: cColor.grey500,
+                                      size: Dimensions.height2 * 8,
+                                      text: "還沒有創建過貼文",
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : GridView.custom(
+                                shrinkWrap: true,
+                                physics: const ClampingScrollPhysics(),
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 2,
-                                  crossAxisSpacing: Dimensions.height5 * 2,
-                                  mainAxisSpacing: Dimensions.width5 * 6,
-                                  childAspectRatio: 1.3,
+                                  mainAxisSpacing: Dimensions.height2 * 4,
+                                  childAspectRatio: 172 / 219,
+                                  crossAxisSpacing: Dimensions.width2 * 4,
                                 ),
-                                shrinkWrap: true,
-                                scrollDirection: Axis.horizontal,
-                                children: List.generate(
-                                  organList.length + 1,
-                                  (index) {
-                                    return organizerContainer(
-                                      organList,
-                                      index,
-                                      () {
-                                        if (index == 0) {
-                                          widget.bloc.filterOriginList(0);
-                                        } else {
-                                          widget.bloc.filterPostsByOrganizer(
-                                            organList[index - 1].uid,
-                                          );
-                                        }
-                                      },
-                                      widget.bloc.postLengthFromOrgan,
+                                childrenDelegate: SliverChildBuilderDelegate(
+                                  (BuildContext context, int index) {
+                                    return PostCard(
+                                      post: postList[index],
+                                      organizer: null,
+                                      hero:
+                                          "activity${postList[index].datePublished.toString()}",
+                                      isOrganizer: false,
+                                      user: widget.user,
                                     );
                                   },
+                                  childCount: postList.length, // 10个网格项
                                 ),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
+                              );
+                      },
                     ),
-                  ),
-                  SizedBox(height: Dimensions.height5 * 6),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: Dimensions.width5 * 2),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        BoldText(
-                          color: onSecondary,
-                          size: Dimensions.height2 * 9.5,
-                          text: '近期活動',
-                        ),
-                        SizedBox(height: Dimensions.height5 * 1),
-                        ValueListenableBuilder(
-                          valueListenable: widget.bloc.postListNotifier,
-                          builder: (BuildContext context, dynamic value,
-                              Widget? child) {
-                            value as List;
-                            List<PostModel> postList = widget.bloc.postListNotifier.value;
-                            return postList.isEmpty
-                                ? Column(
-                                    children: [
-                                      SizedBox(height: Dimensions.height5 * 16),
-                                      Center(
-                                        child: MediumText(
-                                          color: onSecondary,
-                                          size: Dimensions.height2 * 8,
-                                          text: "還沒有創建過貼文",
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                : Column(
-                                    children: List.generate(
-                                      postList.length,
-                                      (index) {
-                                        return PostCard(
-                                          post: postList[index],
-                                          organizer: null,
-                                          hero:
-                                              "activity${postList[index].datePublished.toString()}",
-                                          isOrganizer: false,
-                                          user: widget.user,
-                                        );
-                                      },
-                                    ),
-                                  );
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
