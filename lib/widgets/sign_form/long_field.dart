@@ -25,15 +25,12 @@ class LongField extends StatefulWidget {
 }
 
 class _LongFieldState extends State<LongField> {
-  late double height;
+  late bool isDetail = widget.option.type == "detail";
   late TextEditingController _controller;
   List iconList = ["date", "date2002", "date91", "time"];
   @override
   void initState() {
     super.initState();
-    height = widget.option.type == "detail"
-        ? Dimensions.height5 * 24
-        : Dimensions.height5 * 10;
     _controller = TextEditingController(text: widget.initText);
   }
 
@@ -121,8 +118,9 @@ class _LongFieldState extends State<LongField> {
       children: [
         Expanded(
           child: Container(
-            height: height,
-            padding: EdgeInsets.only(left: 17, right: 11),
+            height:
+                isDetail ? Dimensions.height5 * 24 : Dimensions.height5 * 10,
+            padding: const EdgeInsets.only(left: 17, right: 11),
             decoration: BoxDecoration(
               border: Border.all(color: cColor.grey300),
               borderRadius: BorderRadius.circular(10),
@@ -135,7 +133,7 @@ class _LongFieldState extends State<LongField> {
               children: [
                 widget.option.type == "drop_down"
                     ? Expanded(
-                      child: DropdownButtonHideUnderline(
+                        child: DropdownButtonHideUnderline(
                           child: DropdownButton2<String>(
                             customButton: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -155,8 +153,9 @@ class _LongFieldState extends State<LongField> {
                                 color: Theme.of(context).hintColor,
                               ),
                             ),
-                            value:
-                                _controller.text == "" ? null : _controller.text,
+                            value: _controller.text == ""
+                                ? null
+                                : _controller.text,
                             isExpanded: true,
                             onChanged: (value) => onTap(value),
                             items: widget.option.body
@@ -173,7 +172,7 @@ class _LongFieldState extends State<LongField> {
                                 .toList(),
                           ),
                         ),
-                    )
+                      )
                     : Expanded(
                         child: Row(
                           children: [
@@ -181,13 +180,17 @@ class _LongFieldState extends State<LongField> {
                               child: TextField(
                                 controller: _controller,
                                 enabled: !iconList.contains(widget.option.type),
+                                maxLines: isDetail ? 20 : 1,
+                                keyboardType:
+                                    isDetail ? TextInputType.multiline : null,
                                 style: TextStyle(
                                   color: cColor.grey500,
                                   fontSize: Dimensions.height2 * 8,
                                   fontFamily: "NotoSansRegular",
                                 ),
-                                decoration: const InputDecoration(
-                                  contentPadding: EdgeInsets.only(bottom: 0),
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: Dimensions.height5),
                                   enabledBorder: InputBorder.none,
                                   disabledBorder: InputBorder.none,
                                   focusedBorder: InputBorder.none,
