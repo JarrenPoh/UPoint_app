@@ -1,13 +1,16 @@
 // ignore_for_file: use_build_context_synchronously
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:upoint/bloc/inbox_page_bloc.dart';
 import 'package:upoint/globals/custom_messengers.dart';
 import 'package:upoint/models/post_model.dart';
+import '../firebase/auth_methods.dart';
 import '../firebase/firestore_methods.dart';
 import '../models/form_model.dart';
 import '../models/option_model.dart';
 import '../models/user_model.dart';
 import '../pages/sign_form_finish_page.dart';
+import 'package:provider/provider.dart';
 
 class SignFormBloc {
   SignFormBloc(List<FormModel> formModel, UserModel user) {
@@ -83,6 +86,14 @@ class SignFormBloc {
       post,
       jsonEncode(signForm),
     );
+    if (res == "success") {
+      Messenger.snackBar(context, "報名成功", "謝謝您的報名，請記得出席活動");
+      await Provider.of<AuthMethods>(context, listen: false).getUserDetails();
+    } else {
+      Messenger.snackBar(context, "報名失敗，請回報問題", "請聯絡service.upoint@gmail.com");
+      Messenger.dialog("報名失敗，請回報問題", "請聯絡service.upoint@gmail.com", context);
+    }
+    Provider.of<InboxPageBloc>(context, listen: false).onRefresh();
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -92,12 +103,6 @@ class SignFormBloc {
         ),
       ),
     );
-    if (res == "success") {
-      Messenger.snackBar(context, "報名成功", "謝謝您的報名，請記得出席活動");
-    } else {
-      Messenger.snackBar(context, "報名失敗，請回報問題", "請聯絡service.upoint@gmail.com");
-      Messenger.dialog("報名失敗，請回報問題", "請聯絡service.upoint@gmail.com", context);
-    }
   }
 
   List<OptionModel> fixCommon = [

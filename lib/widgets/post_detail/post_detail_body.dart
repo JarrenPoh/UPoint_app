@@ -22,11 +22,20 @@ class _PostDetailBodyState extends State<PostDetailBody> {
   late CColor cColor;
   // final QuillController _controller = QuillController.basic();
   @override
+  void initState() {
+    super.initState();
+    initList();
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     cColor = CColor.of(context);
     debugPrint(widget.post.content!);
     // _controller.document = Document.fromJson(jsonDecode(widget.post.content!));
+  }
+
+  initList() {
     informList = [
       {
         "type": "front",
@@ -46,24 +55,6 @@ class _PostDetailBodyState extends State<PostDetailBody> {
         "icon": Icons.local_play,
         "text": widget.post.reward,
       },
-      // {
-      //   "type": "latter",
-      //   "icon": Icons.home_filled,
-      //   "text": "主辦單位：",
-      // },
-      // {
-      //   "type":"latter",
-      //   "icon":Icons.person,
-      //   "text":"聯絡人：",
-      // },  {
-      //   "type":"latter",
-      //   "icon":Icons.phone,
-      //   "text":"聯絡電話：",
-      // },{
-      //   "type":"latter",
-      //   "icon":Icons.email,
-      //   "text":"Email：",
-      // },
     ];
   }
 
@@ -141,6 +132,7 @@ class _PostDetailBodyState extends State<PostDetailBody> {
                     color: cColor.grey500,
                     size: Dimensions.height2 * 7,
                     text: widget.post.introduction!,
+                    maxLines: 20,
                   ),
                 ),
                 const SizedBox(height: 18),
@@ -159,7 +151,7 @@ class _PostDetailBodyState extends State<PostDetailBody> {
                 ),
                 Divider(color: cColor.grey200),
                 Container(
-                  height: Dimensions.height5*60,
+                  height: Dimensions.height5 * 60,
                   width: double.infinity,
                   padding: EdgeInsets.symmetric(
                     vertical: Dimensions.height2 * 4,

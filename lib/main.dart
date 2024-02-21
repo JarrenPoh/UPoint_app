@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:upoint/bloc/inbox_page_bloc.dart';
 import 'package:upoint/bloc/uri_bloc.dart';
 import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/globals/user_simple_preference.dart';
@@ -24,6 +25,7 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => AuthMethods()),
         ChangeNotifierProvider(create: (context) => UriBloc()),
+        ChangeNotifierProvider(create: (context) => InboxPageBloc()),
       ],
       child: MyApp(),
     ),

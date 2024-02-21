@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -17,15 +18,16 @@ class InboxPageBloc with ChangeNotifier {
   List docs = [];
   List lastDocs = [];
 
-  InboxPageBloc(String uid) {
+  InboxPageBloc() {
     scrollController.addListener(() async {
       if (scrollController.position.maxScrollExtent ==
               scrollController.offset &&
           noMore == false) {
-        await fetchNext(uid);
+        if (FirebaseAuth.instance.currentUser != null) {
+          await fetchNext(FirebaseAuth.instance.currentUser!.uid);
+        }
       }
     });
-    fetchNext(uid);
   }
 
   Future fetchNext(String uid) async {
@@ -107,7 +109,7 @@ class InboxPageBloc with ChangeNotifier {
       "isLoading": true,
     };
     this.noMore = false;
-    this.lastDocs=[];
+    this.lastDocs = [];
     notifierProvider.notifyListeners();
   }
 }

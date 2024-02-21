@@ -1,16 +1,18 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:insta_assets_picker/insta_assets_picker.dart';
 import 'package:upoint/firebase/firestore_methods.dart';
 import 'package:upoint/globals/dimension.dart';
+import 'package:provider/provider.dart';
+
+import '../../firebase/auth_methods.dart';
+import '../../models/user_model.dart';
+import '../../secret.dart';
 
 class ProfilePic extends StatefulWidget {
-  final String picUri;
-  final String id;
   const ProfilePic({
     super.key,
-    required this.picUri,
-    required this.id,
   });
 
   @override
@@ -20,12 +22,6 @@ class ProfilePic extends StatefulWidget {
 class _ProfilePicState extends State<ProfilePic> {
   final StreamController<InstaAssetsExportDetails> imgStreamController =
       StreamController<InstaAssetsExportDetails>();
-  late String _picUri;
-  @override
-  void initState() {
-    super.initState();
-    _picUri = widget.picUri;
-  }
 
   @override
   void dispose() {
@@ -34,11 +30,11 @@ class _ProfilePicState extends State<ProfilePic> {
   }
 
   uploadPic(pic) async {
-    _picUri = await FirestoreMethods().updatePic(
+    await FirestoreMethods().updatePic(
       pic,
-      widget.id,
+      FirebaseAuth.instance.currentUser!.uid,
     );
-    setState(() {});
+    await Provider.of<AuthMethods>(context, listen: false).getUserDetails();
   }
 
   Future<List<AssetEntity>?> callPicker() {
@@ -98,7 +94,7 @@ class _ProfilePicState extends State<ProfilePic> {
       bottom: 10,
       child: GestureDetector(
         onTap: () async {
-          if (widget.id != '') {
+          if (FirebaseAuth.instance.currentUser != null) {
             await callPicker();
           }
         },
@@ -123,25 +119,28 @@ class _ProfilePicState extends State<ProfilePic> {
                     ],
                   ),
                 ),
-                ClipOval(
-                  child: Image.network(
-                    _picUri,
-                    width: Dimensions.width2 * 38,
-                    height: Dimensions.width2 * 38,
-                    fit: BoxFit.cover,
-                    errorBuilder: (BuildContext context, Object exception,
-                        StackTrace? stackTrace) {
-                      return Icon(
-                        Icons.account_circle,
-                        size: Dimensions.width2 * 44,
-                        color: Colors.grey[600],
-                      );
-                    },
-                  ),
-                )
+                Consumer<AuthMethods>(builder: (context, userNotifier, child) {
+                  UserModel? user = userNotifier.user;
+                  return ClipOval(
+                    child: Image.network(
+                      user?.pic ?? defaultUserPic,
+                      width: Dimensions.width2 * 38,
+                      height: Dimensions.width2 * 38,
+                      fit: BoxFit.cover,
+                      errorBuilder: (BuildContext context, Object exception,
+                          StackTrace? stackTrace) {
+                        return Icon(
+                          Icons.account_circle,
+                          size: Dimensions.width2 * 44,
+                          color: Colors.grey[600],
+                        );
+                      },
+                    ),
+                  );
+                })
               ],
             ),
-            if (widget.id != '' )
+            if (FirebaseAuth.instance.currentUser != null)
               Positioned(
                 right: Dimensions.width2 * 1,
                 bottom: Dimensions.width2 * 1,

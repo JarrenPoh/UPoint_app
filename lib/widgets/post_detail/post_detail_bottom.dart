@@ -8,11 +8,9 @@ import 'package:upoint/models/user_model.dart';
 import 'package:upoint/pages/login_page.dart';
 import 'package:upoint/pages/sign_form_page.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../firebase/auth_methods.dart';
 import '../../globals/colors.dart';
 import '../../globals/dimension.dart';
 import '../../globals/medium_text.dart';
-import 'package:provider/provider.dart';
 
 class PostDetailBottomBar extends StatefulWidget {
   final PostModel post;
@@ -33,15 +31,21 @@ class _PostDetailBottomBarState extends State<PostDetailBottomBar> {
   late CColor cColor;
   bool isOver = false;
   bool needSign = true;
-  late bool alreadySign = widget.user?.signList == null
-      ? false
-      : widget.user!.signList!.contains(widget.post.postId);
-  late bool isFull = widget.post.capacity == null
-      ? false
-      : widget.post.capacity! <= widget.post.signFormsLength!.toInt();
+  bool alreadySign = false;
+  bool isFull = false;
   @override
   void initState() {
     super.initState();
+    initInform();
+  }
+
+  initInform() {
+    alreadySign = widget.user?.signList == null
+        ? false
+        : widget.user!.signList!.contains(widget.post.postId);
+    isFull = widget.post.capacity == null
+        ? false
+        : widget.post.capacity! <= widget.post.signFormsLength!.toInt();
     if (widget.post.form == null) {
       needSign = false;
     }
@@ -60,6 +64,7 @@ class _PostDetailBottomBarState extends State<PostDetailBottomBar> {
 
   @override
   Widget build(BuildContext context) {
+    initInform();
     return SafeArea(
       child: Container(
         decoration: BoxDecoration(
@@ -151,16 +156,12 @@ class _PostDetailBottomBarState extends State<PostDetailBottomBar> {
             //   ),
             // );
             // ignore: use_build_context_synchronously
-            bool? back = await Navigator.push(
+            await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => const LoginPage(),
               ),
             );
-            if (back == true) {
-              await Provider.of<AuthMethods>(context, listen: false)
-                  .getUserDetails();
-            }
           }
         } else {
           debugPrint("前進本地報名");

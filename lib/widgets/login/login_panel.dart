@@ -4,6 +4,7 @@ import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/globals/custom_messengers.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/widgets/login/reset_password.dart';
+import 'package:provider/provider.dart';
 
 class LoginPanel extends StatefulWidget {
   final Function() onTap;
@@ -81,6 +82,7 @@ class _LoginPanelState extends State<LoginPanel> {
   void signIn(res) async {
     if (res == "success") {
       if (FirebaseAuth.instance.currentUser!.emailVerified) {
+        await Provider.of<AuthMethods>(context, listen: false).getUserDetails();
         // ignore: use_build_context_synchronously
         Navigator.pop(context, true);
       } else {

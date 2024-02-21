@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/globals/bold_text.dart';
@@ -11,9 +11,7 @@ import 'package:upoint/models/user_model.dart';
 import 'package:upoint/pages/edit_profile_page.dart';
 import 'package:upoint/pages/login_page.dart';
 import 'package:upoint/pages/privacy_page.dart';
-import 'package:upoint/secret.dart';
 import 'package:upoint/widgets/profile/profile_pic.dart';
-import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
   final UserModel? user;
@@ -42,13 +40,13 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   void initState() {
     super.initState();
-    if (widget.user != null) {
-      _user = widget.user;
-    }
     initInform();
   }
 
   initInform() {
+    if (widget.user != null) {
+      _user = widget.user;
+    }
     if (_organizer != null) {
       if (_organizer!.username.isNotEmpty) {
         username = _organizer!.username;
@@ -88,21 +86,8 @@ class _ProfilePageState extends State<ProfilePage>
   }
 
   refresh() async {
-    print('refresh');
     if (_user != null) {
-      QuerySnapshot<Map<String, dynamic>> fetchUser =
-          await FirebaseFirestore.instance
-              .collection('users')
-              .where(
-                'uuid',
-                isEqualTo: widget.user!.uuid,
-              )
-              .get();
-      UserModel _u = UserModel.fromSnap(fetchUser.docs.toList().first);
-      _user = _u;
-      setState(() {
-        initInform();
-      });
+      await Provider.of<AuthMethods>(context, listen: false).getUserDetails();
     }
   }
 
@@ -134,27 +119,20 @@ class _ProfilePageState extends State<ProfilePage>
       if (res == "success") {
         await AuthMethods().signOut();
         // ignore: use_build_context_synchronously
-        bool? back = await Navigator.push(
+        await Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => LoginPage(),
           ),
         );
-        if (back == true) {
-          await Provider.of<AuthMethods>(context, listen: false)
-              .getUserDetails();
-        }
       }
     } else {
-      bool? back = await Navigator.push(
+      await Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => LoginPage(),
         ),
       );
-      if (back == true) {
-        await Provider.of<AuthMethods>(context, listen: false).getUserDetails();
-      }
     }
   }
 
@@ -178,6 +156,7 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   Widget build(BuildContext context) {
+    initInform();
     super.build(context);
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     Color appBarColor = Theme.of(context).appBarTheme.backgroundColor!;
@@ -582,12 +561,7 @@ class _ProfilePageState extends State<ProfilePage>
             ),
           ),
         ),
-        ProfilePic(
-          picUri: widget.user != null
-              ? widget.user!.pic ?? defaultUserPic
-              : defaultUserPic,
-          id: widget.user != null ? widget.user!.uuid : '',
-        ),
+        ProfilePic(),
       ],
     );
   }

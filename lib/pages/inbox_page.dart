@@ -14,7 +14,6 @@ import 'package:upoint/pages/post_detail_page.dart';
 import 'package:upoint/pages/login_page.dart';
 import 'package:upoint/secret.dart';
 import 'package:provider/provider.dart';
-import '../firebase/auth_methods.dart';
 
 class InboxPage extends StatefulWidget {
   final UserModel? user;
@@ -31,13 +30,11 @@ class _InboxPageState extends State<InboxPage>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-  late InboxPageBloc bloc;
+  late final bloc = Provider.of<InboxPageBloc>(context, listen: false);
 
-  @override
-  void initState() {
-    super.initState();
+  init() {
     if (widget.user != null) {
-      bloc = InboxPageBloc(widget.user!.uuid);
+      bloc.fetchNext(widget.user!.uuid);
     }
   }
 
@@ -79,6 +76,7 @@ class _InboxPageState extends State<InboxPage>
 
   @override
   Widget build(BuildContext context) {
+    init();
     super.build(context);
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     Color onPrimary = Theme.of(context).colorScheme.onPrimary;
@@ -95,7 +93,6 @@ class _InboxPageState extends State<InboxPage>
             text: '收件欄',
           ),
         ),
-        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: widget.user == null
           ? loginContainer()
@@ -314,17 +311,12 @@ class _InboxPageState extends State<InboxPage>
                         ),
                         MaterialButton(
                           onPressed: () async {
-                            bool? back = await Navigator.push(
+                            await Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => LoginPage(),
                               ),
                             );
-                            if (back == true) {
-                              await Provider.of<AuthMethods>(context,
-                                      listen: false)
-                                  .getUserDetails();
-                            }
                           },
                           child: MediumText(
                             color: onSecondary,
