@@ -6,7 +6,7 @@ import 'package:upoint/bloc/uri_bloc.dart';
 import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/globals/custom_messengers.dart';
 import 'package:upoint/models/post_model.dart';
-import 'package:upoint/pages/activity_detail_page.dart';
+import 'package:upoint/pages/post_detail_page.dart';
 import 'package:upoint/pages/home_page.dart';
 import 'package:upoint/pages/inbox_page.dart';
 import 'package:upoint/pages/logo_page.dart';
@@ -78,7 +78,7 @@ class _NavigationContainerState extends State<NavigationContainer>
       context,
       MaterialPageRoute(
         builder: (context) {
-          return ActivityDetailPage(
+          return PostDetailPage(
             post: _p,
             hero: "activity${_p.datePublished.toString()}",
           );

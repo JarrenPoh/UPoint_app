@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:upoint/bloc/activity_detail_page_bloc.dart';
+import 'package:upoint/bloc/post_detail_page_bloc.dart';
 import 'package:upoint/globals/custom_messengers.dart';
 import 'package:upoint/models/post_model.dart';
 import 'package:upoint/models/user_model.dart';
@@ -14,11 +14,11 @@ import '../../globals/dimension.dart';
 import '../../globals/medium_text.dart';
 import 'package:provider/provider.dart';
 
-class ActDetailBottomBar extends StatefulWidget {
+class PostDetailBottomBar extends StatefulWidget {
   final PostModel post;
-  final ActivityDetailPageBloc bloc;
+  final PostDetailPageBloc bloc;
   final UserModel? user;
-  const ActDetailBottomBar({
+  const PostDetailBottomBar({
     super.key,
     required this.post,
     required this.bloc,
@@ -26,10 +26,10 @@ class ActDetailBottomBar extends StatefulWidget {
   });
 
   @override
-  State<ActDetailBottomBar> createState() => _ActDetailBottomBarState();
+  State<PostDetailBottomBar> createState() => _PostDetailBottomBarState();
 }
 
-class _ActDetailBottomBarState extends State<ActDetailBottomBar> {
+class _PostDetailBottomBarState extends State<PostDetailBottomBar> {
   late CColor cColor;
   bool isOver = false;
   bool needSign = true;

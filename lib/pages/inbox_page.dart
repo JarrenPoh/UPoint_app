@@ -10,11 +10,10 @@ import 'package:upoint/globals/regular_text.dart';
 import 'package:upoint/models/inbox_model.dart';
 import 'package:upoint/models/post_model.dart';
 import 'package:upoint/models/user_model.dart';
-import 'package:upoint/pages/activity_detail_page.dart';
+import 'package:upoint/pages/post_detail_page.dart';
 import 'package:upoint/pages/login_page.dart';
 import 'package:upoint/secret.dart';
 import 'package:provider/provider.dart';
-
 import '../firebase/auth_methods.dart';
 
 class InboxPage extends StatefulWidget {
@@ -56,7 +55,7 @@ class _InboxPageState extends State<InboxPage>
       context,
       MaterialPageRoute(
         builder: (context) {
-          return ActivityDetailPage(
+          return PostDetailPage(
             post: _p,
             hero: "activity${_p.datePublished.toString()}",
           );

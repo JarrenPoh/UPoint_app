@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter_quill/flutter_quill.dart';
 import 'package:upoint/globals/colors.dart';
 import 'package:upoint/globals/date_time_transfer.dart';
 import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/globals/regular_text.dart';
 import 'package:upoint/models/post_model.dart';
-
 import '../../globals/dimension.dart';
 
-class ActDetailBody extends StatefulWidget {
+class PostDetailBody extends StatefulWidget {
   final PostModel post;
-  const ActDetailBody({
+  const PostDetailBody({
     super.key,
     required this.post,
   });
 
   @override
-  State<ActDetailBody> createState() => _ActDetailBodyState();
+  State<PostDetailBody> createState() => _PostDetailBodyState();
 }
 
-class _ActDetailBodyState extends State<ActDetailBody> {
+class _PostDetailBodyState extends State<PostDetailBody> {
   late List<Map> informList;
   late CColor cColor;
   // final QuillController _controller = QuillController.basic();

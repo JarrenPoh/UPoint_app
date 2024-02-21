@@ -9,7 +9,7 @@ import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/models/organizer_model.dart';
 import 'package:upoint/models/post_model.dart';
 import 'package:upoint/models/user_model.dart';
-import 'package:upoint/pages/activity_detail_page.dart';
+import 'package:upoint/pages/post_detail_page.dart';
 
 import '../../globals/regular_text.dart';
 
@@ -70,7 +70,7 @@ class _PostCardState extends State<PostCard> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ActivityDetailPage(
+            builder: (context) => PostDetailPage(
               post: widget.post,
               hero: widget.hero,
             ),

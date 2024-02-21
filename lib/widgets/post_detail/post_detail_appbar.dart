@@ -4,20 +4,20 @@ import 'package:upoint/models/post_model.dart';
 import '../../globals/colors.dart';
 import '../../globals/dimension.dart';
 
-class ActDetailAppBar extends StatefulWidget {
+class PostDetailAppBar extends StatefulWidget {
   final PostModel post;
   final String hero;
-  const ActDetailAppBar({
+  const PostDetailAppBar({
     super.key,
     required this.hero,
     required this.post,
   });
 
   @override
-  State<ActDetailAppBar> createState() => _ActDetailAppBarState();
+  State<PostDetailAppBar> createState() => _PostDetailAppBarState();
 }
 
-class _ActDetailAppBarState extends State<ActDetailAppBar> {
+class _PostDetailAppBarState extends State<PostDetailAppBar> {
   late CColor cColor;
   @override
   void didChangeDependencies() {
