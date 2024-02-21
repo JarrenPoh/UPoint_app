@@ -44,6 +44,26 @@ class _PostCardState extends State<PostCard> {
   late bool isOver;
   @override
   Widget build(BuildContext context) {
+    informList = [
+      {
+        "type": "front",
+        "icon": Icons.calendar_month,
+        "text": TimeTransfer.timeTrans05(
+          widget.post.startDateTime,
+          widget.post.endDateTime,
+        ),
+      },
+      {
+        "type": "front",
+        "icon": Icons.location_on,
+        "text": widget.post.location,
+      },
+      {
+        "type": "front",
+        "icon": Icons.local_play,
+        "text": widget.post.reward,
+      },
+    ];
     CColor cColor = CColor.of(context);
     return GestureDetector(
       onTapUp: (d) {
@@ -196,23 +216,5 @@ class _PostCardState extends State<PostCard> {
       "icon": Icons.local_play,
       "text": widget.post.reward,
     },
-    // {
-    //   "type": "latter",
-    //   "icon": Icons.home_filled,
-    //   "text": "主辦單位：",
-    // },
-    // {
-    //   "type":"latter",
-    //   "icon":Icons.person,
-    //   "text":"聯絡人：",
-    // },  {
-    //   "type":"latter",
-    //   "icon":Icons.phone,
-    //   "text":"聯絡電話：",
-    // },{
-    //   "type":"latter",
-    //   "icon":Icons.email,
-    //   "text":"Email：",
-    // },
   ];
 }

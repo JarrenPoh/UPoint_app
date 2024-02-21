@@ -120,7 +120,7 @@ class _RewardBodyState extends State<RewardBody>
                                     post: postList[index],
                                     organizer: null,
                                     hero:
-                                        "activity${postList[index].datePublished.toString()}",
+                                        "reward${postList[index].datePublished.toString()}",
                                     isOrganizer: false,
                                     user: widget.user,
                                   );
