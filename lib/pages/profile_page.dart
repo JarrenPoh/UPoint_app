@@ -262,7 +262,7 @@ class _ProfilePageState extends State<ProfilePage>
                                               CrossAxisAlignment.start,
                                           children: [
                                             profileRow("姓名：$username"),
-                                            profileRow("系級：$className"),
+                                            profileRow("班級：$className"),
                                             profileRow("學號：$studentID"),
                                             profileRow("連絡電話：$phoneNumber"),
                                             profileRow("電子郵件：$email"),

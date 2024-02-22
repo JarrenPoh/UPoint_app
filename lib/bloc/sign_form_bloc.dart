@@ -22,6 +22,7 @@ class SignFormBloc {
     for (var form in formModel)
       // ignore: curly_braces_in_flow_control_structures
       for (var option in form.options) {
+        print('type: ${option.type}');
         String _value = "";
         switch (option.type) {
           case "username":
@@ -32,6 +33,12 @@ class SignFormBloc {
             break;
           case "email":
             _value = user.email;
+            break;
+          case "class":
+            _value = user.className ?? "";
+            break;
+          case "studentID":
+            _value = user.studentID ?? "";
             break;
         }
         signForm.add({
