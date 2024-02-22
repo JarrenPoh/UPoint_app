@@ -1,3 +1,4 @@
+import 'package:just_the_tooltip/just_the_tooltip.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:upoint/firebase/auth_methods.dart';
@@ -37,6 +38,7 @@ class _ProfilePageState extends State<ProfilePage>
   String studentID = '尚未編輯';
   String phoneNumber = '尚未編輯';
   String email = '尚未編輯';
+  final JustTheController tooltipController = JustTheController();
 
   @override
   void initState() {
@@ -215,7 +217,7 @@ class _ProfilePageState extends State<ProfilePage>
                                 decoration: BoxDecoration(
                                   color: cColor.white,
                                   borderRadius: BorderRadius.circular(16),
-                                  boxShadow: [
+                                  boxShadow: const [
                                     BoxShadow(
                                       color: Color.fromRGBO(0, 0, 0, 0.05),
                                       offset: Offset(2, 2),
@@ -237,13 +239,63 @@ class _ProfilePageState extends State<ProfilePage>
                                               vertical: 8.0, horizontal: 16.0),
                                           child: Row(
                                             children: [
-                                              Expanded(
-                                                child: BoldText(
-                                                  color: cColor.grey500,
-                                                  size: Dimensions.height2 * 8,
-                                                  text: "表單預填資料",
+                                              BoldText(
+                                                color: cColor.grey500,
+                                                size: Dimensions.height2 * 8,
+                                                text: "表單預填資料",
+                                              ),
+                                              SizedBox(
+                                                  width: Dimensions.width5),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  print(
+                                                      'value:${tooltipController.value}');
+                                                   if (tooltipController
+                                                          .value ==
+                                                      TooltipStatus.isHidden) {
+                                                    tooltipController
+                                                        .showTooltip();
+                                                  }
+                                                },
+                                                child: JustTheTooltip(
+                                                  controller: tooltipController,
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                  backgroundColor:
+                                                      Colors.grey.shade800,
+                                                  content: Padding(
+                                                    padding:
+                                                        EdgeInsets.all(8.0),
+                                                    child: MediumText(
+                                                      color: cColor.grey500,
+                                                      size: Dimensions.height2 *
+                                                          7,
+                                                      text:
+                                                          "表單預填資料在您填寫報名表單時會自動帶入資料",
+                                                    ),
+                                                  ),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                        color: cColor.grey300,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              100),
+                                                    ),
+                                                    padding:
+                                                        const EdgeInsets.all(0),
+                                                    child: Icon(
+                                                      Icons.question_mark,
+                                                      color: cColor.grey300,
+                                                      size: Dimensions.height2 *
+                                                          6,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
+                                              const Expanded(
+                                                  child: Column(children: [])),
                                               GestureDetector(
                                                 onTap: () {
                                                   editProfile();
@@ -256,7 +308,8 @@ class _ProfilePageState extends State<ProfilePage>
                                             ],
                                           ),
                                         ),
-                                        Divider(thickness: 1, color: cColor.div),
+                                        Divider(
+                                            thickness: 1, color: cColor.div),
                                         Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -307,7 +360,8 @@ class _ProfilePageState extends State<ProfilePage>
                                             text: "常用功能",
                                           ),
                                         ),
-                                        Divider(thickness: 1, color: cColor.div),
+                                        Divider(
+                                            thickness: 1, color: cColor.div),
                                         Column(
                                           children: [
                                             funcBtn(
