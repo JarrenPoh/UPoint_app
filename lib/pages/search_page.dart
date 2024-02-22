@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:upoint/bloc/home_page_bloc.dart';
+import 'package:upoint/globals/colors.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/globals/user_simple_preference.dart';
@@ -70,7 +71,8 @@ class _SearchPageState extends State<SearchPage>
               e.organizerName!.contains(query) ||
               (e.reward?.contains(query) ?? false) ||
               e.content!.contains(query) ||
-              (e.tags?.any((e) => e.contains(query)) ?? false)) {
+              (e.tags?.any((e) => e.contains(query)) ?? false) ||
+              (e.location?.contains(query) ?? false)) {
             return true;
           }
           return false;
@@ -105,7 +107,7 @@ class _SearchPageState extends State<SearchPage>
         elevation: 0,
         title: SearchWidget(
           text: query,
-          hintText: '輸入想搜尋的內容或標題',
+          hintText: '輸入任何想搜尋的內容',
           onChanged: searchBook,
           autoFocus: false,
           controller: controller,
@@ -201,11 +203,11 @@ class _SearchPageState extends State<SearchPage>
                                         leading: Icon(
                                           Icons.history,
                                           color: primary,
-                                          size: 28,
+                                          size: Dimensions.height2*12,
                                         ),
                                         title: MediumText(
                                           color: onSecondary,
-                                          size: Dimensions.height2 * 8,
+                                          size: Dimensions.height2 * 7,
                                           text: history[index],
                                         ),
                                         trailing: GestureDetector(
@@ -224,6 +226,7 @@ class _SearchPageState extends State<SearchPage>
                                     ),
                                     Divider(
                                       height: Dimensions.height5,
+                                      color: CColor.of(context).div,
                                     ),
                                   ],
                                 ),
