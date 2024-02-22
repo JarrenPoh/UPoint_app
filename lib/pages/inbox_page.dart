@@ -202,10 +202,10 @@ class _InboxPageState extends State<InboxPage>
                 children: [
                   CircleAvatar(
                     backgroundColor: cColor.grey200,
-                    radius: 24,
+                    radius: 20,
                     child: CircleAvatar(
                       backgroundColor: cColor.grey200,
-                      radius: 23,
+                      radius: 18,
                       child: CircleAvatar(
                         backgroundColor: Colors.grey,
                         backgroundImage: NetworkImage(
@@ -219,7 +219,7 @@ class _InboxPageState extends State<InboxPage>
                   Expanded(
                     child: RichText(
                       text: TextSpan(
-                        style: TextStyle(fontSize: Dimensions.height2 * 7),
+                        style: TextStyle(fontSize: Dimensions.height2 * 6.5),
                         children: [
                           TextSpan(
                             text: inboxModel.name,
@@ -254,11 +254,11 @@ class _InboxPageState extends State<InboxPage>
                     padding: EdgeInsets.symmetric(
                       horizontal: Dimensions.width5 * 4,
                     ),
-                    minSize: Dimensions.height5 * 7,
+                    minSize: Dimensions.height5 * 6,
                     color: cColor.primary,
                     child: MediumText(
                       color: Colors.white,
-                      size: Dimensions.height2 * 8,
+                      size: Dimensions.height2 * 6,
                       text: '前往',
                     ),
                     onPressed: () => go(inboxModel.url),
