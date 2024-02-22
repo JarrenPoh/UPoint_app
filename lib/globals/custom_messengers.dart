@@ -42,6 +42,7 @@ class Messenger {
             content: MediumText(
               color: cColor.grey500,
               size: Dimensions.height2 * 9,
+              maxLines: 10,
               text: content,
             ),
             actions: <Widget>[
