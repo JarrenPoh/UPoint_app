@@ -2,6 +2,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/globals/bold_text.dart';
+import 'package:upoint/globals/colors.dart';
 import 'package:upoint/globals/custom_messengers.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
@@ -158,13 +159,10 @@ class _ProfilePageState extends State<ProfilePage>
   Widget build(BuildContext context) {
     initInform();
     super.build(context);
-    Color onSecondary = Theme.of(context).colorScheme.onSecondary;
-    Color appBarColor = Theme.of(context).appBarTheme.backgroundColor!;
-    Color onPrimary = Theme.of(context).colorScheme.onPrimary;
-    Color scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
+    CColor cColor = CColor.of(context);
 
     return Scaffold(
-      backgroundColor: appBarColor,
+      backgroundColor: cColor.div,
       body: NestedScrollView(
         floatHeaderSlivers: true,
         headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -181,8 +179,8 @@ class _ProfilePageState extends State<ProfilePage>
         },
         body: RefreshIndicator(
           displacement: Dimensions.height5 * 3,
-          backgroundColor: onPrimary,
-          color: onSecondary,
+          backgroundColor: cColor.white,
+          color: cColor.black,
           onRefresh: () async {
             refresh();
           },
@@ -215,7 +213,7 @@ class _ProfilePageState extends State<ProfilePage>
                         widget.user != null
                             ? Container(
                                 decoration: BoxDecoration(
-                                  color: scaffoldBackgroundColor,
+                                  color: cColor.white,
                                   borderRadius: BorderRadius.circular(16),
                                   boxShadow: [
                                     BoxShadow(
@@ -241,9 +239,9 @@ class _ProfilePageState extends State<ProfilePage>
                                             children: [
                                               Expanded(
                                                 child: BoldText(
-                                                  color: onSecondary,
+                                                  color: cColor.grey500,
                                                   size: Dimensions.height2 * 8,
-                                                  text: "$username / 個人資料",
+                                                  text: "表單預填資料",
                                                 ),
                                               ),
                                               GestureDetector(
@@ -252,19 +250,18 @@ class _ProfilePageState extends State<ProfilePage>
                                                 },
                                                 child: Icon(
                                                   Icons.edit,
-                                                  color: Colors.grey,
+                                                  color: cColor.grey300,
                                                 ),
                                               )
                                             ],
                                           ),
                                         ),
-                                        Divider(
-                                            thickness: 1, color: Colors.grey),
+                                        Divider(thickness: 1, color: cColor.div),
                                         Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            profileRow("學校：中原大學"),
+                                            profileRow("姓名：$username"),
                                             profileRow("系級：$className"),
                                             profileRow("學號：$studentID"),
                                             profileRow("連絡電話：$phoneNumber"),
@@ -282,7 +279,7 @@ class _ProfilePageState extends State<ProfilePage>
                             ? Container(
                                 // height: Dimensions.width2 * 85,
                                 decoration: BoxDecoration(
-                                  color: scaffoldBackgroundColor,
+                                  color: cColor.white,
                                   borderRadius: BorderRadius.circular(16),
                                   boxShadow: [
                                     BoxShadow(
@@ -305,13 +302,12 @@ class _ProfilePageState extends State<ProfilePage>
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 8.0, horizontal: 16.0),
                                           child: BoldText(
-                                            color: onSecondary,
+                                            color: cColor.grey500,
                                             size: Dimensions.height2 * 8,
                                             text: "常用功能",
                                           ),
                                         ),
-                                        Divider(
-                                            thickness: 1, color: Colors.grey),
+                                        Divider(thickness: 1, color: cColor.div),
                                         Column(
                                           children: [
                                             funcBtn(
@@ -363,7 +359,7 @@ class _ProfilePageState extends State<ProfilePage>
                             ? Container(
                                 // height: Dimensions.width2 * 85,
                                 decoration: BoxDecoration(
-                                  color: scaffoldBackgroundColor,
+                                  color: cColor.white,
                                   borderRadius: BorderRadius.circular(16),
                                   boxShadow: const [
                                     BoxShadow(
@@ -390,7 +386,7 @@ class _ProfilePageState extends State<ProfilePage>
                                                     const EdgeInsets.symmetric(
                                                         vertical: 8.0),
                                                 child: RegularText(
-                                                  color: onSecondary,
+                                                  color: cColor.grey500,
                                                   size: Dimensions.height2 * 7,
                                                   text: "歡迎登入，查看更多資訊",
                                                 ),
@@ -400,7 +396,7 @@ class _ProfilePageState extends State<ProfilePage>
                                                   logInOrOut();
                                                 },
                                                 child: MediumText(
-                                                  color: onSecondary,
+                                                  color: cColor.grey500,
                                                   size: Dimensions.height2 * 8,
                                                   text: _user == null
                                                       ? "登入"
@@ -434,8 +430,7 @@ class _ProfilePageState extends State<ProfilePage>
     IconData iconData,
     String str,
   ) {
-    Color hintColor = Theme.of(context).hintColor;
-    Color onSecondary = Theme.of(context).colorScheme.onSecondary;
+    CColor cColor = CColor.of(context);
     return MaterialButton(
       onPressed: () => onPressed(),
       child: Padding(
@@ -445,11 +440,11 @@ class _ProfilePageState extends State<ProfilePage>
             Icon(
               iconData,
               size: 30,
-              color: hintColor,
+              color: cColor.primary,
             ),
             SizedBox(width: 10),
             RegularText(
-              color: onSecondary,
+              color: cColor.grey500,
               size: Dimensions.height2 * 7,
               text: str,
             ),
@@ -460,7 +455,7 @@ class _ProfilePageState extends State<ProfilePage>
   }
 
   Widget profileRow(str) {
-    Color onSecondary = Theme.of(context).colorScheme.onSecondary;
+    CColor cColor = CColor.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Column(
@@ -470,7 +465,7 @@ class _ProfilePageState extends State<ProfilePage>
               SizedBox(width: 10),
               Flexible(
                 child: RegularText(
-                  color: onSecondary,
+                  color: cColor.grey500,
                   size: Dimensions.height2 * 7,
                   text: str,
                   maxLines: 3,
@@ -484,13 +479,12 @@ class _ProfilePageState extends State<ProfilePage>
   }
 
   Widget scnContainer(int index, String str) {
-    Color onSecondary = Theme.of(context).colorScheme.onSecondary;
-    Color scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
+    CColor cColor = CColor.of(context);
     return Expanded(
       child: Container(
         // width: Dimensions.width2 * 20,
         decoration: BoxDecoration(
-          color: scaffoldBackgroundColor,
+          color: cColor.white,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -506,7 +500,7 @@ class _ProfilePageState extends State<ProfilePage>
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             MediumText(
-              color: onSecondary,
+              color: cColor.grey500,
               size: Dimensions.height2 * 7,
               text: index == 0 ? "UPoints" : "活動紀錄",
             ),
@@ -523,7 +517,7 @@ class _ProfilePageState extends State<ProfilePage>
                     : Container(),
                 SizedBox(width: index == 0 ? 8 : 0),
                 BoldText(
-                  color: onSecondary,
+                  color: cColor.grey500,
                   size: Dimensions.height2 * 9,
                   text: str,
                 ),
@@ -536,7 +530,7 @@ class _ProfilePageState extends State<ProfilePage>
   }
 
   Widget firstContainer() {
-    Color hintColor = Theme.of(context).hintColor;
+    CColor cColor = CColor.of(context);
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -548,7 +542,7 @@ class _ProfilePageState extends State<ProfilePage>
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [Color(0xFFFFD396), hintColor],
+                colors: [cColor.color, cColor.primary],
               ),
               boxShadow: [
                 BoxShadow(

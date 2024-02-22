@@ -88,7 +88,7 @@ class _PostDetailBodyState extends State<PostDetailBody> {
                   ],
                 ),
                 const SizedBox(height: 5),
-                Divider(color: cColor.grey200),
+                Divider(color: cColor.div),
                 // 時間 地點 獎勵
                 Container(
                   height: Dimensions.height2 * 44,
@@ -126,7 +126,7 @@ class _PostDetailBodyState extends State<PostDetailBody> {
                   ),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
-                    border: Border.all(color: cColor.grey200),
+                    border: Border.all(color: cColor.div),
                   ),
                   child: RegularText(
                     color: cColor.grey500,
@@ -149,7 +149,7 @@ class _PostDetailBodyState extends State<PostDetailBody> {
                     text: "活動詳情",
                   ),
                 ),
-                Divider(color: cColor.grey200),
+                Divider(color: cColor.div),
                 Container(
                   height: Dimensions.height5 * 60,
                   width: double.infinity,
@@ -159,7 +159,7 @@ class _PostDetailBodyState extends State<PostDetailBody> {
                   ),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
-                    border: Border.all(color: cColor.grey200),
+                    border: Border.all(color: cColor.div),
                   ),
                   child: RegularText(
                     color: cColor.grey500,

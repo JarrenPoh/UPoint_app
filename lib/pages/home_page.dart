@@ -42,7 +42,6 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     super.build(context);
     CColor cColor = CColor.of(context);
-    Color bgColor = Theme.of(context).appBarTheme.foregroundColor!;
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -51,7 +50,7 @@ class _HomePageState extends State<HomePage>
           color: cColor.white,
           child: SafeArea(
             child: Scaffold(
-              backgroundColor: bgColor,
+              backgroundColor: cColor.div,
               body: NestedScrollView(
                 floatHeaderSlivers: true,
                 headerSliverBuilder: (context, innerBoxIsScrolled) {

@@ -12,6 +12,7 @@ class CColor {
   final Color second;
   final Color color;
   final Color sub;
+  final Color div;
 
   CColor({
     required this.white,
@@ -25,6 +26,7 @@ class CColor {
     required this.second,
     required this.color,
     required this.sub,
+    required this.div,
   });
 
   factory CColor.of(BuildContext context) {
@@ -40,6 +42,7 @@ class CColor {
       second: const Color(0xFFFB9348),
       color: const Color(0xFFFF9F18),
       sub: Theme.of(context).colorScheme.onPrimaryContainer,
+      div: Theme.of(context).appBarTheme.foregroundColor!,
     );
   }
 }

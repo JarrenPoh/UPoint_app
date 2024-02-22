@@ -154,7 +154,7 @@ class _PostDetailAppBarState extends State<PostDetailAppBar> {
               topRight: Radius.circular(15),
             ),
             border: Border(
-              bottom: BorderSide(color: cColor.grey200),
+              bottom: BorderSide(color: cColor.div),
             ),
           ),
           child: Center(
