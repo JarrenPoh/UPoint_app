@@ -17,26 +17,35 @@ class _ResetPasswordState extends State<ResetPassword> {
   final TextEditingController _emailController = TextEditingController();
 
   bool isLoading = false;
-  bool emptyEmail = false;
+  String errorEmail = "";
   @override
   void initState() {
     super.initState();
     _emailController.addListener(() {
-      if (emptyEmail == true) {
+      if (errorEmail.isNotEmpty) {
         setState(() {
-          _emailController.text.trim() == ''
-              ? emptyEmail = true
-              : emptyEmail = false;
+          _emailController.text.trim() == '' ? null : errorEmail = "";
         });
       }
     });
+  }
+
+  bool isEmail(String input) {
+    final RegExp emailRegExp = RegExp(
+      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$',
+    );
+    return emailRegExp.hasMatch(input);
   }
 
   Future resetPassword() async {
     FocusScope.of(context).unfocus();
     if (_emailController.text.trim() == '') {
       setState(() {
-        emptyEmail = true;
+        errorEmail = "電子郵件不可為空";
+      });
+    } else if (!isEmail(_emailController.text.trim())) {
+      setState(() {
+        errorEmail = "請輸入有效的電子郵件格式";
       });
     } else {
       setState(() {
@@ -78,20 +87,20 @@ class _ResetPasswordState extends State<ResetPassword> {
     Color hintColor = Theme.of(context).hintColor;
     Color appBarColor = Theme.of(context).appBarTheme.backgroundColor!;
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
-    return Scaffold(
-      backgroundColor: appBarColor,
-      appBar: AppBar(
-        elevation: 0,
-        title: MediumText(
-          color: onSecondary,
-          size: Dimensions.height2 * 9,
-          text: '重置密碼',
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        backgroundColor: appBarColor,
+        appBar: AppBar(
+          elevation: 0,
+          title: MediumText(
+            color: onSecondary,
+            size: Dimensions.height2 * 9,
+            text: '重置密碼',
+          ),
+          iconTheme: IconThemeData(color: hintColor),
         ),
-        iconTheme: IconThemeData(color: hintColor),
-      ),
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Center(
+        body: Center(
           child: isLoading
               ? CircularProgressIndicator.adaptive()
               : Padding(
@@ -104,7 +113,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                         false,
                         Icons.people_alt_rounded,
                         "輸入你的電子信箱，我們將寄信給您",
-                        emptyEmail,
+                        errorEmail,
                         _emailController,
                       ),
                       const SizedBox(height: 24),
@@ -145,7 +154,8 @@ class _ResetPasswordState extends State<ResetPassword> {
     );
   }
 
-  Widget textWidget(obscureText, prefixIcon, hintText, emptyInput, controller) {
+  Widget textWidget(
+      obscureText, prefixIcon, hintText, String errorText, controller) {
     Color primary = Theme.of(context).colorScheme.primary;
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     Color hintColor = Theme.of(context).hintColor;
@@ -158,7 +168,7 @@ class _ResetPasswordState extends State<ResetPassword> {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10), // 圓角設定
         ),
-        errorText: emptyInput ? '不可為空' : null,
+        errorText: errorText.isNotEmpty ? errorText : null,
         prefixIcon: Icon(prefixIcon, color: primary),
         hintText: hintText,
         hintStyle: TextStyle(color: primary),

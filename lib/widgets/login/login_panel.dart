@@ -21,27 +21,23 @@ class _LoginPanelState extends State<LoginPanel> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool isLoading = false;
-  bool emptyEmail = false;
-  bool emptyPassword = false;
+  String errorEmail = "";
+  String errorPassword = "";
 
   @override
   void initState() {
     super.initState();
     _emailController.addListener(() {
-      if (emptyEmail == true) {
+      if (errorEmail.isNotEmpty) {
         setState(() {
-          _emailController.text.trim() == ''
-              ? emptyEmail = true
-              : emptyEmail = false;
+          _emailController.text.trim() == '' ? null : errorEmail = "";
         });
       }
     });
     _passwordController.addListener(() {
-      if (emptyPassword == true) {
+      if (errorPassword.isNotEmpty) {
         setState(() {
-          _passwordController.text.trim() == ''
-              ? emptyPassword = true
-              : emptyPassword = false;
+          _passwordController.text.trim() == '' ? null : errorPassword = '';
         });
       }
     });
@@ -54,14 +50,25 @@ class _LoginPanelState extends State<LoginPanel> {
     _passwordController.dispose();
   }
 
+  bool isEmail(String input) {
+    final RegExp emailRegExp = RegExp(
+      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$',
+    );
+    return emailRegExp.hasMatch(input);
+  }
+
   void loginUser() async {
     if (_emailController.text.trim() == '') {
       setState(() {
-        emptyEmail = true;
+        errorEmail = "電子郵件不可為空";
       });
-    } else if (_passwordController.text.trim() == '') {
+    } else if (!isEmail(_emailController.text.trim())) {
       setState(() {
-        emptyPassword = true;
+        errorEmail = "請輸入有效的電子郵件格式";
+      });
+    }  else if (_passwordController.text.trim() == '') {
+      setState(() {
+        errorPassword = "密碼不可為空";
       });
     } else {
       if (!isLoading) {
@@ -89,7 +96,7 @@ class _LoginPanelState extends State<LoginPanel> {
         await AuthMethods().signOut();
         // ignore: use_build_context_synchronously
         await Messenger.dialog(
-          '如有問題，請回報官方:service.upoint@gmail.com',
+          '如有問題，請洽詢官方:service.upoint@gmail.com',
           '你尚未驗證你的Gmail',
           context,
         );
@@ -100,11 +107,11 @@ class _LoginPanelState extends State<LoginPanel> {
       });
       await AuthMethods().signOut();
       // ignore: use_build_context_synchronously
-      Messenger.snackBar(context, "失敗", '$res ，請回報官方發現問題');
+      Messenger.snackBar(context, "失敗", '$res ，請洽詢官方發現問題');
       // ignore: use_build_context_synchronously
       await Messenger.dialog(
         '發生錯誤',
-        '如有問題，請回報官方:service.upoint@gmail.com',
+        '$res，請洽詢官方:service.upoint@gmail.com',
         context,
       );
     }
@@ -147,7 +154,7 @@ class _LoginPanelState extends State<LoginPanel> {
                         false,
                         Icons.people_alt_rounded,
                         "電子郵件",
-                        emptyEmail,
+                        errorEmail,
                         _emailController,
                       ),
                       SizedBox(height: Dimensions.height5 * 3),
@@ -155,7 +162,7 @@ class _LoginPanelState extends State<LoginPanel> {
                         true,
                         Icons.lock,
                         "密碼",
-                        emptyPassword,
+                        errorPassword,
                         _passwordController,
                       ),
                       SizedBox(height: Dimensions.height5 * 3),
@@ -316,7 +323,8 @@ class _LoginPanelState extends State<LoginPanel> {
     );
   }
 
-  Widget textWidget(obscureText, prefixIcon, hintText, emptyInput, controller) {
+  Widget textWidget(
+      obscureText, prefixIcon, hintText, String errorText, controller) {
     Color primary = Theme.of(context).colorScheme.primary;
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     Color hintColor = Theme.of(context).hintColor;
@@ -329,7 +337,7 @@ class _LoginPanelState extends State<LoginPanel> {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10), // 圓角設定
         ),
-        errorText: emptyInput ? '不可為空' : null,
+        errorText: errorText.isNotEmpty ? errorText : null,
         prefixIcon: Icon(prefixIcon, color: primary),
         hintText: hintText,
         hintStyle: TextStyle(color: primary),

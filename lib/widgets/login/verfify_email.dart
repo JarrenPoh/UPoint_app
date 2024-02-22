@@ -72,7 +72,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
           });
         });
       } else {
-        Messenger.snackBar(context, "失敗", '$res ，請回報官方發現問題');
+        Messenger.snackBar(context, "失敗", '$res ，請洽詢官方發現問題');
       }
     } else {
       bool exist = false;
@@ -113,7 +113,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
           ),
         );
       } else {
-        Messenger.snackBar(context, "失敗", '$res ，請回報官方發現問題');
+        Messenger.snackBar(context, "失敗", '$res ，請洽詢官方發現問題');
       }
     }
   }

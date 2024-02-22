@@ -146,7 +146,8 @@ class _InboxPageState extends State<InboxPage>
                                             ),
                                           ),
                                           listBuilder(_list, lindex),
-                                          Divider(),
+                                          Divider(
+                                              color: CColor.of(context).div),
                                         ],
                                       );
                                     },

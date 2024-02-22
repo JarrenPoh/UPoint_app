@@ -78,6 +78,14 @@ class SignFormBloc {
           _errorText = "${signForm[_i]["subtitle"]}是必填欄位";
           break;
         }
+        if (option.type == "phoneNumber" &&
+            !isTaiwanMobileNumber(signForm[_i]["value"])) {
+          _errorText = "${signForm[_i]["subtitle"]}請輸入有效手機號碼格式";
+          break;
+        } else if (option.type == "email" && !isEmail(signForm[_i]["value"])) {
+          _errorText = "${signForm[_i]["subtitle"]}請輸入有效電子郵件格式";
+          break;
+        }
         _i++;
       }
     }
@@ -97,8 +105,8 @@ class SignFormBloc {
       Messenger.snackBar(context, "報名成功", "謝謝您的報名，請記得出席活動");
       await Provider.of<AuthMethods>(context, listen: false).getUserDetails();
     } else {
-      Messenger.snackBar(context, "報名失敗，請回報問題", "請聯絡service.upoint@gmail.com");
-      Messenger.dialog("報名失敗，請回報問題", "請聯絡service.upoint@gmail.com", context);
+      Messenger.snackBar(context, "報名失敗，請洽詢問題", "請聯絡service.upoint@gmail.com");
+      Messenger.dialog("報名失敗，請洽詢問題", "請聯絡service.upoint@gmail.com", context);
     }
     Provider.of<InboxPageBloc>(context, listen: false).onRefresh();
     Navigator.pushReplacement(
@@ -110,6 +118,20 @@ class SignFormBloc {
         ),
       ),
     );
+  }
+
+  bool isEmail(String input) {
+    final RegExp emailRegExp = RegExp(
+      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$',
+    );
+    return emailRegExp.hasMatch(input);
+  }
+
+  bool isTaiwanMobileNumber(String input) {
+    final RegExp mobileRegExp = RegExp(
+      r'^09\d{8}$',
+    );
+    return mobileRegExp.hasMatch(input);
   }
 
   List<OptionModel> fixCommon = [

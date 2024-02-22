@@ -102,9 +102,11 @@ class AuthMethods with ChangeNotifier {
     } on PlatformException catch (err) {
       debugPrint('errorr');
       res = err.toString();
+      debugPrint(res);
     } catch (e) {
       debugPrint('errorr');
       res = e.toString();
+      debugPrint(res);
     }
     return res;
   }

@@ -22,54 +22,64 @@ class _RegisterPanelState extends State<RegisterPanel> {
   final TextEditingController _confirmController = TextEditingController();
 
   bool isLoading = false;
-  bool emptyEmail = false;
-  bool emptyPassword = false;
-  bool emptyConfirm = false;
+  String errorEmail = "";
+  String errorPassword = "";
+  String errorConfirm = "";
 
   @override
   void initState() {
     super.initState();
     _emailController.addListener(() {
-      if (emptyEmail == true) {
+      if (errorEmail.isNotEmpty) {
         setState(() {
-          _emailController.text.trim() == ''
-              ? emptyEmail = true
-              : emptyEmail = false;
+          _emailController.text.trim() == '' ? null : errorEmail = "";
         });
       }
     });
     _passwordController.addListener(() {
-      if (emptyPassword == true) {
+      if (errorPassword.isNotEmpty) {
         setState(() {
-          _passwordController.text.trim() == ''
-              ? emptyPassword = true
-              : emptyPassword = false;
+          _passwordController.text.trim() == '' ? null : errorPassword = "";
         });
       }
     });
     _confirmController.addListener(() {
-      if (emptyConfirm == true) {
+      if (errorConfirm.isNotEmpty) {
         setState(() {
-          _confirmController.text.trim() == ''
-              ? emptyConfirm = true
-              : emptyConfirm = false;
+          _confirmController.text.trim() == '' ? null : errorConfirm = "";
         });
       }
     });
   }
 
+  bool isEmail(String input) {
+    final RegExp emailRegExp = RegExp(
+      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$',
+    );
+    return emailRegExp.hasMatch(input);
+  }
+
   void signUpUser() async {
     if (_emailController.text.trim() == '') {
       setState(() {
-        emptyEmail = true;
+        errorEmail = "電子郵件不可為空";
+      });
+    } else if (!isEmail(_emailController.text.trim())) {
+      setState(() {
+        errorEmail = "請輸入有效的電子郵件格式";
       });
     } else if (_passwordController.text.trim() == '') {
       setState(() {
-        emptyPassword = true;
+        errorPassword = "密碼不可為空";
       });
     } else if (_confirmController.text.trim() == '') {
       setState(() {
-        emptyConfirm = true;
+        errorConfirm = "確認密碼不可為空";
+      });
+    } else if (_passwordController.text.trim() !=
+        _confirmController.text.trim()) {
+      setState(() {
+        errorConfirm = "密碼填寫不同，請確認清楚你的密碼";
       });
     } else {
       if (!isLoading) {
@@ -100,11 +110,11 @@ class _RegisterPanelState extends State<RegisterPanel> {
           });
           // show the error
           // ignore: use_build_context_synchronously
-          Messenger.snackBar(context, "失敗", '$res ，請回報官方發現問題');
+          Messenger.snackBar(context, "失敗", '$res ，請洽詢官方發現問題');
           // ignore: use_build_context_synchronously
           await Messenger.dialog(
             '發生錯誤',
-            '如有問題，請回報官方:service.upoint@gmail.com',
+            '如有問題，請洽詢官方:service.upoint@gmail.com',
             context,
           );
         }
@@ -157,7 +167,7 @@ class _RegisterPanelState extends State<RegisterPanel> {
                         false,
                         Icons.people_alt_rounded,
                         "電子郵件",
-                        emptyEmail,
+                        errorEmail,
                         _emailController,
                       ),
                       SizedBox(height: Dimensions.height5 * 3),
@@ -165,7 +175,7 @@ class _RegisterPanelState extends State<RegisterPanel> {
                         false,
                         Icons.lock,
                         "密碼",
-                        emptyPassword,
+                        errorPassword,
                         _passwordController,
                       ),
                       SizedBox(height: Dimensions.height5 * 3),
@@ -173,7 +183,7 @@ class _RegisterPanelState extends State<RegisterPanel> {
                         true,
                         Icons.lock,
                         "確認密碼",
-                        emptyConfirm,
+                        errorConfirm,
                         _confirmController,
                       ),
                       SizedBox(height: Dimensions.height5 * 3),
@@ -243,7 +253,8 @@ class _RegisterPanelState extends State<RegisterPanel> {
     );
   }
 
-  Widget textWidget(obscureText, prefixIcon, hintText, emptyInput, controller) {
+  Widget textWidget(
+      obscureText, prefixIcon, hintText, String errorText, controller) {
     Color primary = Theme.of(context).colorScheme.primary;
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     Color hintColor = Theme.of(context).hintColor;
@@ -256,7 +267,7 @@ class _RegisterPanelState extends State<RegisterPanel> {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10), // 圓角設定
         ),
-        errorText: emptyInput ? '不可為空' : null,
+        errorText: errorText.isNotEmpty ? errorText : null,
         prefixIcon: Icon(prefixIcon, color: primary),
         hintText: hintText,
         hintStyle: TextStyle(color: primary),
