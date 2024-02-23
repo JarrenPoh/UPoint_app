@@ -1,10 +1,10 @@
-import 'package:just_the_tooltip/just_the_tooltip.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/globals/bold_text.dart';
 import 'package:upoint/globals/colors.dart';
 import 'package:upoint/globals/custom_messengers.dart';
+import 'package:upoint/globals/custom_tooltip.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/globals/regular_text.dart';
@@ -38,7 +38,6 @@ class _ProfilePageState extends State<ProfilePage>
   String studentID = '尚未編輯';
   String phoneNumber = '尚未編輯';
   String email = '尚未編輯';
-  final JustTheController tooltipController = JustTheController();
 
   @override
   void initState() {
@@ -245,55 +244,10 @@ class _ProfilePageState extends State<ProfilePage>
                                                 text: "表單預填資料",
                                               ),
                                               SizedBox(
-                                                  width: Dimensions.width5),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  print(
-                                                      'value:${tooltipController.value}');
-                                                   if (tooltipController
-                                                          .value ==
-                                                      TooltipStatus.isHidden) {
-                                                    tooltipController
-                                                        .showTooltip();
-                                                  }
-                                                },
-                                                child: JustTheTooltip(
-                                                  controller: tooltipController,
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
-                                                  backgroundColor:
-                                                      Colors.grey.shade800,
-                                                  content: Padding(
-                                                    padding:
-                                                        EdgeInsets.all(8.0),
-                                                    child: MediumText(
-                                                      color: cColor.grey500,
-                                                      size: Dimensions.height2 *
-                                                          7,
-                                                      text:
-                                                          "表單預填資料在您填寫報名表單時會自動帶入資料",
-                                                    ),
-                                                  ),
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                      border: Border.all(
-                                                        color: cColor.grey300,
-                                                      ),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              100),
-                                                    ),
-                                                    padding:
-                                                        const EdgeInsets.all(0),
-                                                    child: Icon(
-                                                      Icons.question_mark,
-                                                      color: cColor.grey300,
-                                                      size: Dimensions.height2 *
-                                                          6,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
+                                                  width: Dimensions.width5 * 2),
+                                              const CustomToolTip(
+                                                  text:
+                                                      "表單預填資料在您填寫報名表單時會自動帶入資料"),
                                               const Expanded(
                                                   child: Column(children: [])),
                                               GestureDetector(
@@ -303,6 +257,7 @@ class _ProfilePageState extends State<ProfilePage>
                                                 child: Icon(
                                                   Icons.edit,
                                                   color: cColor.grey300,
+                                                  size: Dimensions.height5 * 4,
                                                 ),
                                               )
                                             ],
@@ -553,10 +508,16 @@ class _ProfilePageState extends State<ProfilePage>
           padding: const EdgeInsets.all(16.0),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            MediumText(
-              color: cColor.grey500,
-              size: Dimensions.height2 * 7,
-              text: index == 0 ? "UPoints" : "活動紀錄",
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                MediumText(
+                  color: cColor.grey500,
+                  size: Dimensions.height2 * 7,
+                  text: index == 0 ? "UPoints" : "活動紀錄",
+                ),
+                if (index == 0) const CustomToolTip(text: "敬請期待"),
+              ],
             ),
             SizedBox(height: 8),
             Row(
