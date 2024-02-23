@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:upoint/firebase/auth_methods.dart';
+import 'package:upoint/globals/bold_text.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/widgets/login/verfify_email.dart';
 
+import '../../globals/colors.dart';
 import '../../globals/custom_messengers.dart';
 
 class RegisterPanel extends StatefulWidget {
@@ -132,7 +134,6 @@ class _RegisterPanelState extends State<RegisterPanel> {
 
   @override
   Widget build(BuildContext context) {
-    Color hintColor = Theme.of(context).hintColor;
     Color primary = Theme.of(context).colorScheme.primary;
     Color onPrimary = Theme.of(context).colorScheme.onPrimary;
     return Container(
@@ -150,19 +151,42 @@ class _RegisterPanelState extends State<RegisterPanel> {
                   child: Column(
                     children: [
                       //logo
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: Dimensions.height5 * 4),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image(
-                            image: AssetImage("assets/Upoint.png"),
-                            width: Dimensions.width5 * 16,
-                            height: Dimensions.height5 * 16,
-                            fit: BoxFit.cover,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          BoldText(
+                            color: CColor.of(context).primary,
+                            size: Dimensions.height2 * 24,
+                            text: "U",
                           ),
-                        ),
+                          BoldText(
+                            color: CColor.of(context).grey500,
+                            size: Dimensions.height2 * 24,
+                            text: "Point",
+                          ),
+                        ],
                       ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          BoldText(
+                            color: CColor.of(context).grey500,
+                            size: Dimensions.height2 * 8,
+                            text: "精彩校園，",
+                          ),
+                          BoldText(
+                            color: CColor.of(context).primary,
+                            size: Dimensions.height2 * 8,
+                            text: "U",
+                          ),
+                          BoldText(
+                            color: CColor.of(context).grey500,
+                            size: Dimensions.height2 * 8,
+                            text: "你作主",
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: Dimensions.height5 * 5),
                       textWidget(
                         false,
                         Icons.people_alt_rounded,
@@ -192,7 +216,7 @@ class _RegisterPanelState extends State<RegisterPanel> {
                           signUpUser();
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: hintColor,
+                          backgroundColor: CColor.of(context).primary,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -225,7 +249,7 @@ class _RegisterPanelState extends State<RegisterPanel> {
                       child: Text(
                         "回登入頁面！",
                         style: TextStyle(
-                          color: hintColor,
+                          color: CColor.of(context).primary,
                           fontWeight: FontWeight.w600,
                         ),
                       ),

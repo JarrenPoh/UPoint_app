@@ -68,7 +68,7 @@ flutter_native_splash:
   ios: true
   web: false
   color: "#ffffff"
-  image: "assets/launcher_icon.png"
+  image: "assets/splash_1242*2208.png"
 
 dev_dependencies:
   flutter_test:

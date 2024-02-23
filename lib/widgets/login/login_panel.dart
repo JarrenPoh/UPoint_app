@@ -1,10 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:upoint/firebase/auth_methods.dart';
+import 'package:upoint/globals/colors.dart';
 import 'package:upoint/globals/custom_messengers.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/widgets/login/reset_password.dart';
 import 'package:provider/provider.dart';
+
+import '../../globals/bold_text.dart';
 
 class LoginPanel extends StatefulWidget {
   final Function() onTap;
@@ -66,7 +69,7 @@ class _LoginPanelState extends State<LoginPanel> {
       setState(() {
         errorEmail = "請輸入有效的電子郵件格式";
       });
-    }  else if (_passwordController.text.trim() == '') {
+    } else if (_passwordController.text.trim() == '') {
       setState(() {
         errorPassword = "密碼不可為空";
       });
@@ -119,7 +122,6 @@ class _LoginPanelState extends State<LoginPanel> {
 
   @override
   Widget build(BuildContext context) {
-    Color hintColor = Theme.of(context).hintColor;
     Color primary = Theme.of(context).colorScheme.primary;
     Color onPrimary = Theme.of(context).colorScheme.onPrimary;
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
@@ -137,19 +139,43 @@ class _LoginPanelState extends State<LoginPanel> {
                       EdgeInsets.symmetric(horizontal: Dimensions.width5 * 4),
                   child: Column(
                     children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: Dimensions.height5 * 4),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image(
-                            image: AssetImage("assets/Upoint.png"),
-                            width: Dimensions.width5 * 16,
-                            height: Dimensions.height5 * 16,
-                            fit: BoxFit.cover,
+                      //logo
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          BoldText(
+                            color: CColor.of(context).primary,
+                            size: Dimensions.height2 * 24,
+                            text: "U",
                           ),
-                        ),
+                          BoldText(
+                            color: CColor.of(context).grey500,
+                            size: Dimensions.height2 * 24,
+                            text: "Point",
+                          ),
+                        ],
                       ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          BoldText(
+                            color: CColor.of(context).grey500,
+                            size: Dimensions.height2 * 8,
+                            text: "精彩校園，",
+                          ),
+                          BoldText(
+                            color: CColor.of(context).primary,
+                            size: Dimensions.height2 * 8,
+                            text: "U",
+                          ),
+                          BoldText(
+                            color: CColor.of(context).grey500,
+                            size: Dimensions.height2 * 8,
+                            text: "你作主",
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: Dimensions.height5 * 5),
                       textWidget(
                         false,
                         Icons.people_alt_rounded,
@@ -171,7 +197,7 @@ class _LoginPanelState extends State<LoginPanel> {
                           loginUser();
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: hintColor,
+                          backgroundColor: CColor.of(context).primary,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -295,7 +321,7 @@ class _LoginPanelState extends State<LoginPanel> {
                       child: Text(
                         "點此註冊！",
                         style: TextStyle(
-                          color: hintColor,
+                          color: CColor.of(context).primary,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
