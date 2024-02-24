@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:upoint/firebase/auth_methods.dart';
@@ -120,7 +122,6 @@ class _ProfilePageState extends State<ProfilePage>
       );
       if (res == "success") {
         await AuthMethods().signOut();
-        // ignore: use_build_context_synchronously
         await Navigator.push(
           context,
           MaterialPageRoute(
@@ -138,21 +139,27 @@ class _ProfilePageState extends State<ProfilePage>
     }
   }
 
-  deleteAccount() async {
+  deleteAccount(UserModel user) async {
     String res = await Messenger.dialog(
       '確定要刪除帳號嗎！',
       '一旦刪除後便永久無法復原！',
       context,
     );
     if (res == "success") {
-      await AuthMethods().deleteUser();
-      // ignore: use_build_context_synchronously
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => LoginPage(),
-        ),
-      );
+      String _rr = await AuthMethods().deleteUser(user);
+      if (_rr == "success") {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LoginPage(),
+          ),
+        );
+      } else {
+        Messenger.dialog(
+            "註銷失敗", "$_rr 有問題請洽詢官方：service.upoint@gmail.com", context);
+        Messenger.snackBar(
+            context, "註銷失敗", "$_rr 有問題請洽詢官方：service.upoint@gmail.com");
+      }
     }
   }
 
@@ -350,7 +357,8 @@ class _ProfilePageState extends State<ProfilePage>
                                             if (_user != null)
                                               funcBtn(
                                                 () async {
-                                                  await deleteAccount();
+                                                  await deleteAccount(
+                                                      widget.user!);
                                                 },
                                                 Icons.key_off,
                                                 "註銷帳號",

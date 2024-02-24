@@ -2,11 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:upoint/firebase/storage_methods.dart';
-import 'package:upoint/globals/date_time_transfer.dart';
+import 'package:upoint/globals/user_simple_preference.dart';
 import 'package:upoint/models/post_model.dart';
 import 'package:upoint/models/sign_form_model.dart';
 import 'package:upoint/models/user_model.dart';
-import 'package:upoint/secret.dart';
 import 'package:uuid/uuid.dart';
 
 class FirestoreMethods {
@@ -16,9 +15,11 @@ class FirestoreMethods {
   Future<String> signUpUser(email, auth.User currentUser) async {
     String res = 'some error occur';
     try {
+      String? fcmToken = UserSimplePreference.getFcmToken();
       UserModel user = UserModel(
         email: email,
         uuid: currentUser.uid,
+        fcmToken: fcmToken == null ? null : [fcmToken],
       );
       //上傳firestore
       await _firestore
@@ -69,15 +70,6 @@ class FirestoreMethods {
       await _firestore.collection('users').doc(user.uuid).update({
         "signList": _signList,
       });
-      //上傳去使用者inbox
-      uploadToInbox(
-        user.uuid,
-        post.organizerName!,
-        post.organizerPic,
-        post.organizerUid!,
-        "您報名了 ${post.title} ，請於${TimeTransfer.timeTrans01(post.startDateTime)}準時出席",
-        "https://$host/activity?id=$postId",
-      );
       res = 'success';
     } catch (err) {
       res = err.toString();
@@ -116,6 +108,20 @@ class FirestoreMethods {
     return _picUrl;
   }
 
+  //找一篇文
+  Future<PostModel> fetchPostById(postId) async {
+    QuerySnapshot<Map<String, dynamic>> fetchPost =
+        await FirebaseFirestore.instance
+            .collection('posts')
+            .where(
+              'postId',
+              isEqualTo: postId,
+            )
+            .get();
+    PostModel _post = PostModel.fromSnap(fetchPost.docs.toList().first);
+    return _post;
+  }
+
   //發送Notification
   Future<void> uploadToInbox(
     String targetUserId,
@@ -137,7 +143,7 @@ class FirestoreMethods {
         'inboxId': inboxId,
         'datePublished': DateTime.now(),
         'pic': organizerPic,
-        "uid":organizerUid,
+        "uid": organizerUid,
         'name': organizerName,
         'text': text,
         'url': url,

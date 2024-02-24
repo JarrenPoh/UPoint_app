@@ -29,12 +29,12 @@ class StorageMethods {
   }
 
   Future deleteImageToStorage(
-      String postId, String childname, bool isPost) async {
+      String? postId, String childname, bool isPost) async {
     try {
       Reference ref =
           _storage.ref().child(childname).child(_auth.currentUser!.uid);
       if (isPost) {
-        ref = ref.child(postId);
+        ref = ref.child(postId!);
       }
       debugPrint('ref: $ref');
       ref.delete();

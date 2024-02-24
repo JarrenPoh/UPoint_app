@@ -103,6 +103,7 @@ class InboxPageBloc with ChangeNotifier {
   }
 
   Future onRefresh() async {
+    debugPrint("刷新inbox");
     notifierProvider.value = {
       "list": [],
       "bool": false,

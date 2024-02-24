@@ -2,15 +2,18 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:upoint/bloc/inbox_page_bloc.dart';
-import 'package:upoint/globals/custom_messengers.dart';
+import 'package:upoint/firebase/messaging_methods.dart';
 import 'package:upoint/models/post_model.dart';
 import '../firebase/auth_methods.dart';
 import '../firebase/firestore_methods.dart';
+import '../globals/date_time_transfer.dart';
 import '../models/form_model.dart';
 import '../models/option_model.dart';
 import '../models/user_model.dart';
 import '../pages/sign_form_finish_page.dart';
 import 'package:provider/provider.dart';
+
+import '../secret.dart';
 
 class SignFormBloc {
   SignFormBloc(List<FormModel> formModel, UserModel user) {
@@ -95,29 +98,59 @@ class SignFormBloc {
   confirmSend(UserModel user, PostModel post, BuildContext context) async {
     debugPrint('傳送報名表單');
     debugPrint('signForm:$signForm');
-
-    String res = await FirestoreMethods().uploadSignForm(
-      user,
-      post,
-      jsonEncode(signForm),
-    );
-    if (res == "success") {
-      Messenger.snackBar(context, "報名成功", "謝謝您的報名，請記得出席活動");
-      await Provider.of<AuthMethods>(context, listen: false).getUserDetails();
-    } else {
-      Messenger.snackBar(context, "報名失敗，請洽詢問題", "請聯絡service.upoint@gmail.com");
-      Messenger.dialog("報名失敗，請洽詢問題", "請聯絡service.upoint@gmail.com", context);
-    }
-    Provider.of<InboxPageBloc>(context, listen: false).onRefresh();
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => SignFormFinishPage(
-          user: user,
-          res: res,
+    try {
+      // 上傳報名資訊到此貼文
+      String res = await FirestoreMethods().uploadSignForm(
+        user,
+        post,
+        jsonEncode(signForm),
+      );
+      String title = "";
+      String text = "";
+      if (res == "success") {
+        await Provider.of<AuthMethods>(context, listen: false).getUserDetails();
+        title = "報名成功";
+        text =
+            "您報名了 ${post.title} ，請於${TimeTransfer.timeTrans01(post.startDateTime)}準時出席";
+      } else {
+        title = "報名失敗";
+        text =
+            "您報名的${post.title}報名失敗，請再嘗試一次，仍然失敗請洽詢官方：service.upoint@gmail.com";
+      }
+      // 發送報名成功通知給本使用者
+      if (user.fcmToken != null) {
+        for (var token in user.fcmToken!) {
+          await MessagingMethod().sendNotification(
+            token,
+            title,
+            text,
+            user,
+            "https://$host/activity?id=${post.postId}",
+          );
+        }
+      }
+      // 發送到inbox
+      await FirestoreMethods().uploadToInbox(
+        user.uuid,
+        post.organizerName!,
+        post.organizerPic,
+        post.organizerUid!,
+        text,
+        "https://$host/activity?id=${post.postId}",
+      );
+      Provider.of<InboxPageBloc>(context, listen: false).onRefresh();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SignFormFinishPage(
+            user: user,
+            res: res,
+          ),
         ),
-      ),
-    );
+      );
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   bool isEmail(String input) {

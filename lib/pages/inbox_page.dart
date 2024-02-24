@@ -1,7 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:upoint/bloc/inbox_page_bloc.dart';
+import 'package:upoint/firebase/firestore_methods.dart';
 import 'package:upoint/globals/colors.dart';
 import 'package:upoint/globals/date_time_transfer.dart';
 import 'package:upoint/globals/dimension.dart';
@@ -47,7 +47,7 @@ class _InboxPageState extends State<InboxPage>
   }
 
   findAndGoPost(postId) async {
-    PostModel _p = await fetchPostById(postId);
+    PostModel _p = await FirestoreMethods().fetchPostById(postId);
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -59,19 +59,6 @@ class _InboxPageState extends State<InboxPage>
         },
       ),
     );
-  }
-
-  Future<PostModel> fetchPostById(postId) async {
-    QuerySnapshot<Map<String, dynamic>> fetchPost =
-        await FirebaseFirestore.instance
-            .collection('posts')
-            .where(
-              'postId',
-              isEqualTo: postId,
-            )
-            .get();
-    PostModel _post = PostModel.fromSnap(fetchPost.docs.toList().first);
-    return _post;
   }
 
   @override

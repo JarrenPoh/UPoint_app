@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:upoint/firebase/firestore_methods.dart';
+import 'package:upoint/firebase/storage_methods.dart';
 import 'package:upoint/models/user_model.dart';
 
 class AuthMethods with ChangeNotifier {
@@ -243,14 +244,22 @@ class AuthMethods with ChangeNotifier {
   }
 
   //刪除帳號
-  Future<void> deleteUser() async {
+  Future<String> deleteUser(UserModel user) async {
+    String res = 'some error occur';
     try {
       await _auth.currentUser!.delete();
+      await _firestore.collection("users").doc(user.uuid).delete();
+      await StorageMethods().deleteImageToStorage(null, "users", false);
+      res = 'success';
       // 成功删除账户后的操作，比如返回登录页面
     } on FirebaseAuthException catch (e) {
       // 处理错误，可能是因为用户最近没有登录
       debugPrint('删除账户出错: ${e.message}');
+      res = e.toString();
       // 可以提示用户重新登录后再尝试删除账户
+    } catch (err) {
+      res = err.toString();
     }
+    return res;
   }
 }
