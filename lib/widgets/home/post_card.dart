@@ -185,7 +185,7 @@ class _PostCardState extends State<PostCard> {
                       child: RegularText(
                         color: cColor.grey500,
                         size: Dimensions.height2 * 7,
-                        text: inform["text"],
+                        text: inform["text"]??"無",
                       ),
                     ),
                   ],

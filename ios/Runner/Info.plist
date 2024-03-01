@@ -80,5 +80,10 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
+	<key>FirebaseDynamicLinksCustomDomains</key>
+	<array>
+		<string>https://links.upoint.tw/activity</string>
+		<!-- <string>https://upoint.tw/promos</string> -->
+	</array>
 </dict>
 </plist>

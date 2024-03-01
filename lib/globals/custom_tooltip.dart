@@ -32,7 +32,7 @@ class _CustomToolTipState extends State<CustomToolTip> {
       child: JustTheTooltip(
         controller: tooltipController,
         borderRadius: BorderRadius.circular(5),
-        backgroundColor: Colors.grey.shade800,
+        backgroundColor: cColor.grey100,
         content: Padding(
           padding: EdgeInsets.all(8.0),
           child: MediumText(

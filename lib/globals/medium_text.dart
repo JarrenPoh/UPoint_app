@@ -5,12 +5,14 @@ class MediumText extends StatelessWidget {
   final double size;
   final int? maxLines;
   final String text;
+  final double? letterSpacing;
   const MediumText({
     super.key,
     required this.color,
     this.maxLines,
     required this.size,
     required this.text,
+    this.letterSpacing,
   });
 
   @override
@@ -21,6 +23,7 @@ class MediumText extends StatelessWidget {
       softWrap: true,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
+        letterSpacing: letterSpacing,
         fontSize: size,
         color: color,
         fontFamily: "NotoSansMedium",

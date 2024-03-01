@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:upoint/bloc/inbox_page_bloc.dart';
 import 'package:upoint/firebase/firestore_methods.dart';
@@ -44,6 +45,20 @@ class _InboxPageState extends State<InboxPage>
       final parameter = uri.queryParameters['id'];
       findAndGoPost(parameter);
     }
+  }
+
+  gotoProfile(){
+    print('前往處室頁面');
+    //  Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) {
+    //       return ProfilePage(
+    //         user: ,
+    //       );
+    //     },
+    //   ),
+    // );
   }
 
   findAndGoPost(postId) async {
@@ -188,18 +203,21 @@ class _InboxPageState extends State<InboxPage>
             children: [
               Row(
                 children: [
-                  CircleAvatar(
-                    backgroundColor: cColor.grey200,
-                    radius: 20,
+                  GestureDetector(
+                    onTap: () => gotoProfile(),
                     child: CircleAvatar(
                       backgroundColor: cColor.grey200,
-                      radius: 18,
+                      radius: 20,
                       child: CircleAvatar(
-                        backgroundColor: Colors.grey,
-                        backgroundImage: NetworkImage(
-                          inboxModel.pic ?? defaultUserPic,
+                        backgroundColor: cColor.grey200,
+                        radius: 18,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.grey,
+                          backgroundImage: NetworkImage(
+                            inboxModel.pic ?? defaultUserPic,
+                          ),
+                          radius: 22,
                         ),
-                        radius: 22,
                       ),
                     ),
                   ),
@@ -210,6 +228,8 @@ class _InboxPageState extends State<InboxPage>
                         style: TextStyle(fontSize: Dimensions.height2 * 6.5),
                         children: [
                           TextSpan(
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () => gotoProfile(),
                             text: inboxModel.name,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,

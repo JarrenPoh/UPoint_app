@@ -53,7 +53,7 @@ class _PostDetailBodyState extends State<PostDetailBody> {
       {
         "type": "front",
         "icon": Icons.local_play,
-        "text": widget.post.reward,
+        "text": widget.post.reward ?? "無",
       },
     ];
   }
@@ -80,13 +80,14 @@ class _PostDetailBodyState extends State<PostDetailBody> {
                 ),
                 const SizedBox(height: 5),
                 // 活動標籤
-                Wrap(
-                  runSpacing: Dimensions.height2 * 3,
-                  spacing: Dimensions.width2 * 6,
-                  children: [
-                    for (var i in widget.post.tags!) _tagWidget(i),
-                  ],
-                ),
+                if (widget.post.tags != null)
+                  Wrap(
+                    runSpacing: Dimensions.height2 * 3,
+                    spacing: Dimensions.width2 * 6,
+                    children: [
+                      for (var i in widget.post.tags!) _tagWidget(i),
+                    ],
+                  ),
                 const SizedBox(height: 5),
                 Divider(color: cColor.div),
                 // 時間 地點 獎勵

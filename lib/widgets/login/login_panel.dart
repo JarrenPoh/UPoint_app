@@ -4,10 +4,12 @@ import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/globals/colors.dart';
 import 'package:upoint/globals/custom_messengers.dart';
 import 'package:upoint/globals/dimension.dart';
+import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/widgets/login/reset_password.dart';
 import 'package:provider/provider.dart';
 
 import '../../globals/bold_text.dart';
+import 'verfify_email.dart';
 
 class LoginPanel extends StatefulWidget {
   final Function() onTap;
@@ -96,13 +98,21 @@ class _LoginPanelState extends State<LoginPanel> {
         // ignore: use_build_context_synchronously
         Navigator.pop(context, true);
       } else {
-        await AuthMethods().signOut();
-        // ignore: use_build_context_synchronously
         await Messenger.dialog(
           '如有問題，請洽詢官方:service.upoint@gmail.com',
           '你尚未驗證你的Gmail',
           context,
         );
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) {
+              return VerifyEmail(
+                email: _emailController.text,
+              );
+            },
+          ),
+        );
+        // ignore: use_build_context_synchronously
       }
     } else {
       setState(() {
@@ -158,19 +168,22 @@ class _LoginPanelState extends State<LoginPanel> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          BoldText(
+                          MediumText(
                             color: CColor.of(context).grey500,
                             size: Dimensions.height2 * 8,
+                            letterSpacing: null,
                             text: "精彩校園，",
                           ),
-                          BoldText(
+                          MediumText(
                             color: CColor.of(context).primary,
                             size: Dimensions.height2 * 8,
+                            letterSpacing: null,
                             text: "U",
                           ),
-                          BoldText(
+                          MediumText(
                             color: CColor.of(context).grey500,
                             size: Dimensions.height2 * 8,
+                            letterSpacing: null,
                             text: "你作主",
                           ),
                         ],
@@ -349,8 +362,8 @@ class _LoginPanelState extends State<LoginPanel> {
     );
   }
 
-  Widget textWidget(
-      obscureText, prefixIcon, hintText, String errorText, controller) {
+  Widget textWidget(obscureText, prefixIcon, hintText, String errorText,
+      TextEditingController controller) {
     Color primary = Theme.of(context).colorScheme.primary;
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     Color hintColor = Theme.of(context).hintColor;
