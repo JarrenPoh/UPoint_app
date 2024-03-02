@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:upoint/globals/colors.dart';
 import 'package:upoint/globals/date_time_transfer.dart';
 import 'package:upoint/globals/medium_text.dart';
@@ -21,11 +23,12 @@ class PostDetailBody extends StatefulWidget {
 class _PostDetailBodyState extends State<PostDetailBody> {
   late List<Map> informList;
   late CColor cColor;
-  // final QuillController _controller = QuillController.basic();
+  final QuillController _controller = QuillController.basic();
   @override
   void initState() {
     super.initState();
     initList();
+    _controller.document = Document.fromJson(jsonDecode(widget.post.content!));
   }
 
   @override
@@ -33,7 +36,6 @@ class _PostDetailBodyState extends State<PostDetailBody> {
     super.didChangeDependencies();
     cColor = CColor.of(context);
     debugPrint(widget.post.content!);
-    // _controller.document = Document.fromJson(jsonDecode(widget.post.content!));
   }
 
   initList() {
@@ -239,7 +241,6 @@ class _PostDetailBodyState extends State<PostDetailBody> {
                 ),
                 Divider(color: cColor.div),
                 Container(
-                  height: Dimensions.height5 * 60,
                   width: double.infinity,
                   padding: EdgeInsets.symmetric(
                     vertical: Dimensions.height2 * 4,
@@ -249,26 +250,16 @@ class _PostDetailBodyState extends State<PostDetailBody> {
                     borderRadius: BorderRadius.circular(5),
                     border: Border.all(color: cColor.div),
                   ),
-                  child: RegularText(
-                    color: cColor.grey500,
-                    size: Dimensions.height2 * 7,
-                    text: "尚未開放",
+                  child: QuillEditor.basic(
+                    configurations: QuillEditorConfigurations(
+                      controller: _controller,
+                      readOnly: true,
+                      sharedConfigurations: const QuillSharedConfigurations(
+                        locale: Locale('en'),
+                      ),
+                    ),
                   ),
                 ),
-                // Container(
-                //   padding: EdgeInsets.symmetric(
-                //     vertical: Dimensions.height2 * 9,
-                //   ),
-                //   child: QuillEditor.basic(
-                //     configurations: QuillEditorConfigurations(
-                //       controller: _controller,
-                //       readOnly: true,
-                //       sharedConfigurations: const QuillSharedConfigurations(
-                //         locale: Locale('en'),
-                //       ),
-                //     ),
-                //   ),
-                // ),
               ],
             ),
           ),
