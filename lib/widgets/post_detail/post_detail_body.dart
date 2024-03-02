@@ -4,6 +4,7 @@ import 'package:upoint/globals/date_time_transfer.dart';
 import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/globals/regular_text.dart';
 import 'package:upoint/models/post_model.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../globals/dimension.dart';
 
 class PostDetailBody extends StatefulWidget {
@@ -55,6 +56,31 @@ class _PostDetailBodyState extends State<PostDetailBody> {
         "icon": Icons.local_play,
         "text": widget.post.reward ?? "無",
       },
+      {
+        "title": "主辦單位：",
+        "type": "back",
+        "icon": Icons.home,
+        "text": widget.post.organizerName,
+      },
+      {
+        "title": "聯絡人：",
+        "type": "back",
+        "icon": Icons.person,
+        "text": widget.post.contact ?? "無",
+      },
+      {
+        "title": "聯絡方式：",
+        "type": "back",
+        "icon": Icons.phone,
+        "text": widget.post.phoneNumber ?? "無",
+      },
+      {
+        "title": "相關連結：",
+        "type": "back",
+        "icon": Icons.link,
+        "text": widget.post.link ?? "無",
+        "index": "link"
+      },
     ];
   }
 
@@ -75,7 +101,7 @@ class _PostDetailBodyState extends State<PostDetailBody> {
                 // 大標題
                 MediumText(
                   color: cColor.grey500,
-                  size: 24,
+                  size: Dimensions.height2 * 12,
                   text: widget.post.title!,
                 ),
                 const SizedBox(height: 5),
@@ -99,7 +125,9 @@ class _PostDetailBodyState extends State<PostDetailBody> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      for (var inform in informList)
+                      for (var inform in informList
+                          .where((e) => e["type"] == "front")
+                          .toList())
                         Row(
                           children: [
                             Icon(
@@ -134,6 +162,65 @@ class _PostDetailBodyState extends State<PostDetailBody> {
                     size: Dimensions.height2 * 7,
                     text: widget.post.introduction!,
                     maxLines: 20,
+                  ),
+                ),
+                const SizedBox(height: 18),
+                // 主辦資訊
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  child: MediumText(
+                    color: cColor.grey500,
+                    size: Dimensions.height2 * 8,
+                    text: "主辦資訊",
+                  ),
+                ),
+                Divider(color: cColor.div),
+                // 主辦資訊內容
+                SizedBox(
+                  height: Dimensions.height5 * 20,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      for (var inform in informList
+                          .where((e) => e["type"] == "back")
+                          .toList())
+                        inform["index"] == "link" && widget.post.link == null
+                            ? Container()
+                            : Row(
+                                children: [
+                                  Icon(
+                                    inform["icon"],
+                                    size: Dimensions.height2 * 12,
+                                    color: cColor.grey400,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  RegularText(
+                                    color: cColor.grey500,
+                                    size: Dimensions.height2 * 7,
+                                    text: inform["title"],
+                                  ),
+                                  inform["index"] == "link"
+                                      ? GestureDetector(
+                                          onTap: () => launchUrl(
+                                            Uri.parse(inform["text"]),
+                                          ),
+                                          child: RegularText(
+                                            color: cColor.primary,
+                                            size: Dimensions.height2 * 7,
+                                            text: inform["text"],
+                                          ),
+                                        )
+                                      : RegularText(
+                                          color: cColor.grey500,
+                                          size: Dimensions.height2 * 7,
+                                          text: inform["text"],
+                                        ),
+                                ],
+                              ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 18),
