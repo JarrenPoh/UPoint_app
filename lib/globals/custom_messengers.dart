@@ -73,6 +73,50 @@ class Messenger {
         'dismissed'; // Return 'dismissed' if the dialog is dismissed without selection
   }
 
+  //彈窗Dialog
+  static Future<String> updateDialog(
+    String title,
+    String content,
+    BuildContext context,
+  ) async {
+    CColor cColor = CColor.of(context);
+    final result = await showDialog<String>(
+      context: context,
+      builder: (context) {
+        return CupertinoTheme(
+          data: CupertinoThemeData(barBackgroundColor: cColor.white),
+          child: CupertinoAlertDialog(
+            title: MediumText(
+              color: cColor.grey400,
+              size: Dimensions.height2 * 7,
+              text: title,
+            ),
+            content: MediumText(
+              color: cColor.grey500,
+              size: Dimensions.height2 * 7.5,
+              maxLines: 10,
+              text: content,
+            ),
+            actions: <Widget>[
+              CupertinoDialogAction(
+                onPressed: () => Navigator.of(context).pop('success'),
+                child: MediumText(
+                  color: cColor.primary,
+                  size: Dimensions.height2 * 8,
+                  text: '更新',
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
+    // Return 'result' which will be 'success' or 'cancel'
+    return result ??
+        'dismissed'; // Return 'dismissed' if the dialog is dismissed without selection
+  }
+
   //選日期
   static Future<DateTime?> selectDate(
     BuildContext context,
