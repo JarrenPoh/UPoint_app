@@ -3,7 +3,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:upoint/firebase/auth_methods.dart';
-import 'package:upoint/globals/colors.dart';
 import 'package:upoint/globals/custom_messengers.dart';
 import 'package:upoint/models/user_model.dart';
 import 'package:upoint/pages/login_page.dart';
@@ -16,7 +15,6 @@ class ProfilePageBloc {
   ValueNotifier<List<Map>> personNotifier = ValueNotifier([]);
   ValueNotifier<int> countNotifier = ValueNotifier(0);
   initInform(UserModel? userModel) {
-    print('here02');
     if (userModel != null) {
       if (userModel.signList != null && userModel.signList!.isNotEmpty) {
         countNotifier.value = userModel.signList!.length;
@@ -145,18 +143,23 @@ class ProfilePageBloc {
   ];
 
   List<Map> commonUseList(context, UserModel user) {
-    CColor cColor = CColor.of(context);
+    double size = 20;
     return [
       {
         "title": "編輯個人資料",
-        "icon": Icon(Icons.edit_note_outlined, size: 26, color: cColor.primary),
+        "icon": SvgPicture.asset(
+          width: size,
+          height: size,
+          "assets/edit_profile.svg",
+          fit: BoxFit.cover,
+        ),
         "onTap": () => editProfile(user, context),
       },
       {
         "title": "功能許願池",
         "icon": SvgPicture.asset(
-          width: 26,
-          height: 26,
+          width: size,
+          height: size,
           "assets/fountain.svg",
           fit: BoxFit.cover,
         ),
@@ -171,8 +174,12 @@ class ProfilePageBloc {
       },
       {
         "title": "隱私條約",
-        "icon":
-            Icon(Icons.library_books_outlined, size: 26, color: cColor.primary),
+        "icon": SvgPicture.asset(
+          width: size,
+          height: size,
+          "assets/privacy.svg",
+          fit: BoxFit.cover,
+        ),
         "onTap": () => Navigator.push(
               context,
               MaterialPageRoute(
@@ -185,8 +192,8 @@ class ProfilePageBloc {
       {
         "title": "登出",
         "icon": SvgPicture.asset(
-          width: 26,
-          height: 26,
+          width: size,
+          height: size,
           "assets/logout.svg",
           fit: BoxFit.cover,
         ),
@@ -195,8 +202,8 @@ class ProfilePageBloc {
       {
         "title": "註銷帳號",
         "icon": SvgPicture.asset(
-          width: 26,
-          height: 26,
+          width: size,
+          height: size,
           "assets/key-remove.svg",
           fit: BoxFit.cover,
         ),
