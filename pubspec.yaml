@@ -72,13 +72,14 @@ dependencies:
   dots_indicator: ^3.0.0
 
 
-
+# dart run flutter_native_splash:remove
+# dart run flutter_native_splash:create
 flutter_native_splash:
   android: true
   ios: true
   web: false
   color: "#ffffff"
-  image: "assets/splash_1242*2208.png"
+  image: "assets/splash.png"
 
 dev_dependencies:
   flutter_test:
