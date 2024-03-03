@@ -9,6 +9,8 @@ import 'package:upoint/models/sign_form_model.dart';
 import 'package:upoint/models/user_model.dart';
 import 'package:uuid/uuid.dart';
 
+import '../globals/global.dart';
+
 class FirestoreMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -132,6 +134,9 @@ class FirestoreMethods {
         .get();
     List<QueryDocumentSnapshot> _list = fetchPost.docs.toList();
     List<PostModel> _post = _list.map((e) => PostModel.fromSnap(e)).toList();
+    if (!isDebugging) {
+      _post.removeWhere((e) => debugId.contains(e.organizerUid));
+    }
     debugPrint('找了${fetchPost.docs.length}則貼文');
     return _post;
   }

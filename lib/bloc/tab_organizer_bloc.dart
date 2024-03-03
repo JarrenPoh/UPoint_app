@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:upoint/models/post_model.dart';
+import '../globals/global.dart';
 import '../models/organizer_model.dart';
 
 class TabOrganizerBloc {
@@ -20,13 +21,16 @@ class TabOrganizerBloc {
     _filterOriginList();
   }
 
-  Future<List> _fetchOrganizers() async {
-    QuerySnapshot<Map<String, dynamic>> fetchPost =
+  Future _fetchOrganizers() async {
+    QuerySnapshot<Map<String, dynamic>> fetchOrganizers =
         await FirebaseFirestore.instance.collection('organizers').get();
-    debugPrint('找了${fetchPost.docs.length}個活動方');
-    List<QueryDocumentSnapshot> _list = fetchPost.docs.toList();
+    debugPrint('找了${fetchOrganizers.docs.length}個活動方');
+    List<QueryDocumentSnapshot> _list = fetchOrganizers.docs.toList();
     organListNotifier.value =
         _list.map((e) => OrganizerModel.fromSnap(e)).toList();
+    if (!isDebugging) {
+      organListNotifier.value.removeWhere((e) => debugId.contains(e.uid));
+    }
     // 加入預設
     organListNotifier.value.insert(
       0,
@@ -57,7 +61,6 @@ class TabOrganizerBloc {
         postLengthFromOrgan[tag]?.value = count;
       }
     }
-    return fetchPost.docs.toList();
   }
 
   void filterPostsByOrganizer(int index) {
@@ -70,7 +73,7 @@ class TabOrganizerBloc {
       postListNotifier.value = _list;
       postListNotifier.notifyListeners();
     }
-    // 
+    //
     selectFilterNotifier.value = index;
     selectFilterNotifier.notifyListeners();
   }
