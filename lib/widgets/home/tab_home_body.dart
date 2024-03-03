@@ -76,7 +76,8 @@ class _TabHomeBodyState extends State<TabHomeBody>
                     children: [
                       SizedBox(width: Dimensions.width5 * 4),
                       GestureDetector(
-                        onTap: () => Messenger.toast(context, "尚未開放", "尚未開放，敬請期待"),
+                        onTap: () =>
+                            Messenger.toast(context, "尚未開放", "尚未開放，敬請期待"),
                         child: SizedBox(
                           height: Dimensions.height2 * 29,
                           child: Column(
@@ -133,6 +134,7 @@ class _TabHomeBodyState extends State<TabHomeBody>
                   _bloc.featuredPostValue,
                   _bloc.moreFeatured,
                 ),
+                SizedBox(height: Dimensions.height5),
                 // UPoint猜你喜歡
                 postBlock(
                   "猜你喜歡",
