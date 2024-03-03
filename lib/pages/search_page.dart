@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:upoint/bloc/home_page_bloc.dart';
 import 'package:upoint/globals/colors.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
@@ -12,11 +11,11 @@ import 'package:upoint/widgets/home/post_card.dart';
 import 'package:upoint/widgets/search/search_widget.dart';
 
 class SearchPage extends StatefulWidget {
-  final HomePageBloc bloc;
+  final List<PostModel> allPost;
   final UserModel? user;
   const SearchPage({
     super.key,
-    required this.bloc,
+    required this.allPost,
     required this.user,
   });
 
@@ -62,7 +61,7 @@ class _SearchPageState extends State<SearchPage>
   }
 
   void searchBook(String query) {
-    List<PostModel> postList = widget.bloc.originList.value;
+    List<PostModel> postList = widget.allPost;
 
     if (query != '') {
       return debounce(() async {

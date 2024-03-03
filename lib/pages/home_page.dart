@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:upoint/bloc/home_page_bloc.dart';
 import 'package:upoint/globals/colors.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/scroll_things_provider.dart';
 import 'package:upoint/models/user_model.dart';
-import 'package:upoint/widgets/home/activity_body.dart';
-import 'package:upoint/widgets/home/reward_body.dart';
+import 'package:upoint/widgets/home/tab_organizer_body.dart';
+import 'package:upoint/widgets/home/tab_reward_body.dart';
+
+import '../models/ad_model.dart';
+import '../models/post_model.dart';
+import '../widgets/home/tab_home_body.dart';
+import '../widgets/home/tab_type_body.dart';
 
 class HomePage extends StatefulWidget {
   final Function(int) searchTapped;
-  final HomePageBloc bloc;
+  final List<PostModel> allPost;
   final UserModel? user;
+  final List<AdModel> allAd;
   const HomePage({
     super.key,
     required this.searchTapped,
-    required this.bloc,
+    required this.allPost,
     required this.user,
+    required this.allAd,
   });
 
   @override
@@ -27,12 +33,13 @@ class _HomePageState extends State<HomePage>
     with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   @override
   final bool wantKeepAlive = true;
-
+  List tabList = ["UPoint", "單位", "類別", "獎勵"];
+  late TabController tabController;
   @override
   void initState() {
     super.initState();
-    widget.bloc.tabController = TabController(
-      length: widget.bloc.tabList.length,
+    tabController = TabController(
+      length: tabList.length,
       vsync: this,
       initialIndex: 0,
     );
@@ -79,18 +86,18 @@ class _HomePageState extends State<HomePage>
                             indicatorPadding: EdgeInsets.only(
                               bottom: Dimensions.height2 * 4,
                               top: Dimensions.height2 * 18.5,
-                              left: Dimensions.width5 * 2,
-                              right: Dimensions.width5 * 2,
+                              left:0,
+                              right: 0,
                             ),
                             indicatorWeight: 4,
                             onTap: (value) {
-                              widget.bloc.tabController.index = value;
+                              tabController.index = value;
                             },
-                            controller: widget.bloc.tabController,
+                            controller: tabController,
                             tabs: List.generate(
-                              widget.bloc.tabList.length,
+                              tabList.length,
                               (index) => Tab(
-                                child: Text(widget.bloc.tabList[index]),
+                                child: Text(tabList[index]),
                               ),
                             ),
                           ),
@@ -102,20 +109,34 @@ class _HomePageState extends State<HomePage>
                 body: Builder(
                   builder: (context) {
                     return CustomScrollProvider(
-                      tabController: widget.bloc.tabController,
+                      tabController: tabController,
                       parent: PrimaryScrollController.of(context),
                       child: TabBarView(
-                        controller: widget.bloc.tabController,
+                        controller: tabController,
                         children: [
-                          ActivityBody(
+                          TabHomeBody(
                             index: 0,
-                            bloc: widget.bloc,
                             user: widget.user,
+                            allPost: widget.allPost,
+                            allAd: widget.allAd,
                           ),
-                          RewardBody(
+                          TabOrganizerBody(
                             index: 1,
-                            bloc: widget.bloc,
                             user: widget.user,
+                            allPost: widget.allPost,
+                            allAd: widget.allAd,
+                          ),
+                          TabTypeBody(
+                            index: 2,
+                            user: widget.user,
+                            allPost: widget.allPost,
+                            allAd: widget.allAd,
+                          ),
+                          TabRewardBody(
+                            index: 3,
+                            user: widget.user,
+                            allPost: widget.allPost,
+                            allAd: widget.allAd,
                           ),
                         ],
                       ),

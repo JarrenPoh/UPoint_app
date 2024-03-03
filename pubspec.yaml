@@ -69,6 +69,8 @@ dependencies:
   flutter_svg: ^2.0.10+1
   flutter_quill: 9.2.12
   package_info_plus: ^5.0.1
+  dots_indicator: ^3.0.0
+
 
 
 flutter_native_splash:

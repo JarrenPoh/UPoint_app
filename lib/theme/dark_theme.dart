@@ -20,7 +20,6 @@ ThemeData darkTheme = ThemeData(
     onErrorContainer: Color(0xFFEAEAEA),
     onInverseSurface: Color(0xFFF8F8F8),
     onPrimaryContainer: Color(0xFFFFC169),
-
     primary: Colors.white54,
     secondary: Colors.white38,
     tertiary: Colors.white12,

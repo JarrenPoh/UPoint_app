@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:upoint/firebase/storage_methods.dart';
 import 'package:upoint/globals/user_simple_preference.dart';
+import 'package:upoint/models/ad_model.dart';
 import 'package:upoint/models/post_model.dart';
 import 'package:upoint/models/sign_form_model.dart';
 import 'package:upoint/models/user_model.dart';
@@ -120,6 +121,31 @@ class FirestoreMethods {
             .get();
     PostModel _post = PostModel.fromSnap(fetchPost.docs.toList().first);
     return _post;
+  }
+
+  Future<List<PostModel>> fetchAllPost() async {
+    QuerySnapshot<Map<String, dynamic>> fetchPost = await FirebaseFirestore
+        .instance
+        .collection('posts')
+        .where('endDateTime', isGreaterThanOrEqualTo: DateTime.now())
+        .orderBy('endDateTime', descending: false)
+        .get();
+    List<QueryDocumentSnapshot> _list = fetchPost.docs.toList();
+    List<PostModel> _post = _list.map((e) => PostModel.fromSnap(e)).toList();
+    debugPrint('找了${fetchPost.docs.length}則貼文');
+    return _post;
+  }
+
+  Future<List<AdModel>> fetchAllAd() async {
+    QuerySnapshot<Map<String, dynamic>> fetchPost = await FirebaseFirestore
+        .instance
+        .collection('ads')
+        .orderBy('datePublished', descending: true)
+        .get();
+    List<QueryDocumentSnapshot> _list = fetchPost.docs.toList();
+    List<AdModel> _ads = _list.map((e) => AdModel.fromMap(e)).toList();
+    debugPrint('找了${fetchPost.docs.length}則貼文');
+    return _ads;
   }
 
   //發送Notification

@@ -69,7 +69,7 @@ class _InboxPageState extends State<InboxPage>
         builder: (context) {
           return PostDetailPage(
             post: _p,
-            hero: "activity${_p.datePublished.toString()}",
+            hero: "inbox${_p.datePublished.toString()}",
           );
         },
       ),

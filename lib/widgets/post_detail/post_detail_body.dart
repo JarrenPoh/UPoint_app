@@ -247,6 +247,7 @@ class _PostDetailBodyState extends State<PostDetailBody> {
                     horizontal: Dimensions.width2 * 4,
                   ),
                   decoration: BoxDecoration(
+                    color: cColor.black,
                     borderRadius: BorderRadius.circular(5),
                     border: Border.all(color: cColor.div),
                   ),

@@ -9,6 +9,19 @@ import 'medium_text.dart';
 
 class Messenger {
   // 下方彈出的toast
+  static toast(BuildContext context, String title, String text) {
+    CColor cColor = CColor.of(context);
+    Get.snackbar(
+      title,
+      text,
+      snackPosition: SnackPosition.BOTTOM,
+      duration: const Duration(seconds: 1),
+      backgroundColor: cColor.grey200,
+      colorText: cColor.black,
+    );
+  }
+
+  // 上方彈出的toast
   static snackBar(BuildContext context, String title, String text) {
     CColor cColor = CColor.of(context);
     Get.snackbar(
@@ -16,7 +29,7 @@ class Messenger {
       text,
       snackPosition: SnackPosition.TOP,
       duration: const Duration(seconds: 2),
-      backgroundColor: cColor.white,
+      backgroundColor: cColor.grey400,
       colorText: cColor.black,
     );
   }

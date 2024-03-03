@@ -55,11 +55,6 @@ class _PostCardState extends State<PostCard> {
       },
       {
         "type": "front",
-        "icon": Icons.location_on,
-        "text": widget.post.location,
-      },
-      {
-        "type": "front",
         "icon": Icons.local_play,
         "text": widget.post.reward,
       },

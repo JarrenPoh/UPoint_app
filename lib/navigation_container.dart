@@ -1,13 +1,13 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:upoint/bloc/home_page_bloc.dart';
 import 'package:upoint/bloc/uri_bloc.dart';
 import 'package:upoint/firebase/auth_methods.dart';
+import 'package:upoint/firebase/firestore_methods.dart';
 import 'package:upoint/globals/custom_messengers.dart';
 import 'package:upoint/globals/global.dart';
+import 'package:upoint/models/ad_model.dart';
 import 'package:upoint/models/post_model.dart';
 import 'package:upoint/pages/post_detail_page.dart';
 import 'package:upoint/pages/home_page.dart';
@@ -35,9 +35,9 @@ class _NavigationContainerState extends State<NavigationContainer>
     with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   @override
   bool get wantKeepAlive => true;
-  List<Widget> Function(UserModel?) _pages = (u) => [];
+  List<Widget> Function(UserModel?, List<PostModel>, List<AdModel>) _pages =
+      (u, p, a) => [];
   PageController _pageController = PageController();
-  final HomePageBloc _homePageBloc = HomePageBloc();
 
   Future<void> _initPackageInfo() async {
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
@@ -100,14 +100,14 @@ class _NavigationContainerState extends State<NavigationContainer>
   findAndGoPost(postId) async {
     // UserModel? user =
     //     await Provider.of<AuthMethods>(context, listen: false).getUserDetails();
-    PostModel _p = await _homePageBloc.fetchPostById(postId);
+    PostModel _p = await FirestoreMethods().fetchPostById(postId);
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) {
           return PostDetailPage(
             post: _p,
-            hero: "activity${_p.datePublished.toString()}",
+            hero: "activity${DateTime.now()}",
           );
         },
       ),
@@ -129,10 +129,20 @@ class _NavigationContainerState extends State<NavigationContainer>
     // 其他生命周期变化...
   }
 
+  Future<Map> getUserAndPost() async {
+    final userAccountManager = Provider.of<AuthMethods>(context, listen: false);
+    await userAccountManager.getUserDetails();
+    List<PostModel> post = await FirestoreMethods().fetchAllPost();
+    List<AdModel> ad = await FirestoreMethods().fetchAllAd();
+    return {
+      "post": post,
+      "ad": ad,
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final userAccountManager = Provider.of<AuthMethods>(context, listen: false);
     _initPackageInfo();
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
     Color scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
@@ -147,7 +157,7 @@ class _NavigationContainerState extends State<NavigationContainer>
       child: Scaffold(
         backgroundColor: scaffoldBackgroundColor,
         body: FutureBuilder(
-          future: userAccountManager.getUserDetails(),
+          future: getUserAndPost(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(
@@ -155,35 +165,39 @@ class _NavigationContainerState extends State<NavigationContainer>
                 backgroundColor: onSecondary,
               ));
             }
-            _pages = (UserModel? _user) => [
-                  HomePage(
-                    bloc: _homePageBloc,
-                    searchTapped: searchTapped,
-                    user: _user,
-                  ),
-                  SearchPage(
-                    bloc: _homePageBloc,
-                    user: _user,
-                  ),
-                  LogoPage(),
-                  InboxPage(
-                    user: _user,
-                  ),
-                  ProfilePage(
-                    user: _user,
-                  ),
-                ];
+            _pages =
+                (UserModel? _user, List<PostModel> _post, List<AdModel> ad) => [
+                      HomePage(
+                        allPost: _post,
+                        searchTapped: searchTapped,
+                        user: _user,
+                        allAd: ad,
+                      ),
+                      SearchPage(
+                        allPost: _post,
+                        user: _user,
+                      ),
+                      LogoPage(),
+                      InboxPage(
+                        user: _user,
+                      ),
+                      ProfilePage(
+                        user: _user,
+                      ),
+                    ];
             // }
             return Consumer<AuthMethods>(
               builder: (context, userNotifier, child) {
+                List<PostModel> post = snapshot.data?["post"] ?? [];
+                List<AdModel> ad = snapshot.data?["ad"] ?? [];
                 UserModel? user = userNotifier.user;
                 print('這裡有改');
                 return PageView.builder(
                   physics: const NeverScrollableScrollPhysics(),
                   controller: _pageController,
-                  itemCount: _pages(user).length,
+                  itemCount: _pages(user, post, ad).length,
                   itemBuilder: (context, index) {
-                    return _pages(user)[index];
+                    return _pages(user, post, ad)[index];
                   },
                 );
               },
