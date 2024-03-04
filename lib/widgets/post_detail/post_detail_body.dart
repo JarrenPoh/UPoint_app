@@ -88,6 +88,23 @@ class _PostDetailBodyState extends State<PostDetailBody> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode =
+        MediaQuery.of(context).platformBrightness == Brightness.dark;
+    TextStyle? _sty = isDarkMode
+        ? TextStyle(
+            color: cColor.grey500,
+          )
+        : null;
+    DefaultTextBlockStyle? defaultTextBlockStyle = isDarkMode
+        ? DefaultTextBlockStyle(
+            TextStyle(
+              color: cColor.grey500,
+            ),
+            const VerticalSpacing(0, 0),
+            const VerticalSpacing(0, 0),
+            const BoxDecoration(),
+          )
+        : null;
     return SliverList(
       delegate: SliverChildListDelegate(
         [
@@ -247,12 +264,34 @@ class _PostDetailBodyState extends State<PostDetailBody> {
                     horizontal: Dimensions.width2 * 4,
                   ),
                   decoration: BoxDecoration(
-                    color: cColor.black,
+                    color: cColor.white,
                     borderRadius: BorderRadius.circular(5),
                     border: Border.all(color: cColor.div),
                   ),
                   child: QuillEditor.basic(
                     configurations: QuillEditorConfigurations(
+                      customStyles: DefaultStyles(
+                        h1: defaultTextBlockStyle,
+                        h2: defaultTextBlockStyle,
+                        h3: defaultTextBlockStyle,
+                        h4: defaultTextBlockStyle,
+                        h5: defaultTextBlockStyle,
+                        h6: defaultTextBlockStyle,
+                        paragraph: defaultTextBlockStyle,
+                        sizeSmall: _sty,
+                        bold: _sty,
+                        subscript: _sty,
+                        superscript: _sty,
+                        italic: _sty,
+                        small: _sty,
+                        underline: _sty,
+                        strikeThrough: _sty,
+                        link: TextStyle(
+                          color: cColor.primary,
+                          decoration: TextDecoration.underline,
+                          decorationColor: cColor.primary,
+                        ),
+                      ),
                       controller: _controller,
                       readOnly: true,
                       sharedConfigurations: const QuillSharedConfigurations(
