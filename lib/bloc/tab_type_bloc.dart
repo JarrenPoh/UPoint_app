@@ -8,23 +8,17 @@ class TabTypeBloc {
   final ValueNotifier<int> pageNotifier = ValueNotifier(0);
   late List<PostModel> _allPost;
   ValueNotifier<List<PostModel>> postListNotifier = ValueNotifier([]);
+  Map<String, ValueNotifier<int>> postLengthFromType = {};
   List<String> typeList = [
     "全部",
-    "體驗活動",
+    "演講講座",
     "實習就業",
-    "語言學習",
     "志工服務",
-    "藝文欣賞",
-    "DIY手作",
-    "電腦軟體",
-    "程式語言",
-    "戶外活動",
-    "系學會",
-    "運動",
-    "大自然",
-    "文化交流",
-    "營隊",
     "藝術人文",
+    "資訊科技",
+    "學習成長",
+    "戶外探索",
+    "競賽活動",
   ];
   Map<String, ValueNotifier<int>> postLengthFromOrgan = {};
 
@@ -47,5 +41,17 @@ class TabTypeBloc {
   void filterOriginList() {
     postListNotifier.value = _allPost;
     postListNotifier.notifyListeners();
+    //計算每個獎勵標籤多少活動
+    for (var type in typeList) {
+      if (type == "全部") {
+        postLengthFromType['全部'] = ValueNotifier<int>(0);
+        postLengthFromType['全部']?.value = _allPost.length;
+      } else {
+        postLengthFromType[type] = ValueNotifier<int>(0);
+        int count = _allPost.where((post) => post.postType == type).length;
+        postLengthFromType[type]?.value = count;
+      }
+      postLengthFromType['全部']?.notifyListeners();
+    }
   }
 }

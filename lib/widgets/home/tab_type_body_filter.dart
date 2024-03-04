@@ -104,6 +104,21 @@ class _TabTypeBodyFilterState extends State<TabTypeBodyFilter> {
                         size: Dimensions.height2 * 7,
                         text: e,
                       ),
+                      SizedBox(width: Dimensions.width5 * 2),
+                      ValueListenableBuilder(
+                        valueListenable: widget.bloc.postLengthFromType[e]!,
+                        builder: (
+                          context,
+                          dynamic value,
+                          Widget? child,
+                        ) {
+                          return MediumText(
+                            color: cColor.primary,
+                            size: Dimensions.height2 * 6,
+                            text: value.toString(),
+                          );
+                        },
+                      ),
                     ],
                   ),
                 ),
