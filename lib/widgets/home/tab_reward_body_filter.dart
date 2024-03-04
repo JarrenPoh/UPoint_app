@@ -101,7 +101,8 @@ class _TabRewardBodyFilterState extends State<TabRewardBodyFilter> {
                                                   image: DecorationImage(
                                                     fit: BoxFit.cover,
                                                     image: NetworkImage(
-                                                        _rewardList[index].pic),
+                                                      _rewardList[index].pic,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -138,7 +139,7 @@ class _TabRewardBodyFilterState extends State<TabRewardBodyFilter> {
                               borderRadius: BorderRadius.circular(5),
                             ),
                             child: MediumText(
-                              color: cColor.white,
+                              color: Colors.white,
                               size: Dimensions.height2 * 6,
                               text: value.toString(),
                             ),

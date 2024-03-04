@@ -142,7 +142,7 @@ class _TabOrganizerBodyFilterState extends State<TabOrganizerBodyFilter> {
                               borderRadius: BorderRadius.circular(5),
                             ),
                             child: MediumText(
-                              color: cColor.white,
+                              color: Colors.white,
                               size: Dimensions.height2 * 6,
                               text: value.toString(),
                             ),
