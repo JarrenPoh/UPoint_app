@@ -71,7 +71,7 @@ class TagHomeBloc {
 
   List<Map> buttonList = [
     {
-      "title": "功能許願池(尚未開放)",
+      "title": "功能許願池",
       "icon": "assets/fountain.svg",
       "color": Color(0xFFFFBC7D),
     },

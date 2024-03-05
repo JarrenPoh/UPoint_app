@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -47,6 +48,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
+      themeMode:ThemeMode.system,
       theme: lightTheme,
       darkTheme: darkTheme,
       home: const NavigationContainer(),
@@ -75,6 +77,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 Future<void> setupFlutterNotifications() async {
   //flutter local notification setup
   await flutterLocalSetup();
+  FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
   //允許接收
   FirebaseMessaging.instance.requestPermission();
   //拿token
@@ -115,7 +118,32 @@ Future<void> setupFlutterNotifications() async {
       }
     }
   });
-
+  dynamicLinks.onLink.listen((event) async {
+    debugPrint('firebas dynamic link: ${event.link}');
+    uri = event.link;
+    if (uri != null && uri?.pathSegments != null) {
+      if (uri!.pathSegments.isNotEmpty &&
+          uri!.pathSegments.first == 'activity') {
+        final postId = uri!.queryParameters['id'];
+        PostModel _p = await FirestoreMethods().fetchPostById(postId);
+        Get.to(
+          () => PostDetailPage(
+            post: _p,
+            hero: "activity${DateTime.now()}",
+          ),
+        );
+      } else if (uri!.pathSegments.isNotEmpty &&
+          uri!.pathSegments.first == 'users') {
+        // final userId = uri.queryParameters['id'];
+        // Get.to(
+        //   () => ProfileScreen(
+        //     searchUserUid: userId!,
+        //     hiddenDrawer: false,
+        //   ),
+        // );
+      }
+    }
+  });
   // uriLinkStream.listen((_uri) {
   //   debugPrint('收到: $_uri');
   //   if (_uri != null) {

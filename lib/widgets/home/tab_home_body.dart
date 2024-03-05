@@ -82,7 +82,7 @@ class _TabHomeBodyState extends State<TabHomeBody>
                                 builder: (context) => WishingPage()))
                             : Messenger.toast(context, "尚未開放", "尚未開放，敬請期待"),
                         child: SizedBox(
-                          width: Dimensions.width5 * 10,
+                          width: Dimensions.width5 * 11,
                           child: Column(
                             children: [
                               SizedBox(height: Dimensions.height5 * 2),

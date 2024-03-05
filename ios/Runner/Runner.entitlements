@@ -10,7 +10,7 @@
 	</array>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>applinks:upoint.tw</string>
+		<string>applinks:links.upoint.tw</string>
 	</array>
 </dict>
 </plist>
