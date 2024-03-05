@@ -1,12 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:upoint/bloc/uri_bloc.dart';
 import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/firebase/firestore_methods.dart';
 import 'package:upoint/globals/custom_messengers.dart';
-import 'package:upoint/globals/global.dart';
 import 'package:upoint/models/ad_model.dart';
 import 'package:upoint/models/post_model.dart';
 import 'package:upoint/pages/post_detail_page.dart';
@@ -18,9 +15,8 @@ import 'package:upoint/widgets/custom_bottom_naviagation_bar.dart';
 import 'package:upoint/pages/profile_page.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import 'models/user_model.dart';
-import 'models/version_model.dart';
+import 'new_version-master/lib/new_version.dart';
 
 class NavigationContainer extends StatefulWidget {
   const NavigationContainer({
@@ -40,24 +36,19 @@ class _NavigationContainerState extends State<NavigationContainer>
   PageController _pageController = PageController();
 
   Future<void> _initPackageInfo() async {
-    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
-    PackageInfo info = await PackageInfo.fromPlatform();
-    String _thisVersionStr = "${info.version}+${info.buildNumber}";
-    QuerySnapshot<Map<String, dynamic>> fetchVersion = await FirebaseFirestore
-        .instance
-        .collection('versions')
-        .orderBy('datePublished', descending: true)
-        .limit(1)
-        .get();
-    VersionModel latestVersion = VersionModel.fromMap(fetchVersion.docs.first);
-    String latestVersionStr = isIOS ? latestVersion.iOS : latestVersion.android;
-    if (_thisVersionStr != latestVersionStr) {
+    final newVersion = NewVersion(
+      iOSId: 'com.upoint.ios',
+      androidId: 'com.upoint.android.',
+      iOSAppStoreCountry: "tw",
+    );
+    final status = await newVersion.getVersionStatus();
+    if (status != null && status.canUpdate) {
       await Messenger.updateDialog(
-        "version $latestVersionStr is now available",
+        "version ${status.storeVersion} is now available",
         "請先點擊前往更新最新的版本",
         context,
       );
-      launchUrl(Uri.parse(isIOS ? appleStoreLink : googlePlayLink));
+      launchUrl(Uri.parse(status.appStoreLink));
     }
   }
 
