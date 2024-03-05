@@ -71,37 +71,37 @@ class TagHomeBloc {
 
   List<Map> buttonList = [
     {
-      "title": "最新消息",
-      "icon": "assets/new-box.svg",
-      "color": Color(0xFFD19EEA),
-    },
-    {
-      "title": "功能許願池",
+      "title": "功能許願池(尚未開放)",
       "icon": "assets/fountain.svg",
       "color": Color(0xFFFFBC7D),
     },
     {
-      "title": "APP更新資訊",
+      "title": "最新消息(尚未開放)",
+      "icon": "assets/new-box.svg",
+      "color": Color(0xFFD19EEA),
+    },
+    {
+      "title": "APP更新資訊(尚未開放)",
       "icon": "assets/rocket-launch.svg",
       "color": Color(0xFFFF7D7D),
     },
     {
-      "title": "工讀徵才",
+      "title": "工讀徵才(尚未開放)",
       "icon": "assets/briefcase-variant.svg",
       "color": Color(0xFF80CE88),
     },
     {
-      "title": "尚未開放",
+      "title": "(尚未開放)",
       "icon": "assets/bow-arrow.svg",
       "color": Color(0xFFFE9669),
     },
     {
-      "title": "尚未開放",
+      "title": "(尚未開放)",
       "icon": "assets/bow-arrow.svg",
       "color": Color(0xFFFE9669),
     },
     {
-      "title": "尚未開放",
+      "title": "(尚未開放)",
       "icon": "assets/bow-arrow.svg",
       "color": Color(0xFFFE9669),
     },

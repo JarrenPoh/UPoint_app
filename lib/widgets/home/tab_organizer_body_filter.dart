@@ -39,7 +39,7 @@ class _TabOrganizerBodyFilterState extends State<TabOrganizerBodyFilter> {
         builder: (context, value, child) {
           List<OrganizerModel> _organList = value;
           if (_organList.isEmpty) {
-            return CircularProgressIndicator(color: cColor.black);
+            return CircularProgressIndicator.adaptive(backgroundColor: cColor.black);
           }
           return ListView(
             shrinkWrap: true,

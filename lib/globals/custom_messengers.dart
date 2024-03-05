@@ -87,6 +87,89 @@ class Messenger {
   }
 
   //彈窗Dialog
+  static Future<Map> wishDialog(
+    BuildContext context,
+  ) async {
+    CColor cColor = CColor.of(context);
+    final TextEditingController _controller = TextEditingController();
+    String? result = await showDialog<String>(
+      context: context,
+      builder: (context) {
+        return CupertinoTheme(
+          data: const CupertinoThemeData(),
+          child: CupertinoAlertDialog(
+            title: MediumText(
+              color: cColor.grey500,
+              size: Dimensions.height2 * 8,
+              text: "留下許願內容",
+            ),
+            content: Material(
+              color: Colors.transparent,
+              child: Container(
+                height: Dimensions.height2 * 96,
+                width: Dimensions.width5 * 52,
+                margin: EdgeInsets.symmetric(
+                  vertical: Dimensions.height2 * 8,
+                ),
+                padding: EdgeInsets.all(Dimensions.height5 * 2),
+                decoration: BoxDecoration(
+                  border: Border.all(color: cColor.grey200),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: TextField(
+                  controller: _controller,
+                  autofocus: true,
+                  maxLines: 20,
+                  keyboardType: TextInputType.multiline,
+                  style: TextStyle(
+                    color: cColor.grey500,
+                    fontSize: Dimensions.height2 * 8,
+                    fontFamily: "NotoSansRegular",
+                  ),
+                  decoration: InputDecoration(
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: Dimensions.height5),
+                    enabledBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                  ),
+                ),
+              ),
+            ),
+            actions: <Widget>[
+              CupertinoDialogAction(
+                onPressed: () => Navigator.of(context).pop(_controller.text),
+                child: Container(
+                  width: Dimensions.width2 * 52,
+                  height: Dimensions.height2 * 18,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: cColor.primary,
+                  ),
+                  child: Center(
+                    child: MediumText(
+                      color: Colors.white,
+                      size: Dimensions.height2 * 8,
+                      text: '送出願望',
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
+    return result == null
+        ? {"status": "failed"}
+        : {
+            "status": "success",
+            "text": result,
+          };
+  }
+
+  //彈窗Dialog
   static Future<String> updateDialog(
     String title,
     String content,

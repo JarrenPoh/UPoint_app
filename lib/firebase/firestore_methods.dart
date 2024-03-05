@@ -10,6 +10,7 @@ import 'package:upoint/models/user_model.dart';
 import 'package:uuid/uuid.dart';
 
 import '../globals/global.dart';
+import '../models/wish_model.dart';
 
 class FirestoreMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -181,6 +182,53 @@ class FirestoreMethods {
       });
     } catch (e) {
       debugPrint(e.toString());
+    }
+  }
+
+  //上傳許願
+  Future<String> uploadWishing(
+    UserModel user,
+    String content,
+  ) async {
+    String res = "some error occur";
+    String wishId = const Uuid().v1();
+    try {
+      //以下尚未填過
+      WishModel wish = WishModel(
+        datePublished: DateTime.now(),
+        content: content,
+        wishId: wishId,
+        uid: user.uuid,
+        rateList: [],
+      );
+      // 上傳到posts collection下的signForms collection
+      await _firestore.collection('wishes').doc(wishId).set(wish.toJson());
+      res = 'success';
+    } catch (err) {
+      res = err.toString();
+      debugPrint('err${err.toString()}');
+    }
+    return res;
+  }
+
+  //點贊許願
+  Future likeWishing(UserModel user, WishModel wish) async {
+    try {
+      //以下尚未填過
+      List rateList = wish.rateList;
+      if (rateList.contains(user.uuid)) {
+        print('herer');
+        await _firestore.collection('wishes').doc(wish.wishId).update({
+          'rateList': FieldValue.arrayRemove([user.uuid]),
+        });
+      } else {
+        print('herer11');
+        await _firestore.collection('wishes').doc(wish.wishId).update({
+          'rateList': FieldValue.arrayUnion([user.uuid])
+        });
+      }
+    } catch (err) {
+      debugPrint('err${err.toString()}');
     }
   }
 }

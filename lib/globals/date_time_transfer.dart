@@ -51,6 +51,13 @@ class TimeTransfer {
     }
   }
 
+  //start&end TimeStamp to 2024-09-15 20:54
+  static String timeTrans06(Timestamp time) {
+    DateTime dateTime = time.toDate();
+    String dateStr = "${dateTime.year}-${dateTime.month}-${dateTime.day}";
+    return "$dateStr ${timeTrans02(time)}";
+  }
+
   //DateTime -> 91-09-15
   static String convertToROC(DateTime date) {
     // 计算民国年份

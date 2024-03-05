@@ -7,6 +7,7 @@ import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/globals/regular_text.dart';
 import 'package:upoint/models/ad_model.dart';
+import 'package:upoint/pages/wishing_page.dart';
 import 'package:upoint/widgets/home/ad_layout.dart';
 
 import '../../globals/colors.dart';
@@ -66,7 +67,7 @@ class _TabHomeBodyState extends State<TabHomeBody>
         SliverToBoxAdapter(
           child: Container(
             color: cColor.white,
-            height: Dimensions.height5 * 18,
+            height: Dimensions.height5 * 19,
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: List.generate(
@@ -76,13 +77,15 @@ class _TabHomeBodyState extends State<TabHomeBody>
                     children: [
                       SizedBox(width: Dimensions.width5 * 4),
                       GestureDetector(
-                        onTap: () =>
-                            Messenger.toast(context, "尚未開放", "尚未開放，敬請期待"),
+                        onTap: () => index == 0
+                            ? Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => WishingPage()))
+                            : Messenger.toast(context, "尚未開放", "尚未開放，敬請期待"),
                         child: SizedBox(
-                          height: Dimensions.height2 * 29,
+                          width: Dimensions.width5 * 10,
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
+                              SizedBox(height: Dimensions.height5 * 2),
                               Stack(
                                 alignment: Alignment.center,
                                 children: [
@@ -105,10 +108,12 @@ class _TabHomeBodyState extends State<TabHomeBody>
                                   ),
                                 ],
                               ),
+                              SizedBox(height: Dimensions.height5 * 1),
                               RegularText(
                                 color: cColor.grey500,
                                 size: 10,
                                 text: _bloc.buttonList[index]["title"],
+                                maxLines: 2,
                               ),
                             ],
                           ),

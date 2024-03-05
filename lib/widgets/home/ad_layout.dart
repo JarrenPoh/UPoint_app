@@ -54,7 +54,7 @@ class _AdLayoutState extends State<AdLayout> {
                     dotsCount: widget.allAd.length,
                     position: value,
                     decorator: DotsDecorator(
-                      activeColor: cColor.white,
+                      activeColor: cColor.primary,
                       color: Colors.white.withOpacity(0.5),
                       size: Size.square(Dimensions.width5 * 2),
                       activeSize:

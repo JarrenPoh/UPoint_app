@@ -39,7 +39,7 @@ class _TabRewardBodyFilterState extends State<TabRewardBodyFilter> {
         builder: (context, value, child) {
           List<RewardTagModel> _rewardList = value;
           if (_rewardList.isEmpty) {
-            return CircularProgressIndicator(color: cColor.black);
+            return CircularProgressIndicator.adaptive(backgroundColor: cColor.black);
           }
           return ListView(
             shrinkWrap: true,
