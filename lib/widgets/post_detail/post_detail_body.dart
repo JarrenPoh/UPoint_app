@@ -80,7 +80,7 @@ class _PostDetailBodyState extends State<PostDetailBody> {
         "title": "相關連結：",
         "type": "back",
         "icon": Icons.link,
-        "text": widget.post.link ?? "無",
+        "text": "點擊我前往",
         "index": "link"
       },
     ];
@@ -224,7 +224,7 @@ class _PostDetailBodyState extends State<PostDetailBody> {
                                   inform["index"] == "link"
                                       ? GestureDetector(
                                           onTap: () => launchUrl(
-                                            Uri.parse(inform["text"]),
+                                            Uri.parse(widget.post.link!),
                                           ),
                                           child: RegularText(
                                             color: cColor.primary,
