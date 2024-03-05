@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:upoint/globals/colors.dart';
+import 'package:upoint/globals/regular_text.dart';
 
 import 'dimension.dart';
 import 'medium_text.dart';
@@ -16,7 +17,7 @@ class Messenger {
       text,
       snackPosition: SnackPosition.BOTTOM,
       duration: const Duration(seconds: 1),
-      backgroundColor: cColor.grey200,
+      backgroundColor: cColor.white,
       colorText: cColor.black,
     );
   }
@@ -29,7 +30,7 @@ class Messenger {
       text,
       snackPosition: SnackPosition.TOP,
       duration: const Duration(seconds: 2),
-      backgroundColor: cColor.grey400,
+      backgroundColor: cColor.white,
       colorText: cColor.black,
     );
   }
@@ -90,73 +91,12 @@ class Messenger {
   static Future<Map> wishDialog(
     BuildContext context,
   ) async {
-    CColor cColor = CColor.of(context);
-    final TextEditingController _controller = TextEditingController();
     String? result = await showDialog<String>(
       context: context,
       builder: (context) {
         return CupertinoTheme(
           data: const CupertinoThemeData(),
-          child: CupertinoAlertDialog(
-            title: MediumText(
-              color: cColor.grey500,
-              size: Dimensions.height2 * 8,
-              text: "留下許願內容",
-            ),
-            content: Material(
-              color: Colors.transparent,
-              child: Container(
-                height: Dimensions.height2 * 96,
-                width: Dimensions.width5 * 52,
-                margin: EdgeInsets.symmetric(
-                  vertical: Dimensions.height2 * 8,
-                ),
-                padding: EdgeInsets.all(Dimensions.height5 * 2),
-                decoration: BoxDecoration(
-                  border: Border.all(color: cColor.grey200),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: TextField(
-                  controller: _controller,
-                  autofocus: true,
-                  maxLines: 20,
-                  keyboardType: TextInputType.multiline,
-                  style: TextStyle(
-                    color: cColor.grey500,
-                    fontSize: Dimensions.height2 * 8,
-                    fontFamily: "NotoSansRegular",
-                  ),
-                  decoration: InputDecoration(
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: Dimensions.height5),
-                    enabledBorder: InputBorder.none,
-                    disabledBorder: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                  ),
-                ),
-              ),
-            ),
-            actions: <Widget>[
-              CupertinoDialogAction(
-                onPressed: () => Navigator.of(context).pop(_controller.text),
-                child: Container(
-                  width: Dimensions.width2 * 52,
-                  height: Dimensions.height2 * 18,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: cColor.primary,
-                  ),
-                  child: Center(
-                    child: MediumText(
-                      color: Colors.white,
-                      size: Dimensions.height2 * 8,
-                      text: '送出願望',
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+          child: WishDialog(),
         );
       },
     );
@@ -265,5 +205,114 @@ class Messenger {
       },
     );
     return picked;
+  }
+}
+
+class WishDialog extends StatefulWidget {
+  const WishDialog({super.key});
+
+  @override
+  State<WishDialog> createState() => WishDialogState();
+}
+
+class WishDialogState extends State<WishDialog> {
+  final TextEditingController _controller = TextEditingController();
+  String? errorText;
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(() {
+      if (errorText != null) {
+        setState(() {
+          _controller.text.trim() == '' ? null : errorText = null;
+        });
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    CColor cColor = CColor.of(context);
+    return CupertinoAlertDialog(
+      title: MediumText(
+        color: cColor.grey500,
+        size: Dimensions.height2 * 8,
+        text: "留下許願內容",
+      ),
+      content: Column(
+        children: [
+          Material(
+            color: Colors.transparent,
+            child: Container(
+              height: Dimensions.height2 * 96,
+              width: Dimensions.width5 * 52,
+              margin: EdgeInsets.symmetric(
+                vertical: Dimensions.height2 * 8,
+              ),
+              padding: EdgeInsets.all(Dimensions.height5 * 2),
+              decoration: BoxDecoration(
+                color:cColor.white,
+                border: Border.all(
+                    color: errorText != null ? Colors.red : cColor.grey400),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: TextField(
+                controller: _controller,
+                autofocus: true,
+                maxLines: 20,
+                keyboardType: TextInputType.multiline,
+                style: TextStyle(
+                  color: cColor.grey500,
+                  fontSize: Dimensions.height2 * 8,
+                  fontFamily: "NotoSansRegular",
+                ),
+                decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: Dimensions.height5),
+                  enabledBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                ),
+              ),
+            ),
+          ),
+          if (errorText != null)
+            RegularText(
+              color: Colors.red,
+              size: Dimensions.height2 * 6,
+              text: errorText!,
+            ),
+        ],
+      ),
+      actions: <Widget>[
+        CupertinoDialogAction(
+          onPressed: () {
+            print("object:${_controller.text.trim()}");
+            if (_controller.text.trim() == "") {
+              setState(() {
+                errorText = "請至少輸入一個字元";
+              });
+            } else {
+              Navigator.of(context).pop(_controller.text);
+            }
+          },
+          child: Container(
+            width: Dimensions.width2 * 52,
+            height: Dimensions.height2 * 18,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: cColor.primary,
+            ),
+            child: Center(
+              child: MediumText(
+                color: Colors.white,
+                size: Dimensions.height2 * 8,
+                text: '送出願望',
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

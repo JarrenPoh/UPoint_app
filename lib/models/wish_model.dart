@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class WishModel {
-  final datePublished;
+  var datePublished;
   final String content;
   final String wishId;
   final String uid;

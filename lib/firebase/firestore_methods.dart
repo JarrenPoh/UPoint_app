@@ -187,22 +187,12 @@ class FirestoreMethods {
 
   //上傳許願
   Future<String> uploadWishing(
-    UserModel user,
-    String content,
+    WishModel wish,
   ) async {
     String res = "some error occur";
-    String wishId = const Uuid().v1();
     try {
-      //以下尚未填過
-      WishModel wish = WishModel(
-        datePublished: DateTime.now(),
-        content: content,
-        wishId: wishId,
-        uid: user.uuid,
-        rateList: [],
-      );
       // 上傳到posts collection下的signForms collection
-      await _firestore.collection('wishes').doc(wishId).set(wish.toJson());
+      await _firestore.collection('wishes').doc(wish.wishId).set(wish.toJson());
       res = 'success';
     } catch (err) {
       res = err.toString();
