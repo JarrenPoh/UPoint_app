@@ -64,7 +64,7 @@ class _ProfilePageState extends State<ProfilePage>
               Row(
                 children: [
                   // Upoints coin
-                  scnContainer(0, "0"),
+                  scnContainer(0, "915"),
                   SizedBox(width: Dimensions.width2 * 8),
                   ValueListenableBuilder(
                     valueListenable: _bloc.countNotifier,
