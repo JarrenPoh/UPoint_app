@@ -1,446 +1,204 @@
-// // import 'dart:io';
+// // Copyright 2021 The Chromium Authors. All rights reserved.
+// // Use of this source code is governed by a BSD-style license that can be
+// // found in the LICENSE file.
 
+// import 'dart:async';
+
+// import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 // import 'package:flutter/material.dart';
-// import 'package:upoint/globals/bold_text.dart';
-// import 'package:upoint/globals/dimension.dart';
-// import 'package:upoint/globals/medium_text.dart';
-// import 'package:upoint/globals/regular_text.dart';
-// import 'package:upoint/pages/login_page.dart';
+// import 'package:flutter/services.dart';
+// import 'package:url_launcher/url_launcher.dart';
 
-// class ProfilePage extends StatefulWidget {
-//   const ProfilePage({super.key});
+// import 'firebase_options.dart';
 
-//   @override
-//   State<ProfilePage> createState() => _ProfilePageState();
+// Future<void> main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   // iOS requires you run in release mode to test dynamic links ("flutter run --release").
+//   await Firebase.initializeApp(
+//     options: DefaultFirebaseOptions.currentPlatform,
+//   );
+
+//   runApp(
+//     MaterialApp(
+//       title: 'Dynamic Links Example',
+//       routes: <String, WidgetBuilder>{
+//         '/': (BuildContext context) => _MainScreen(),
+//         '/helloworld': (BuildContext context) => _DynamicLinkScreen(),
+//       },
+//     ),
+//   );
 // }
 
-// class _ProfilePageState extends State<ProfilePage> {
+// class _MainScreen extends StatefulWidget {
+//   @override
+//   State<StatefulWidget> createState() => _MainScreenState();
+// }
+
+// class _MainScreenState extends State<_MainScreen> {
+//   String? _linkMessage;
+//   bool _isCreatingLink = false;
+
+//   FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
+//   final String _testString =
+//       'To test: long press link and then copy and click from a non-browser '
+//       "app. Make sure this isn't being tested on iOS simulator and iOS xcode "
+//       'is properly setup. Look at firebase_dynamic_links/README.md for more '
+//       'details.';
+
+//   final String DynamicLink = 'https://example/helloworld';
+//   final String Link = 'https://flutterfiretests.page.link/MEGs';
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     initDynamicLinks();
+//   }
+
+//   Future<void> initDynamicLinks() async {
+//     dynamicLinks.onLink.listen((dynamicLinkData) {
+//       Navigator.pushNamed(context, dynamicLinkData.link.path);
+//     }).onError((error) {
+//       print('onLink error');
+//       print(error.message);
+//     });
+//   }
+
+//   Future<void> _createDynamicLink(bool short) async {
+//     setState(() {
+//       _isCreatingLink = true;
+//     });
+
+//     final DynamicLinkParameters parameters = DynamicLinkParameters(
+//       uriPrefix: 'https://flutterfiretests.page.link',
+//       longDynamicLink: Uri.parse(
+//         'https://flutterfiretests.page.link?efr=0&ibi=io.flutter.plugins.firebase.dynamiclinksexample&apn=io.flutter.plugins.firebase.dynamiclinksexample&imv=0&amv=0&link=https%3A%2F%2Fexample%2Fhelloworld&ofl=https://ofl-example.com',
+//       ),
+//       link: Uri.parse(DynamicLink),
+//       androidParameters: const AndroidParameters(
+//         packageName: 'io.flutter.plugins.firebase.dynamiclinksexample',
+//         minimumVersion: 0,
+//       ),
+//       iosParameters: const IOSParameters(
+//         bundleId: 'io.flutter.plugins.firebase.dynamiclinksexample',
+//         minimumVersion: '0',
+//       ),
+//     );
+
+//     Uri url;
+//     if (short) {
+//       final ShortDynamicLink shortLink =
+//           await dynamicLinks.buildShortLink(parameters);
+//       url = shortLink.shortUrl;
+//     } else {
+//       url = await dynamicLinks.buildLink(parameters);
+//     }
+
+//     setState(() {
+//       _linkMessage = url.toString();
+//       _isCreatingLink = false;
+//     });
+//   }
+
 //   @override
 //   Widget build(BuildContext context) {
-//     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
-//     Color primary = Theme.of(context).colorScheme.primary;
-//     Color hintColor = Theme.of(context).hintColor;
-//     Color appBarColor = Theme.of(context).appBarTheme.backgroundColor!;
-
-//     return Scaffold(
-//       body: SafeArea(
-//         child: SingleChildScrollView(
-//           child: Column(
-//             children: [
-//               firstContainer(),
-//               Padding(
-//                 padding:
-//                     const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
-//                 child: Column(
-//                   children: [
-//                     Row(
-//                       children: [
-//                         scnContainer(0, "1,800"),
-//                         SizedBox(width: 16),
-//                         scnContainer(1, "18次"),
-//                       ],
-//                     ),
-//                     SizedBox(height: 16),
-//                     Container(
-//                       decoration: BoxDecoration(
-//                         color: appBarColor,
-//                         borderRadius: BorderRadius.circular(16),
-//                         boxShadow: [
-//                           BoxShadow(
-//                             color: Color.fromRGBO(0, 0, 0, 0.05),
-//                             offset: Offset(2, 2),
-//                             blurRadius: 3,
-//                             spreadRadius: 0,
-//                           )
-//                         ],
-//                       ),
-//                       child: Padding(
-//                         padding: const EdgeInsets.symmetric(vertical: 8.0),
-//                         child: Center(
-//                           child: Column(
-//                             crossAxisAlignment: CrossAxisAlignment.start,
-//                             children: [
-//                               Padding(
-//                                 padding: const EdgeInsets.symmetric(
-//                                     vertical: 8.0, horizontal: 16.0),
-//                                 child: Row(
-//                                   children: [
-//                                     Expanded(
-//                                       child: BoldText(
-//                                         color: onSecondary,
-//                                         size: 16,
-//                                         text: "Hi~ XXX / 個人資料",
-//                                       ),
-//                                     ),
-//                                     GestureDetector(
-//                                       onTap: () {},
-//                                       child: Icon(
-//                                         Icons.edit,
-//                                         color: Colors.grey,
-//                                       ),
-//                                     )
-//                                   ],
-//                                 ),
-//                               ),
-//                               Divider(thickness: 1, color: Colors.grey),
-//                               Column(
-//                                 crossAxisAlignment: CrossAxisAlignment.start,
-//                                 children: [
-//                                   profileRow("學校：中原大學"),
-//                                   profileRow("系級：資管三乙"),
-//                                   profileRow("學校：學號：110442xx"),
-//                                   profileRow("連絡電話：0912123456"),
-//                                   profileRow("電子郵件：upoint@gmail.com"),
-//                                 ],
-//                               )
-//                             ],
-//                           ),
-//                         ),
-//                       ),
-//                     ),
-//                     SizedBox(height: 16),
-//                     Container(
-//                       // height: Dimensions.width2 * 85,
-//                       decoration: BoxDecoration(
-//                         color: appBarColor,
-//                         borderRadius: BorderRadius.circular(16),
-//                         boxShadow: [
-//                           BoxShadow(
-//                             color: Color.fromRGBO(0, 0, 0, 0.05),
-//                             offset: Offset(2, 2),
-//                             blurRadius: 3,
-//                             spreadRadius: 0,
-//                           )
-//                         ],
-//                       ),
-//                       child: Padding(
-//                         padding: const EdgeInsets.symmetric(vertical: 8.0),
-//                         child: Center(
-//                           child: Column(
-//                             crossAxisAlignment: CrossAxisAlignment.start,
-//                             children: [
-//                               Padding(
-//                                 padding: const EdgeInsets.symmetric(
-//                                     vertical: 8.0, horizontal: 16.0),
-//                                 child: BoldText(
-//                                   color: onSecondary,
-//                                   size: 16,
-//                                   text: "常用功能",
-//                                 ),
-//                               ),
-//                               Divider(thickness: 1, color: Colors.grey),
-//                               Column(
-//                                 children: [
-//                                   funcBtn(
-//                                     Container(),
-//                                     Icons.edit_note_outlined,
-//                                     "編輯個人資料",
-//                                   ),
-//                                   funcBtn(
-//                                     Container(),
-//                                     Icons.settings_outlined,
-//                                     "設定",
-//                                   ),
-//                                   funcBtn(
-//                                     Container(),
-//                                     Icons.logout,
-//                                     "登出",
-//                                   ),
-//                                 ],
-//                               )
-//                             ],
-//                           ),
-//                         ),
-//                       ),
-//                     ),
-//                     SizedBox(height: 16),
-//                     Container(
-//                       // height: Dimensions.width2 * 85,
-//                       decoration: BoxDecoration(
-//                         color: appBarColor,
-//                         borderRadius: BorderRadius.circular(16),
-//                         boxShadow: const [
-//                           BoxShadow(
-//                             color: Color.fromRGBO(0, 0, 0, 0.05),
-//                             offset: Offset(2, 2),
-//                             blurRadius: 3,
-//                             spreadRadius: 0,
-//                           )
-//                         ],
-//                       ),
-//                       child: Padding(
-//                         padding: const EdgeInsets.symmetric(vertical: 16.0),
-//                         child: Center(
-//                           child: Column(
-//                             crossAxisAlignment: CrossAxisAlignment.start,
-//                             children: [
-//                               Center(
-//                                 child: Column(
-//                                   children: [
-//                                     Padding(
-//                                       padding: const EdgeInsets.symmetric(
-//                                           vertical: 8.0),
-//                                       child: RegularText(
-//                                         color: onSecondary,
-//                                         size: 14,
-//                                         text: "歡迎登入，查看更多資訊",
-//                                       ),
-//                                     ),
-//                                     MaterialButton(
-//                                       onPressed: () {
-//                                         Navigator.push(
-//                                           context,
-//                                           MaterialPageRoute(
-//                                             builder: (context) => LoginPage(),
-//                                           ),
-//                                         );
-//                                       },
-//                                       child: MediumText(
-//                                         color: onSecondary,
-//                                         size: 16,
-//                                         text: "登入",
-//                                       ),
-//                                     ),
-//                                   ],
-//                                 ),
-//                               ),
-//                             ],
-//                           ),
-//                         ),
-//                       ),
-//                     ),
-//                     SizedBox(height: 16),
-//                   ],
-//                 ),
-//               ),
-//             ],
-//           ),
+//     return Material(
+//       child: Scaffold(
+//         appBar: AppBar(
+//           title: const Text('Dynamic Links Example'),
 //         ),
-//       ),
-//     );
-//   }
+//         body: Builder(
+//           builder: (BuildContext context) {
+//             return Center(
+//               child: Column(
+//                 mainAxisAlignment: MainAxisAlignment.center,
+//                 children: <Widget>[
+//                   ButtonBar(
+//                     alignment: MainAxisAlignment.center,
+//                     children: <Widget>[
+//                       ElevatedButton(
+//                         onPressed: () async {
+//                           final PendingDynamicLinkData? data =
+//                               await dynamicLinks.getInitialLink();
+//                           final Uri? deepLink = data?.link;
 
-//   Widget funcBtn(
-//     Widget widget,
-//     IconData iconData,
-//     String str,
-//   ) {
-//     Color hintColor = Theme.of(context).hintColor;
-//     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
-//     return MaterialButton(
-//       onPressed: () {
-//         Navigator.push(
-//           context,
-//           MaterialPageRoute(
-//             builder: (context) => widget,
-//           ),
-//         );
-//       },
-//       child: Padding(
-//         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-//         child: Row(
-//           children: [
-//             Icon(
-//               iconData,
-//               size: 30,
-//               color: hintColor,
-//             ),
-//             SizedBox(width: 10),
-//             RegularText(
-//               color: onSecondary,
-//               size: Dimensions.height2 * 7,
-//               text: str,
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
+//                           if (deepLink != null) {
+//                             // ignore: unawaited_futures
+//                             Navigator.pushNamed(context, deepLink.path);
+//                           }
+//                         },
+//                         child: const Text('getInitialLink'),
+//                       ),
+//                       ElevatedButton(
+//                         onPressed: () async {
+//                           final PendingDynamicLinkData? data =
+//                               await dynamicLinks
+//                                   .getDynamicLink(Uri.parse(Link));
+//                           final Uri? deepLink = data?.link;
 
-//   Widget profileRow(str) {
-//     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
-//     return Padding(
-//       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-//       child: Row(
-//         children: [
-//           SizedBox(width: 10),
-//           RegularText(
-//             color: onSecondary,
-//             size: Dimensions.height2 * 7,
-//             text: str,
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-
-//   Widget scnContainer(int index, String str) {
-//     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
-//     Color appBarColor = Theme.of(context).appBarTheme.backgroundColor!;
-//     return Expanded(
-//       child: Container(
-//         // width: Dimensions.width2 * 20,
-//         decoration: BoxDecoration(
-//           color: appBarColor,
-//           borderRadius: BorderRadius.circular(16),
-//           boxShadow: [
-//             BoxShadow(
-//               color: Color.fromRGBO(0, 0, 0, 0.05),
-//               offset: Offset(2, 2),
-//               blurRadius: 3,
-//               spreadRadius: 0,
-//             )
-//           ],
-//         ),
-//         child: Padding(
-//           padding: const EdgeInsets.all(16.0),
-//           child:
-//               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-//             MediumText(
-//               color: onSecondary,
-//               size: 14,
-//               text: index == 0 ? "UPoints" : "活動紀錄",
-//             ),
-//             SizedBox(height: 8),
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               crossAxisAlignment: CrossAxisAlignment.center,
-//               children: [
-//                 index == 0
-//                     ? Image.asset(
-//                         "assets/coin.png",
-//                         width: Dimensions.width2 * 10,
-//                       )
-//                     : Container(),
-//                 SizedBox(width: index == 0 ? 8 : 0),
-//                 BoldText(
-//                   color: onSecondary,
-//                   size: 18,
-//                   text: str,
-//                 ),
-//               ],
-//             )
-//           ]),
-//         ),
-//       ),
-//     );
-//   }
-
-//   Widget firstContainer() {
-//     Color hintColor = Theme.of(context).hintColor;
-//     return Stack(
-//       alignment: Alignment.center,
-//       children: [
-//         ClipPath(
-//           clipper: MyClipper(),
-//           child: Container(
-//             height: Dimensions.height2 * 70,
-//             decoration: BoxDecoration(
-//               gradient: LinearGradient(
-//                 begin: Alignment.topCenter,
-//                 end: Alignment.bottomCenter,
-//                 colors: [Color(0xFFFFD396), hintColor],
-//               ),
-//               boxShadow: [
-//                 BoxShadow(
-//                   color: Color.fromRGBO(0, 0, 0, 0.14),
-//                   offset: Offset(0, 2),
-//                   blurRadius: 5,
-//                   spreadRadius: 1,
-//                 )
-//               ],
-//             ),
-//           ),
-//         ),
-//         Positioned(
-//           bottom: 10,
-//           child: Stack(
-//             children: [
-//               Stack(
-//                 alignment: Alignment.center,
-//                 children: [
-//                   Container(
-//                     width: Dimensions.width2 * 42,
-//                     height: Dimensions.width2 * 42,
-//                     decoration: BoxDecoration(
-//                       color: Colors.white,
-//                       shape: BoxShape.circle,
-//                       boxShadow: [
-//                         BoxShadow(
-//                           color: Color.fromRGBO(0, 0, 0, 0.05),
-//                           offset: Offset(2, 2),
-//                           blurRadius: 3,
-//                           spreadRadius: 0,
-//                         )
-//                       ],
+//                           if (deepLink != null) {
+//                             // ignore: unawaited_futures
+//                             Navigator.pushNamed(context, deepLink.path);
+//                           }
+//                         },
+//                         child: const Text('getDynamicLink'),
+//                       ),
+//                       ElevatedButton(
+//                         onPressed: !_isCreatingLink
+//                             ? () => _createDynamicLink(false)
+//                             : null,
+//                         child: const Text('Get Long Link'),
+//                       ),
+//                       ElevatedButton(
+//                         onPressed: !_isCreatingLink
+//                             ? () => _createDynamicLink(true)
+//                             : null,
+//                         child: const Text('Get Short Link'),
+//                       ),
+//                     ],
+//                   ),
+//                   InkWell(
+//                     onTap: () async {
+//                       if (_linkMessage != null) {
+//                         await launchUrl(Uri.parse(_linkMessage!));
+//                       }
+//                     },
+//                     onLongPress: () {
+//                       if (_linkMessage != null) {
+//                         Clipboard.setData(ClipboardData(text: _linkMessage!));
+//                         ScaffoldMessenger.of(context).showSnackBar(
+//                           const SnackBar(content: Text('Copied Link!')),
+//                         );
+//                       }
+//                     },
+//                     child: Text(
+//                       _linkMessage ?? '',
+//                       style: const TextStyle(color: Colors.blue),
 //                     ),
 //                   ),
-//                   ClipOval(
-//                     child: Image.asset(
-//                       'assets/profile.png',
-//                       width: Dimensions.width2 * 38,
-//                       height: Dimensions.width2 * 38,
-//                       fit: BoxFit.cover,
-//                       errorBuilder: (BuildContext context, Object exception,
-//                           StackTrace? stackTrace) {
-//                         return Icon(
-//                           Icons.account_circle,
-//                           size: Dimensions.width2 * 44,
-//                           color: Colors.grey[600],
-//                         );
-//                       },
-//                     ),
-//                   )
+//                   Text(_linkMessage == null ? '' : _testString),
 //                 ],
 //               ),
-//               Positioned(
-//                 right: Dimensions.width2 * 1,
-//                 bottom: Dimensions.width2 * 1,
-//                 child: Stack(
-//                   alignment: Alignment.center,
-//                   children: [
-//                     Container(
-//                       width: Dimensions.width2 * 11,
-//                       height: Dimensions.width2 * 11,
-//                       decoration: BoxDecoration(
-//                         shape: BoxShape.circle,
-//                         color: Colors.white,
-//                         border: Border.all(
-//                           color: Colors.grey,
-//                           width: 3,
-//                         ),
-//                       ),
-//                     ),
-//                     Icon(
-//                       Icons.edit,
-//                       size: Dimensions.width2 * 7,
-//                       color: Colors.grey,
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             ],
-//           ),
+//             );
+//           },
 //         ),
-//       ],
+//       ),
 //     );
 //   }
 // }
 
-// class MyClipper extends CustomClipper<Path> {
+// class _DynamicLinkScreen extends StatelessWidget {
 //   @override
-//   Path getClip(Size size) {
-//     var path = Path();
-//     path.lineTo(0, size.height / 2);
-//     path.quadraticBezierTo(
-//         size.width / 2, size.height, size.width, size.height / 2);
-//     path.lineTo(size.width, 0);
-//     path.close();
-//     return path;
-//   }
-
-//   @override
-//   bool shouldReclip(CustomClipper<Path> oldClipper) {
-//     return false;
+//   Widget build(BuildContext context) {
+//     return Material(
+//       child: Scaffold(
+//         appBar: AppBar(
+//           title: const Text('Hello World DeepLink'),
+//         ),
+//         body: const Center(
+//           child: Text('Hello, World!'),
+//         ),
+//       ),
+//     );
 //   }
 // }

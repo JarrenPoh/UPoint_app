@@ -23,7 +23,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLName</key>
-	<string>upoint</string>
+	<string>com.upoint.ios</string>
 	<key>CFBundleURLSchemes</key>
 	<array>
 		<string>upoint</string>
@@ -42,11 +42,9 @@
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>CFBundleURLName</key>
-			<string>Bundle ID</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+				<string>com.upoint.ios</string>
 			</array>
 		</dict>
 	</array>
@@ -54,7 +52,11 @@
 	<string>4</string>
 	<key>FirebaseDynamicLinksCustomDomains</key>
 	<array>
-		<string>https://links.upoint.tw</string>
+		<string>https://links.upoint.tw/post</string>
+	</array>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:links.upoint.tw</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>

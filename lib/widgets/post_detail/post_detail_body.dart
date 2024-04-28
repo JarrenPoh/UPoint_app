@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:upoint/firebase/dynamic_link_service.dart';
 import 'package:upoint/globals/colors.dart';
 import 'package:upoint/globals/date_time_transfer.dart';
 import 'package:upoint/globals/medium_text.dart';
@@ -109,6 +112,7 @@ class _PostDetailBodyState extends State<PostDetailBody> {
       delegate: SliverChildListDelegate(
         [
           Container(
+            width: Dimensions.screenWidth,
             padding: EdgeInsets.symmetric(
               horizontal: Dimensions.width2 * 7.5,
               vertical: Dimensions.height2 * 7,
@@ -116,16 +120,45 @@ class _PostDetailBodyState extends State<PostDetailBody> {
             color: cColor.white,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 // 大標題
-                Stack(
-                  alignment: Alignment.bottomRight,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    MediumText(
-                      color: cColor.grey500,
-                      size: Dimensions.height2 * 12,
-                      text: widget.post.title!,
-                      maxLines: 10000000000,
+                    Expanded(
+                      child: MediumText(
+                        color: cColor.grey500,
+                        size: Dimensions.height2 * 12,
+                        text: widget.post.title!,
+                        maxLines: 10,
+                      ),
+                    ),
+                    CupertinoButton(
+                      minSize: 0,
+                      padding: EdgeInsets.only(top: Dimensions.height2),
+                      onPressed: () async {
+                        String postLink = await DynamicLinkService()
+                            .createDynamicLink(widget.post);
+                        try {
+                          await Share.share(postLink);
+                        } catch (e) {
+                          print(e.toString());
+                        }
+                      },
+                      child: Row(
+                        children: [
+                          MediumText(
+                            color: cColor.primary,
+                            size: Dimensions.height2 * 8,
+                            text: '分享 ',
+                          ),
+                          Icon(
+                            Icons.shortcut,
+                            color: cColor.primary,
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),

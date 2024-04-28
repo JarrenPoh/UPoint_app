@@ -1,17 +1,17 @@
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 
-class UriBloc extends ChangeNotifier {
-  Uri? _uri;
+// class UriBloc extends ChangeNotifier {
+//   Uri? _uri;
 
-  Uri? get uri => _uri;
+//   Uri? get uri => _uri;
 
-  void setUri(Uri? newUri) {
-    _uri = newUri;
-    notifyListeners(); // 通知听众有变化
-  }
+//   void setUri(Uri? newUri) {
+//     _uri = newUri;
+//     notifyListeners(); // 通知听众有变化
+//   }
 
-  void clearUri() {
-    _uri = null;
-    notifyListeners(); // 通知听众有变化
-  }
-}
+//   void clearUri() {
+//     _uri = null;
+//     notifyListeners(); // 通知听众有变化
+//   }
+// }

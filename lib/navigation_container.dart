@@ -1,12 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
-import 'package:upoint/bloc/uri_bloc.dart';
 import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/firebase/firestore_methods.dart';
 import 'package:upoint/globals/custom_messengers.dart';
 import 'package:upoint/models/ad_model.dart';
 import 'package:upoint/models/post_model.dart';
-import 'package:upoint/pages/post_detail_page.dart';
 import 'package:upoint/pages/home_page.dart';
 import 'package:upoint/pages/inbox_page.dart';
 import 'package:upoint/pages/logo_page.dart';
@@ -51,7 +49,6 @@ class _NavigationContainerState extends State<NavigationContainer>
       launchUrl(Uri.parse(status.appStoreLink));
     }
   }
-
   int _selectedPageIndex = 0;
   void onIconTapped(int index) {
     _pageController.jumpToPage(index);
@@ -70,40 +67,40 @@ class _NavigationContainerState extends State<NavigationContainer>
   @override
   void initState() {
     super.initState();
-    Uri? uri = Provider.of<UriBloc>(context, listen: false).uri;
-    if (uri != null) {
-      debugPrint('uri: $uri');
-      if (uri.pathSegments.isNotEmpty && uri.pathSegments.first == 'profile') {
-        _selectedPageIndex = 0;
-      } else if (uri.pathSegments.isNotEmpty &&
-          uri.pathSegments.first == 'activity') {
-        _selectedPageIndex = 0;
-        findAndGoPost(uri.queryParameters['id']);
-      }
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Provider.of<UriBloc>(context, listen: false).setUri(null);
-      });
-    }
+    // Uri? uri = Provider.of<UriBloc>(context, listen: false).uri;
+    // if (uri != null) {
+    //   debugPrint('uri: $uri');
+    //   if (uri.pathSegments.isNotEmpty && uri.pathSegments.first == 'profile') {
+    //     _selectedPageIndex = 0;
+    //   } else if (uri.pathSegments.isNotEmpty &&
+    //       uri.pathSegments.first == 'activity') {
+    //     _selectedPageIndex = 0;
+    //     findAndGoPost(uri.queryParameters['id']);
+    //   }
+    //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     Provider.of<UriBloc>(context, listen: false).setUri(null);
+    //   });
+    // }
     _pageController = PageController(initialPage: _selectedPageIndex);
     WidgetsBinding.instance.addObserver(this);
   }
 
-  findAndGoPost(postId) async {
-    // UserModel? user =
-    //     await Provider.of<AuthMethods>(context, listen: false).getUserDetails();
-    PostModel _p = await FirestoreMethods().fetchPostById(postId);
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) {
-          return PostDetailPage(
-            post: _p,
-            hero: "activity${DateTime.now()}",
-          );
-        },
-      ),
-    );
-  }
+  // findAndGoPost(postId) async {
+  //   // UserModel? user =
+  //   //     await Provider.of<AuthMethods>(context, listen: false).getUserDetails();
+  //   PostModel _p = await FirestoreMethods().fetchPostById(postId);
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(
+  //       builder: (context) {
+  //         return PostDetailPage(
+  //           post: _p,
+  //           hero: "activity${DateTime.now()}",
+  //         );
+  //       },
+  //     ),
+  //   );
+  // }
 
   @override
   void dispose() {

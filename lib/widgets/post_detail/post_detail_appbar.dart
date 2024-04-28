@@ -56,33 +56,7 @@ class _PostDetailAppBarState extends State<PostDetailAppBar> {
         ),
       ),
       actions: [
-        // IconButton(
-        //   padding: EdgeInsets.all(0),
-        //   onPressed: () async {
-        //     String postLink = 'https://$host/activity/?id=${widget.post.postId}';
-        //     try {
-        //       await Share.share(
-        //         ' - ${widget.post.title} ${widget.post.organizerName}\n$postLink',
-        //         subject: '${widget.post.title}  ${widget.post.content!}...',
-        //       );
-        //     } catch (e) {
-        //       print(e.toString());
-        //     }
-        //   },
-        //   icon: Container(
-        //     width: Dimensions.height2 * 20,
-        //     height: Dimensions.height2 * 20,
-        //     decoration: BoxDecoration(
-        //       borderRadius: BorderRadius.circular(40),
-        //       color: cColor.primary,
-        //     ),
-        //     child: Icon(
-        //       Icons.share,
-        //       color: Colors.white,
-        //       size: Dimensions.height2 * 12,
-        //     ),
-        //   ),
-        // ),
+
       ],
       automaticallyImplyLeading: false,
       flexibleSpace: FlexibleSpaceBar(
