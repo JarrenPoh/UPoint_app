@@ -42,45 +42,46 @@ class _LoginPageState extends State<LoginPage> {
     Color appBarColor = Theme.of(context).appBarTheme.backgroundColor!;
 
     return Scaffold(
-        backgroundColor: appBarColor,
-        body: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: SafeArea(
-            child: Center(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: Dimensions.width5 * 4,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: MediaQuery.of(context).size.height * 0.65,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: PageView(
-                          controller: _pageController,
-                          physics: NeverScrollableScrollPhysics(),
-                          children: <Widget>[
-                            // Login Page
-                            LoginPanel(
-                              onTap: () => _navigateToPage(1),
-                            ),
-                            // Register Page
-                            RegisterPanel(
-                              onTap: () => _navigateToPage(0),
-                            ),
-                          ],
-                        ),
+      backgroundColor: appBarColor,
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: Dimensions.width5 * 4,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.65,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                    ],
-                  ),
+                      child: PageView(
+                        controller: _pageController,
+                        physics: NeverScrollableScrollPhysics(),
+                        children: <Widget>[
+                          // Login Page
+                          LoginPanel(
+                            onTap: () => _navigateToPage(1),
+                          ),
+                          // Register Page
+                          RegisterPanel(
+                            onTap: () => _navigateToPage(0),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

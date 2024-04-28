@@ -15,7 +15,6 @@ class ResetPassword extends StatefulWidget {
 
 class _ResetPasswordState extends State<ResetPassword> {
   final TextEditingController _emailController = TextEditingController();
-
   bool isLoading = false;
   String errorEmail = "";
   @override

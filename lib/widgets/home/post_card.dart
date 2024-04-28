@@ -159,6 +159,7 @@ class _PostCardState extends State<PostCard> {
           color: cColor.grey500,
           size: Dimensions.height2 * 8,
           text: title,
+          maxLines: 2,
         ),
         SizedBox(height: Dimensions.height2 * 5),
         // 時間 地點 獎勵

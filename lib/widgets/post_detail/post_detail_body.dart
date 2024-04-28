@@ -118,10 +118,16 @@ class _PostDetailBodyState extends State<PostDetailBody> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // 大標題
-                MediumText(
-                  color: cColor.grey500,
-                  size: Dimensions.height2 * 12,
-                  text: widget.post.title!,
+                Stack(
+                  alignment: Alignment.bottomRight,
+                  children: [
+                    MediumText(
+                      color: cColor.grey500,
+                      size: Dimensions.height2 * 12,
+                      text: widget.post.title!,
+                      maxLines: 10000000000,
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 5),
                 // 活動標籤

@@ -62,14 +62,15 @@ class _PostDetailPageState extends State<PostDetailPage> {
                 ],
               ),
               bottomNavigationBar: Consumer<AuthMethods>(
-                  builder: (context, userNotifier, child) {
-                UserModel? user = userNotifier.user;
-                return PostDetailBottomBar(
-                  post: widget.post,
-                  bloc: _bloc,
-                  user: user,
-                );
-              }),
+                builder: (context, userNotifier, child) {
+                  UserModel? user = userNotifier.user;
+                  return PostDetailBottomBar(
+                    post: widget.post,
+                    bloc: _bloc,
+                    user: user,
+                  );
+                },
+              ),
             ),
           ),
         ),
