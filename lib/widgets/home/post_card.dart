@@ -11,8 +11,6 @@ import 'package:upoint/models/post_model.dart';
 import 'package:upoint/models/user_model.dart';
 import 'package:upoint/pages/post_detail_page.dart';
 
-import '../../globals/regular_text.dart';
-
 class PostCard extends StatefulWidget {
   final PostModel post;
   final OrganizerModel? organizer;
@@ -154,19 +152,18 @@ class _PostCardState extends State<PostCard> {
           errorWidget: (context, url, error) => Icon(Icons.error),
         ),
         SizedBox(height: Dimensions.height2 * 5),
-        // 標題
-        MediumText(
-          color: cColor.grey500,
-          size: Dimensions.height2 * 8,
-          text: title,
-          maxLines: 2,
-        ),
-        SizedBox(height: Dimensions.height2 * 5),
-        // 時間 地點 獎勵
         Expanded(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              // 標題
+              MediumText(
+                color: cColor.grey500,
+                size: 14,
+                text: title,
+                maxLines: 2,
+              ),
+              // 時間 地點 獎勵
               for (var inform in informList)
                 Row(
                   children: [
@@ -178,10 +175,10 @@ class _PostCardState extends State<PostCard> {
                     SizedBox(width: Dimensions.width2 * 4),
                     SizedBox(
                       width: Dimensions.width2 * 65,
-                      child: RegularText(
+                      child: MediumText(
                         color: cColor.grey500,
-                        size: Dimensions.height2 * 7,
-                        text: inform["text"]??"無",
+                        size: 13,
+                        text: inform["text"] ?? "無",
                       ),
                     ),
                   ],

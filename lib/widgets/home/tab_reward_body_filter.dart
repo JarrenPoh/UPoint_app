@@ -27,10 +27,11 @@ class _TabRewardBodyFilterState extends State<TabRewardBodyFilter> {
   Widget build(BuildContext context) {
     CColor cColor = CColor.of(context);
     return Container(
-      height: Dimensions.height5 * 19,
-      margin: EdgeInsets.symmetric(
-        vertical: Dimensions.height2 * 6,
+      height: Dimensions.height5 * 18,
+      padding: EdgeInsets.symmetric(
+        vertical: Dimensions.height2 * 4,
       ),
+      margin: EdgeInsets.only(bottom: Dimensions.height2 * 6),
       decoration: BoxDecoration(
         color: cColor.white,
       ),
@@ -39,7 +40,8 @@ class _TabRewardBodyFilterState extends State<TabRewardBodyFilter> {
         builder: (context, value, child) {
           List<RewardTagModel> _rewardList = value;
           if (_rewardList.isEmpty) {
-            return CircularProgressIndicator.adaptive(backgroundColor: cColor.black);
+            return CircularProgressIndicator.adaptive(
+                backgroundColor: cColor.black);
           }
           return ListView(
             shrinkWrap: true,
@@ -114,7 +116,7 @@ class _TabRewardBodyFilterState extends State<TabRewardBodyFilter> {
                             // 文字
                             MediumText(
                               color: cColor.grey500,
-                              size: Dimensions.height2 * 6,
+                              size: 10,
                               text: _rewardList[index].name,
                               maxLines: 2,
                             ),

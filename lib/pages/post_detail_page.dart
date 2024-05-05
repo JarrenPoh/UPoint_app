@@ -44,11 +44,11 @@ class _PostDetailPageState extends State<PostDetailPage> {
         body: Container(
           color: cColor.white,
           child: SafeArea(
-            bottom: false,
+            bottom: true,
             left: false,
             right: false,
             child: Scaffold(
-              backgroundColor: cColor.white,
+              backgroundColor: cColor.div,
               body: CustomScrollView(
                 slivers: [
                   // APP BAR

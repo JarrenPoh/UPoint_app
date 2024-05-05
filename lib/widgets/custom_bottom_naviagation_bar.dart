@@ -21,7 +21,6 @@ class CustomBottomNavigationBar extends StatefulWidget {
 
 class CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   late int selectedPage;
-  List labelText = [];
   List iconList = [];
   List<Widget> children = [];
   @override
@@ -36,7 +35,6 @@ class CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       Icons.inbox_rounded,
       CupertinoIcons.profile_circled,
     ];
-    labelText = ["home", "search", "", "inbox", "profile"];
   }
 
   void onGlobalTap(int index) {
@@ -102,13 +100,6 @@ class CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                     iconList[index],
                     color: iconAndTextColor,
                     size: 28,
-                  ),
-                  Text(
-                    labelText[index],
-                    style: textStyle.copyWith(
-                      color: iconAndTextColor,
-                      fontWeight: FontWeight.normal,
-                    ),
                   ),
                 ],
               ),

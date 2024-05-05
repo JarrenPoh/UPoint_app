@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:upoint/firebase/dynamic_link_service.dart';
@@ -115,13 +116,30 @@ class _PostDetailBodyState extends State<PostDetailBody> {
             width: Dimensions.screenWidth,
             padding: EdgeInsets.symmetric(
               horizontal: Dimensions.width2 * 7.5,
-              vertical: Dimensions.height2 * 7,
+              vertical: Dimensions.height2 * 5,
             ),
-            color: cColor.white,
+            decoration: BoxDecoration(
+              color: cColor.white,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(15),
+                topRight: Radius.circular(15),
+              ),
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                Center(
+                  child: Container(
+                    width: Dimensions.width5 * 10,
+                    height: Dimensions.height2 * 4,
+                    decoration: BoxDecoration(
+                      color: cColor.grey200,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+                SizedBox(height: Dimensions.height2 * 4),
                 // 大標題
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,7 +147,7 @@ class _PostDetailBodyState extends State<PostDetailBody> {
                     Expanded(
                       child: MediumText(
                         color: cColor.grey500,
-                        size: Dimensions.height2 * 12,
+                        size: 22,
                         text: widget.post.title!,
                         maxLines: 10,
                       ),
@@ -146,18 +164,30 @@ class _PostDetailBodyState extends State<PostDetailBody> {
                           print(e.toString());
                         }
                       },
-                      child: Row(
-                        children: [
-                          MediumText(
-                            color: cColor.primary,
-                            size: Dimensions.height2 * 8,
-                            text: '分享 ',
-                          ),
-                          Icon(
-                            Icons.shortcut,
-                            color: cColor.primary,
-                          ),
-                        ],
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: Dimensions.height2 * 2,
+                          horizontal: Dimensions.width2 * 3,
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: cColor.primary),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.share,
+                              color: cColor.primary,
+                              size: 16,
+                            ),
+                            SizedBox(width: Dimensions.width2 * 2),
+                            MediumText(
+                              color: cColor.primary,
+                              size: 13,
+                              text: '分享 ',
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -175,34 +205,37 @@ class _PostDetailBodyState extends State<PostDetailBody> {
                 const SizedBox(height: 5),
                 Divider(color: cColor.div),
                 // 時間 地點 獎勵
-                Container(
-                  height: Dimensions.height2 * 44,
-                  margin: EdgeInsets.symmetric(
-                    vertical: Dimensions.height2 * 6,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      for (var inform in informList
-                          .where((e) => e["type"] == "front")
-                          .toList())
-                        Row(
-                          children: [
-                            Icon(
-                              inform["icon"],
-                              size: Dimensions.height2 * 12,
-                              color: cColor.grey400,
-                            ),
-                            SizedBox(width: Dimensions.width2 * 4),
-                            RegularText(
-                              color: cColor.grey500,
-                              size: Dimensions.height2 * 7,
-                              text: inform["text"],
-                            ),
-                          ],
-                        ),
-                    ],
-                  ),
+                Column(
+                  children: [
+                    for (var inform in informList
+                        .where((e) => e["type"] == "front")
+                        .toList())
+                      Column(
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                inform["icon"],
+                                size: Dimensions.height2 * 12,
+                                color: cColor.grey400,
+                              ),
+                              SizedBox(width: Dimensions.width5 * 2),
+                              Wrap(
+                                children: [
+                                  MediumText(
+                                    color: cColor.grey500,
+                                    size: 14,
+                                    text: inform["text"],
+                                    maxLines: 2,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: Dimensions.height5 * 2),
+                        ],
+                      ),
+                  ],
                 ),
                 // 介紹內容
                 Container(
@@ -225,61 +258,64 @@ class _PostDetailBodyState extends State<PostDetailBody> {
                 const SizedBox(height: 18),
                 // 主辦資訊
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Dimensions.width2 * 3.2,
+                    vertical: Dimensions.height2 * 3.2,
                   ),
                   child: MediumText(
                     color: cColor.grey500,
-                    size: Dimensions.height2 * 8,
+                    size: 16,
                     text: "主辦資訊",
                   ),
                 ),
                 Divider(color: cColor.div),
                 // 主辦資訊內容
-                SizedBox(
-                  height: Dimensions.height5 * 20,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      for (var inform in informList
-                          .where((e) => e["type"] == "back")
-                          .toList())
-                        inform["index"] == "link" && widget.post.link == null
-                            ? Container()
-                            : Row(
-                                children: [
-                                  Icon(
-                                    inform["icon"],
-                                    size: Dimensions.height2 * 12,
-                                    color: cColor.grey400,
-                                  ),
-                                  const SizedBox(width: 6),
-                                  RegularText(
-                                    color: cColor.grey500,
-                                    size: Dimensions.height2 * 7,
-                                    text: inform["title"],
-                                  ),
-                                  inform["index"] == "link"
-                                      ? GestureDetector(
-                                          onTap: () => launchUrl(
-                                            Uri.parse(widget.post.link!),
-                                          ),
-                                          child: RegularText(
-                                            color: cColor.primary,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    for (var inform in informList
+                        .where((e) => e["type"] == "back")
+                        .toList())
+                      inform["index"] == "link" && widget.post.link == null
+                          ? Container()
+                          : Column(
+                              children: [
+                                Wrap(
+                                  children: [
+                                    Icon(
+                                      inform["icon"],
+                                      size: Dimensions.height2 * 12,
+                                      color: cColor.grey400,
+                                    ),
+                                    SizedBox(width: Dimensions.width5 * 2),
+                                    MediumText(
+                                      color: cColor.grey500,
+                                      size: 14,
+                                      text: inform["title"],
+                                    ),
+                                    inform["index"] == "link"
+                                        ? GestureDetector(
+                                            onTap: () => launchUrl(
+                                              Uri.parse(widget.post.link!),
+                                            ),
+                                            child: RegularText(
+                                              color: cColor.primary,
+                                              size: Dimensions.height2 * 7,
+                                              text: inform["text"],
+                                            ),
+                                          )
+                                        : RegularText(
+                                            color: cColor.grey500,
                                             size: Dimensions.height2 * 7,
+                                            maxLines: 2,
                                             text: inform["text"],
                                           ),
-                                        )
-                                      : RegularText(
-                                          color: cColor.grey500,
-                                          size: Dimensions.height2 * 7,
-                                          text: inform["text"],
-                                        ),
-                                ],
-                              ),
-                    ],
-                  ),
+                                  ],
+                                ),
+                                SizedBox(height: Dimensions.height5 * 2),
+                              ],
+                            ),
+                  ],
                 ),
                 const SizedBox(height: 18),
                 // 活動詳情標題
@@ -291,7 +327,7 @@ class _PostDetailBodyState extends State<PostDetailBody> {
                   height: Dimensions.height2 * 18,
                   child: MediumText(
                     color: cColor.grey500,
-                    size: Dimensions.height2 * 8,
+                    size: 16,
                     text: "活動詳情",
                   ),
                 ),

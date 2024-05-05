@@ -49,7 +49,7 @@ class _TabTypeBodyFilterState extends State<TabTypeBodyFilter> {
               children: [
                 MediumText(
                   color: cColor.grey500,
-                  size: Dimensions.height2 * 8,
+                  size: 14,
                   text: searchText,
                 ),
                 const Expanded(child: Column(children: [])),
@@ -63,7 +63,7 @@ class _TabTypeBodyFilterState extends State<TabTypeBodyFilter> {
           ),
           hint: MediumText(
             color: cColor.grey500,
-            size: Dimensions.height2 * 8,
+            size: 12,
             text: "全部",
           ),
           value: searchText,
@@ -101,7 +101,7 @@ class _TabTypeBodyFilterState extends State<TabTypeBodyFilter> {
                       SizedBox(width: Dimensions.width2 * 6),
                       MediumText(
                         color: cColor.grey500,
-                        size: Dimensions.height2 * 7,
+                        size: 14,
                         text: e,
                       ),
                       SizedBox(width: Dimensions.width5 * 2),
@@ -114,7 +114,7 @@ class _TabTypeBodyFilterState extends State<TabTypeBodyFilter> {
                         ) {
                           return MediumText(
                             color: cColor.primary,
-                            size: Dimensions.height2 * 6,
+                            size: 10,
                             text: value.toString(),
                           );
                         },

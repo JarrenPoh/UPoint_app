@@ -5,11 +5,9 @@ import 'package:upoint/bloc/tab_home_bloc.dart';
 import 'package:upoint/globals/custom_messengers.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
-import 'package:upoint/globals/regular_text.dart';
 import 'package:upoint/models/ad_model.dart';
 import 'package:upoint/pages/wishing_page.dart';
 import 'package:upoint/widgets/home/ad_layout.dart';
-
 import '../../globals/colors.dart';
 import '../../globals/scroll_things_provider.dart';
 import '../../models/post_model.dart';
@@ -109,7 +107,7 @@ class _TabHomeBodyState extends State<TabHomeBody>
                                 ],
                               ),
                               SizedBox(height: Dimensions.height5 * 1),
-                              RegularText(
+                              MediumText(
                                 color: cColor.grey500,
                                 size: 10,
                                 text: _bloc.buttonList[index]["title"],

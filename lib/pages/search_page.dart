@@ -97,11 +97,11 @@ class _SearchPageState extends State<SearchPage>
   Widget build(BuildContext context) {
     super.build(context);
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
-    Color appBarColor = Theme.of(context).appBarTheme.backgroundColor!;
+    CColor cColor = CColor.of(context);
     Color primary = Theme.of(context).colorScheme.primary;
 
     return Scaffold(
-      backgroundColor: appBarColor,
+      backgroundColor: cColor.div,
       appBar: AppBar(
         elevation: 0,
         title: SearchWidget(
@@ -122,7 +122,10 @@ class _SearchPageState extends State<SearchPage>
         },
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.only(top: Dimensions.height5 * 2),
+            padding: EdgeInsets.symmetric(
+              vertical: Dimensions.height5 * 2,
+              horizontal: Dimensions.width5 * 2,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -165,7 +168,7 @@ class _SearchPageState extends State<SearchPage>
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           mainAxisSpacing: Dimensions.height2 * 4,
-                          childAspectRatio: 172 / 219,
+                          childAspectRatio: 172 / 210,
                           crossAxisSpacing: Dimensions.width2 * 4,
                         ),
                         itemBuilder: (context, index) {
@@ -202,7 +205,7 @@ class _SearchPageState extends State<SearchPage>
                                         leading: Icon(
                                           Icons.history,
                                           color: primary,
-                                          size: Dimensions.height2*12,
+                                          size: Dimensions.height2 * 12,
                                         ),
                                         title: MediumText(
                                           color: onSecondary,

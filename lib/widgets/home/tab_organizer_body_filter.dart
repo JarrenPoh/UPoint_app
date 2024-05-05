@@ -27,10 +27,11 @@ class _TabOrganizerBodyFilterState extends State<TabOrganizerBodyFilter> {
   Widget build(BuildContext context) {
     CColor cColor = CColor.of(context);
     return Container(
-      height: Dimensions.height5 * 17,
-      margin: EdgeInsets.symmetric(
-        vertical: Dimensions.height2 * 6,
+      height: Dimensions.height5 * 18,
+      padding: EdgeInsets.symmetric(
+        vertical: Dimensions.height2 * 4,
       ),
+      margin: EdgeInsets.only(bottom: Dimensions.height2 * 6),
       decoration: BoxDecoration(
         color: cColor.white,
       ),
@@ -39,7 +40,8 @@ class _TabOrganizerBodyFilterState extends State<TabOrganizerBodyFilter> {
         builder: (context, value, child) {
           List<OrganizerModel> _organList = value;
           if (_organList.isEmpty) {
-            return CircularProgressIndicator.adaptive(backgroundColor: cColor.black);
+            return CircularProgressIndicator.adaptive(
+                backgroundColor: cColor.black);
           }
           return ListView(
             shrinkWrap: true,
@@ -98,30 +100,25 @@ class _TabOrganizerBodyFilterState extends State<TabOrganizerBodyFilter> {
                             SizedBox(height: Dimensions.height5),
                             // 字
                             ValueListenableBuilder(
-                                valueListenable:
-                                    widget.bloc.selectFilterNotifier,
-                                builder: (context, value, child) {
-                                  bool _isSelected = value == index;
-                                  return Container(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: Dimensions.width5,
-                                      vertical: Dimensions.height2,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: _isSelected
-                                          ? cColor.sub
-                                          : cColor.white,
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    child: MediumText(
-                                      color: cColor.grey500,
-                                      size: Dimensions.height2 * 6,
-                                      text: _organList[index].username,
-                                      maxLines: 2,
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  );
-                                }),
+                              valueListenable: widget.bloc.selectFilterNotifier,
+                              builder: (context, value, child) {
+                                bool _isSelected = value == index;
+                                return Container(
+                                  decoration: BoxDecoration(
+                                    color:
+                                        _isSelected ? cColor.sub : cColor.white,
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: MediumText(
+                                    color: cColor.grey500,
+                                    size: 10,
+                                    text: _organList[index].username,
+                                    maxLines: 2,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                );
+                              },
+                            ),
                           ],
                         ),
                       ),

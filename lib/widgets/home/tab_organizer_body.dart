@@ -91,7 +91,7 @@ class _TabOrganizerBodyState extends State<TabOrganizerBody>
                                   SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2,
                                 mainAxisSpacing: Dimensions.height2 * 4,
-                                childAspectRatio: 172 / 190,
+                                childAspectRatio: 172 / 210,
                                 crossAxisSpacing: Dimensions.width2 * 4,
                               ),
                               childrenDelegate: SliverChildBuilderDelegate(

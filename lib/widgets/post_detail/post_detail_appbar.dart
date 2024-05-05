@@ -28,12 +28,12 @@ class _PostDetailAppBarState extends State<PostDetailAppBar> {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      expandedHeight: Dimensions.height5 * 46,
+      expandedHeight: Dimensions.height5 * 44,
       elevation: 0,
       snap: true,
       floating: true,
       stretch: true,
-      backgroundColor: cColor.white,
+      backgroundColor: cColor.div,
       leading: IconButton(
         onPressed: () {
           Navigator.pop(context);
@@ -117,32 +117,32 @@ class _PostDetailAppBarState extends State<PostDetailAppBar> {
           ),
         ),
       ),
-      bottom: PreferredSize(
-        preferredSize: Size.fromHeight(Dimensions.height2 * 14.4),
-        child: Container(
-          height: Dimensions.height2 * 14.4,
-          decoration: BoxDecoration(
-            color: cColor.white,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(15),
-              topRight: Radius.circular(15),
-            ),
-            border: Border(
-              bottom: BorderSide(color: cColor.div),
-            ),
-          ),
-          child: Center(
-            child: Container(
-              width: Dimensions.width5 * 10,
-              height: Dimensions.height2 * 4,
-              decoration: BoxDecoration(
-                color: cColor.grey200,
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-          ),
-        ),
-      ),
+      // bottom: PreferredSize(
+      //   preferredSize: Size.fromHeight(Dimensions.height2 * 14.4),
+      //   child: Container(
+      //     height: Dimensions.height2 * 14.4,
+      //     decoration: BoxDecoration(
+      //       color: cColor.white,
+      //       borderRadius: const BorderRadius.only(
+      //         topLeft: Radius.circular(15),
+      //         topRight: Radius.circular(15),
+      //       ),
+      //       border: Border(
+      //         bottom: BorderSide(color: cColor.div),
+      //       ),
+      //     ),
+      //     child: Center(
+      //       child: Container(
+      //         width: Dimensions.width5 * 10,
+      //         height: Dimensions.height2 * 4,
+      //         decoration: BoxDecoration(
+      //           color: cColor.grey200,
+      //           borderRadius: BorderRadius.circular(10),
+      //         ),
+      //       ),
+      //     ),
+      //   ),
+      // ),
     );
   }
 }
