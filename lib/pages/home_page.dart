@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:upoint/firebase/firestore_methods.dart';
 import 'package:upoint/globals/colors.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/scroll_things_provider.dart';
 import 'package:upoint/models/user_model.dart';
 import 'package:upoint/widgets/home/tab_organizer_body.dart';
 import 'package:upoint/widgets/home/tab_reward_body.dart';
-
+import 'package:provider/provider.dart';
+import '../firebase/auth_methods.dart';
+import '../globals/user_simple_preference.dart';
 import '../models/ad_model.dart';
 import '../models/post_model.dart';
 import '../widgets/home/tab_home_body.dart';
@@ -43,6 +46,19 @@ class _HomePageState extends State<HomePage>
       vsync: this,
       initialIndex: 0,
     );
+    uploadNewFCM();
+  }
+
+  uploadNewFCM() async {
+    String? newFcm = UserSimplePreference.getFcmToken();
+    if (widget.user != null &&
+        widget.user?.fcmToken != null &&
+        newFcm != null) {
+      if (!widget.user!.fcmToken!.contains(newFcm)) {
+        await FirestoreMethods().addFcm(newFcm, widget.user!);
+        await Provider.of<AuthMethods>(context, listen: false).getUserDetails();
+      }
+    }
   }
 
   @override
@@ -57,7 +73,7 @@ class _HomePageState extends State<HomePage>
           color: cColor.white,
           child: SafeArea(
             child: Scaffold(
-              backgroundColor: cColor.div,
+              backgroundColor: cColor.white,
               body: NestedScrollView(
                 floatHeaderSlivers: true,
                 headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -86,7 +102,7 @@ class _HomePageState extends State<HomePage>
                             indicatorPadding: EdgeInsets.only(
                               bottom: Dimensions.height2 * 4,
                               top: Dimensions.height2 * 18.5,
-                              left:0,
+                              left: 0,
                               right: 0,
                             ),
                             indicatorWeight: 4,

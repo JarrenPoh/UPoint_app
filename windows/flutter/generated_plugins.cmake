@@ -3,8 +3,10 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  cloud_firestore
   firebase_auth
   firebase_core
+  firebase_storage
   irondash_engine_context
   share_plus
   super_native_extensions

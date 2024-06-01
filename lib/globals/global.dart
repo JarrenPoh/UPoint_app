@@ -4,6 +4,6 @@ String appleStoreQrcode = "assets/appleStoreQrcode.png";
 String googlePlayQrcode = "assets/googlePlayQrcode.png";
 bool isDebugging = false;
 List<String> debugId = [
-  "tvRc40ekeeY5UTiPist8qVRm0m92",
-  "yhc5utqU8jgHprx3iCaRtJ70HRy1",
+  // "tvRc40ekeeY5UTiPist8qVRm0m92",
+  // "yhc5utqU8jgHprx3iCaRtJ70HRy1",
 ];

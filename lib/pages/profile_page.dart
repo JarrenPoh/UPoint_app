@@ -33,7 +33,7 @@ class _ProfilePageState extends State<ProfilePage>
     super.build(context);
     CColor cColor = CColor.of(context);
     return Scaffold(
-      backgroundColor: cColor.div,
+      backgroundColor: cColor.white,
       body: NestedScrollView(
         floatHeaderSlivers: true,
         headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -50,7 +50,7 @@ class _ProfilePageState extends State<ProfilePage>
         },
         body: RefreshIndicator(
           displacement: Dimensions.height5 * 3,
-          backgroundColor: cColor.white,
+          backgroundColor: cColor.div,
           color: cColor.black,
           onRefresh: () async {
             _bloc.refresh(widget.user, context);
@@ -64,7 +64,7 @@ class _ProfilePageState extends State<ProfilePage>
               Row(
                 children: [
                   // Upoints coin
-                  scnContainer(0, "915"),
+                  scnContainer(0, "0"),
                   SizedBox(width: Dimensions.width2 * 8),
                   ValueListenableBuilder(
                     valueListenable: _bloc.countNotifier,
@@ -143,7 +143,7 @@ class _ProfilePageState extends State<ProfilePage>
                 Container(
                   // height: Dimensions.width2 * 85,
                   decoration: BoxDecoration(
-                    color: cColor.white,
+                    color: cColor.div,
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: const [
                       BoxShadow(
@@ -204,7 +204,7 @@ class _ProfilePageState extends State<ProfilePage>
       margin: EdgeInsets.only(top: Dimensions.height2 * 8),
       padding: EdgeInsets.symmetric(vertical: Dimensions.height2 * 4),
       decoration: BoxDecoration(
-        color: cColor.white,
+        color: cColor.div,
         borderRadius: BorderRadius.circular(16),
         boxShadow: const [
           BoxShadow(
@@ -296,7 +296,7 @@ class _ProfilePageState extends State<ProfilePage>
       child: Container(
         // width: Dimensions.width2 * 20,
         decoration: BoxDecoration(
-          color: cColor.white,
+          color: cColor.div,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(

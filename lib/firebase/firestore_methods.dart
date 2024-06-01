@@ -137,6 +137,7 @@ class FirestoreMethods {
     List<PostModel> _post = _list.map((e) => PostModel.fromSnap(e)).toList();
     if (!isDebugging) {
       _post.removeWhere((e) => debugId.contains(e.organizerUid));
+      _post.removeWhere((e) => e.isVisible == false);
     }
     debugPrint('找了${fetchPost.docs.length}則貼文');
     return _post;
@@ -219,6 +220,18 @@ class FirestoreMethods {
       }
     } catch (err) {
       debugPrint('err${err.toString()}');
+    }
+  }
+
+  // 增加fcmToken
+  Future<void> addFcm(String fcmToken, UserModel user) async {
+    try {
+      debugPrint("增加Fcm");
+      await _firestore.collection('users').doc(user.uuid).update({
+        "fcmToken": FieldValue.arrayUnion([fcmToken]),
+      });
+    } catch (e) {
+      print("error: ${e.toString()}");
     }
   }
 }

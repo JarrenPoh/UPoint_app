@@ -115,7 +115,7 @@ class AuthMethods with ChangeNotifier {
   Future<String> signInWithApple() async {
     String res = 'some error occur';
     String generateNonce([int length = 32]) {
-      final charset =
+      const charset =
           '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
       final random = Random.secure();
       return List.generate(

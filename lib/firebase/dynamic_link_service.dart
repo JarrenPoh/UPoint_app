@@ -16,7 +16,7 @@ class DynamicLinkService {
       ),
       iosParameters:  IOSParameters(
         bundleId: "com.upoint.ios",
-        appStoreId: "id6477217914",
+        appStoreId: "6477217914",
         fallbackUrl: Uri.parse(appleStoreLink),
       ),
       socialMetaTagParameters: SocialMetaTagParameters(

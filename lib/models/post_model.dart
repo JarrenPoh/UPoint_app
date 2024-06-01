@@ -25,6 +25,7 @@ class PostModel {
   String? contact;
   String? phoneNumber;
   String? postType;
+  bool? isVisible;
 
   PostModel({
     this.photo,
@@ -50,6 +51,7 @@ class PostModel {
     this.contact,
     this.phoneNumber,
     this.postType,
+    this.isVisible,
   });
 
   static Map toMap(PostModel cart) {
@@ -77,6 +79,7 @@ class PostModel {
       "contact": cart.contact,
       "phoneNumber": cart.phoneNumber,
       "postType": cart.postType,
+      "isVisible": cart.isVisible,
     };
   }
 
@@ -107,6 +110,7 @@ class PostModel {
       contact: snapshot["contact"],
       phoneNumber: snapshot["phoneNumber"],
       postType: snapshot["postType"],
+      isVisible: snapshot["isVisible"],
     );
   }
 
@@ -134,6 +138,7 @@ class PostModel {
         "contact": contact,
         "phoneNumber": phoneNumber,
         "postType": postType,
+        "isVisible": isVisible,
       };
 
   static PostModel fromMap(Map map) {
@@ -161,6 +166,7 @@ class PostModel {
       contact: map["contact"],
       phoneNumber: map["phoneNumber"],
       postType: map["postType"],
+      isVisible: map["isVisible"],
     );
   }
 }

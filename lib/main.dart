@@ -99,6 +99,7 @@ Future<void> setupFlutterNotifications() async {
   FirebaseMessaging.instance.requestPermission();
   //拿token
   String? fcmToken = await FirebaseMessaging.instance.getToken();
+  debugPrint("fcm :$fcmToken");
   await UserSimplePreference.setFcmToken(fcmToken ?? '');
 
   //接收fcm

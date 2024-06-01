@@ -72,7 +72,7 @@ class _PostCardState extends State<PostCard> {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: cColor.white,
+          color: cColor.div,
           borderRadius: BorderRadius.circular(10),
         ),
         padding: EdgeInsets.symmetric(
@@ -155,6 +155,7 @@ class _PostCardState extends State<PostCard> {
         Expanded(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // 標題
               MediumText(

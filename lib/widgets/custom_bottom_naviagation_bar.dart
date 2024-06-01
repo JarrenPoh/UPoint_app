@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:upoint/globals/colors.dart';
-
-import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/global_key.dart' as globals;
 
 class CustomBottomNavigationBar extends StatefulWidget {
@@ -46,17 +44,13 @@ class CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   @override
   Widget build(BuildContext context) {
     Color color_onPrimary = Theme.of(context).colorScheme.onPrimary;
-    // final barHeight = MediaQuery.of(context).size.height * 0.06;
-    final style = Theme.of(context).textTheme.bodyText1!.copyWith(
-          fontSize: Dimensions.height2 * 5.5,
-        );
 
     children = [
-      _bottomBarNavItem(0, style, context),
-      _bottomBarNavItem(1, style, context),
+      _bottomBarNavItem(0, context),
+      _bottomBarNavItem(1, context),
       // _addItem(2, barHeight, context),
-      _bottomBarNavItem(3, style, context),
-      _bottomBarNavItem(4, style, context),
+      _bottomBarNavItem(3, context),
+      _bottomBarNavItem(4, context),
     ];
 
     return BottomAppBar(
@@ -73,7 +67,6 @@ class CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
 
   _bottomBarNavItem(
     int index,
-    TextStyle textStyle,
     BuildContext context,
   ) {
     bool isSelected = selectedPage == index;

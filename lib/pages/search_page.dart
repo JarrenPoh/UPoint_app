@@ -101,7 +101,7 @@ class _SearchPageState extends State<SearchPage>
     Color primary = Theme.of(context).colorScheme.primary;
 
     return Scaffold(
-      backgroundColor: cColor.div,
+      backgroundColor: cColor.white,
       appBar: AppBar(
         elevation: 0,
         title: SearchWidget(
