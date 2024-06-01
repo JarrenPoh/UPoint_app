@@ -51,10 +51,9 @@ class _HomePageState extends State<HomePage>
 
   uploadNewFCM() async {
     String? newFcm = UserSimplePreference.getFcmToken();
-    if (widget.user != null &&
-        widget.user?.fcmToken != null &&
-        newFcm != null) {
-      if (!widget.user!.fcmToken!.contains(newFcm)) {
+    if (widget.user != null && newFcm != null) {
+      if (widget.user!.fcmToken == null ||
+          !widget.user!.fcmToken!.contains(newFcm)) {
         await FirestoreMethods().addFcm(newFcm, widget.user!);
         await Provider.of<AuthMethods>(context, listen: false).getUserDetails();
       }

@@ -189,10 +189,17 @@ void _firebaseMessagingForgroundHandler(RemoteMessage message) async {
     debugPrint("前景下收到data: ${message.data}");
     debugPrint("前景下收到notification: ${message.notification}");
     var androidDetails = const AndroidNotificationDetails(
-      'channelId',
-      'channelName',
-      importance: Importance.max,
+      'high_importance_channel', // id
+      'High Importance Notifications', // title
+      importance: Importance.high,
       priority: Priority.high,
+    );
+    const AndroidNotificationChannel channel = AndroidNotificationChannel(
+      'high_importance_channel', // id
+      'High Importance Notifications', // title
+      description:
+          'This channel is used for important notifications.', // description
+      importance: Importance.max,
     );
     var iosDetails = const DarwinNotificationDetails();
     var generalNotificationDetails =
@@ -205,6 +212,11 @@ void _firebaseMessagingForgroundHandler(RemoteMessage message) async {
       generalNotificationDetails, // 通知细节
       payload: message.data["open_link"],
     );
+
+    flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
   } catch (e) {
     debugPrint("error:${e.toString()}");
   }
