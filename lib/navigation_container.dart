@@ -40,7 +40,7 @@ class _NavigationContainerState extends State<NavigationContainer>
   Future<void> _initPackageInfo() async {
     final newVersion = NewVersion(
       iOSId: 'com.upoint.ios',
-      androidId: 'com.upoint.android.',
+      androidId: 'com.upoint.android',
       iOSAppStoreCountry: "tw",
     );
     final status = await newVersion.getVersionStatus();
