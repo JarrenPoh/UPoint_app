@@ -1,6 +1,7 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:upoint/globals/colors.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../globals/dimension.dart';
 import '../../models/ad_model.dart';
@@ -37,9 +38,17 @@ class _AdLayoutState extends State<AdLayout> {
                 physics: const ClampingScrollPhysics(),
                 onPageChanged: (value) => widget.bloc.onPageChanged(value),
                 itemBuilder: (context, index) {
-                  return Image.network(
-                    widget.allAd[index].pic,
-                    fit: BoxFit.cover,
+                  String? url = widget.allAd[index].url;
+                  return GestureDetector(
+                    onTap: () {
+                      if (url != null && url != "") {
+                        launchUrl(Uri.parse(url));
+                      }
+                    },
+                    child: Image.network(
+                      widget.allAd[index].pic,
+                      fit: BoxFit.cover,
+                    ),
                   );
                 },
               ),
