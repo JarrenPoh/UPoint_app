@@ -47,7 +47,7 @@ class _InboxPageState extends State<InboxPage>
     }
   }
 
-  gotoProfile(){
+  gotoProfile() {
     print('前往處室頁面');
     //  Navigator.push(
     //   context,
@@ -80,9 +80,10 @@ class _InboxPageState extends State<InboxPage>
   Widget build(BuildContext context) {
     init();
     super.build(context);
-    Color onSecondary = Theme.of(context).colorScheme.onSecondary;
+    Color onErrorContainer = Theme.of(context).colorScheme.onErrorContainer;
     Color onPrimary = Theme.of(context).colorScheme.onPrimary;
     Color appBarColor = Theme.of(context).appBarTheme.backgroundColor!;
+    Color onSecondary = Theme.of(context).colorScheme.onSecondary;
 
     return Scaffold(
       backgroundColor: appBarColor,
@@ -101,7 +102,7 @@ class _InboxPageState extends State<InboxPage>
           : RefreshIndicator(
               displacement: 100,
               backgroundColor: onPrimary,
-              color: onSecondary,
+              color: onErrorContainer,
               onRefresh: () async {
                 await bloc.onRefresh();
               },
@@ -121,7 +122,7 @@ class _InboxPageState extends State<InboxPage>
                           //shimmer
                           ? Center(
                               child: CircularProgressIndicator.adaptive(
-                                backgroundColor: onSecondary,
+                                backgroundColor: onErrorContainer,
                               ),
                             )
                           : Column(
@@ -143,7 +144,7 @@ class _InboxPageState extends State<InboxPage>
                                             ),
                                             child: MediumText(
                                               color: onSecondary,
-                                              size: Dimensions.height2 * 9,
+                                              size: 18,
                                               text: _list[lindex].title,
                                             ),
                                           ),
@@ -164,14 +165,15 @@ class _InboxPageState extends State<InboxPage>
                                         child: Text(
                                       'No Result.',
                                       style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                          color: onSecondary),
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        color: onSecondary,
+                                      ),
                                     )),
                                   ),
                                 if (_noMore == false)
                                   CircularProgressIndicator.adaptive(
-                                    backgroundColor: onSecondary,
+                                    backgroundColor: onErrorContainer,
                                   ),
                               ],
                             );
@@ -225,7 +227,7 @@ class _InboxPageState extends State<InboxPage>
                   Expanded(
                     child: RichText(
                       text: TextSpan(
-                        style: TextStyle(fontSize: Dimensions.height2 * 6.5),
+                        style: const TextStyle(fontSize: 16),
                         children: [
                           TextSpan(
                             recognizer: TapGestureRecognizer()

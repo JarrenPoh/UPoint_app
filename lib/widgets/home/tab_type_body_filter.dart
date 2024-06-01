@@ -31,7 +31,7 @@ class _TabTypeBodyFilterState extends State<TabTypeBodyFilter> {
         vertical: Dimensions.height2 * 6,
       ),
       decoration: BoxDecoration(
-        color: cColor.white,
+        color: cColor.div,
         borderRadius: BorderRadius.circular(10),
       ),
       child: DropdownButtonHideUnderline(
@@ -42,7 +42,7 @@ class _TabTypeBodyFilterState extends State<TabTypeBodyFilter> {
               horizontal: Dimensions.width2 * 6,
             ),
             decoration: BoxDecoration(
-              color: cColor.white,
+              color:  cColor.div,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Row(

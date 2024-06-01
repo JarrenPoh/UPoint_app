@@ -141,7 +141,7 @@ class _NavigationContainerState extends State<NavigationContainer>
   Widget build(BuildContext context) {
     super.build(context);
     _initPackageInfo();
-    Color onSecondary = Theme.of(context).colorScheme.onSecondary;
+    Color onErrorContainer = Theme.of(context).colorScheme.onErrorContainer;
     Color scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
     return WillPopScope(
       onWillPop: () async {
@@ -159,7 +159,7 @@ class _NavigationContainerState extends State<NavigationContainer>
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(
                   child: CircularProgressIndicator.adaptive(
-                backgroundColor: onSecondary,
+                backgroundColor: onErrorContainer,
               ));
             }
             _pages =

@@ -133,7 +133,6 @@ class _LoginPanelState extends State<LoginPanel> {
   @override
   Widget build(BuildContext context) {
     Color primary = Theme.of(context).colorScheme.primary;
-    Color onPrimary = Theme.of(context).colorScheme.onPrimary;
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     return Container(
       height: MediaQuery.of(context).size.height,
@@ -353,7 +352,7 @@ class _LoginPanelState extends State<LoginPanel> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: CircularProgressIndicator.adaptive(
-                    backgroundColor: onPrimary,
+                    backgroundColor: CColor.of(context).grey400,
                   ),
                 )
               : Container()

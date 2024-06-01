@@ -118,8 +118,8 @@ class _SignFormPageState extends State<SignFormPage> {
           ),
         ),
         if (isLoading)
-          const CircularProgressIndicator.adaptive(
-              backgroundColor: Colors.grey),
+          CircularProgressIndicator.adaptive(
+              backgroundColor: CColor.of(context).grey400),
       ],
     );
   }

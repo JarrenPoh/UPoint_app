@@ -55,9 +55,7 @@ class _PostDetailAppBarState extends State<PostDetailAppBar> {
           ),
         ),
       ),
-      actions: [
-
-      ],
+      actions: [],
       automaticallyImplyLeading: false,
       flexibleSpace: FlexibleSpaceBar(
         stretchModes: const [
@@ -109,9 +107,7 @@ class _PostDetailAppBarState extends State<PostDetailAppBar> {
             placeholder: (context, url) => SizedBox(
               height: Dimensions.height5 * 3,
               width: Dimensions.height5 * 3,
-              child: const CircularProgressIndicator.adaptive(
-                backgroundColor: Colors.grey,
-              ),
+              child: Container(),
             ),
             errorWidget: (context, url, error) => Icon(Icons.error),
           ),

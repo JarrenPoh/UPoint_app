@@ -135,7 +135,6 @@ class _RegisterPanelState extends State<RegisterPanel> {
   @override
   Widget build(BuildContext context) {
     Color primary = Theme.of(context).colorScheme.primary;
-    Color onPrimary = Theme.of(context).colorScheme.onPrimary;
     return Container(
       height: MediaQuery.of(context).size.height,
       child: Stack(
@@ -268,7 +267,7 @@ class _RegisterPanelState extends State<RegisterPanel> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: CircularProgressIndicator.adaptive(
-                    backgroundColor: onPrimary,
+                    backgroundColor: CColor.of(context).grey400,
                   ),
                 )
               : Container()

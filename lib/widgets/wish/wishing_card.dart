@@ -116,7 +116,7 @@ class _WishingCardState extends State<WishingCard> {
                     // 日期
                     MediumText(
                       color: cColor.grey400,
-                      size: Dimensions.height2 * 7,
+                      size: 14,
                       text: TimeTransfer.timeTrans06(widget.wish.datePublished),
                     ),
                     // 按讚
@@ -132,7 +132,7 @@ class _WishingCardState extends State<WishingCard> {
                           SizedBox(width: Dimensions.width5),
                           MediumText(
                             color: isLike ? cColor.primary : cColor.grey400,
-                            size: Dimensions.height2 * 7,
+                            size: 14,
                             text: widget.wish.rateList.length.toString(),
                           ),
                         ],

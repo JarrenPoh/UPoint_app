@@ -145,8 +145,8 @@ class _PostCardState extends State<PostCard> {
           placeholder: (context, url) => SizedBox(
             height: Dimensions.height5 * 3,
             width: Dimensions.height5 * 3,
-            child: const CircularProgressIndicator.adaptive(
-              backgroundColor: Colors.grey,
+            child:  CircularProgressIndicator.adaptive(
+              backgroundColor: cColor.grey400,
             ),
           ),
           errorWidget: (context, url, error) => Icon(Icons.error),

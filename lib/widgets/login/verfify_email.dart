@@ -9,6 +9,7 @@ import 'package:upoint/firebase/firestore_methods.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/pages/login_page.dart';
+import '../../globals/colors.dart';
 import '../../globals/custom_messengers.dart';
 
 class VerifyEmail extends StatefulWidget {
@@ -130,7 +131,6 @@ class _VerifyEmailState extends State<VerifyEmail> {
     Color appBarColor = Theme.of(context).appBarTheme.backgroundColor!;
     Color hintColor = Theme.of(context).hintColor;
     Color primary = Theme.of(context).colorScheme.primary;
-    Color onPrimary = Theme.of(context).colorScheme.onPrimary;
     Color onSecondary = Theme.of(context).colorScheme.onSecondary;
 
     return Scaffold(
@@ -171,8 +171,9 @@ class _VerifyEmailState extends State<VerifyEmail> {
                       color: canResentEmail ? hintColor : Colors.grey,
                     ),
                     child: isLoading
-                        ? const Center(
-                            child: CircularProgressIndicator.adaptive(),
+                        ? Center(
+                            child: CircularProgressIndicator.adaptive(
+                                backgroundColor: CColor.of(context).grey400),
                           )
                         : MediumText(
                             color: Colors.white,
@@ -194,7 +195,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: CircularProgressIndicator.adaptive(
-                    backgroundColor: onPrimary,
+                    backgroundColor: CColor.of(context).grey400,
                   ),
                 )
               : Container()

@@ -4,6 +4,7 @@ import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
 
+import '../../globals/colors.dart';
 import '../../globals/custom_messengers.dart';
 
 class ResetPassword extends StatefulWidget {
@@ -101,7 +102,8 @@ class _ResetPasswordState extends State<ResetPassword> {
         ),
         body: Center(
           child: isLoading
-              ? CircularProgressIndicator.adaptive()
+              ? CircularProgressIndicator.adaptive(
+                  backgroundColor: CColor.of(context).grey400)
               : Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40),
                   child: Column(
@@ -135,8 +137,10 @@ class _ResetPasswordState extends State<ResetPassword> {
                             color: hintColor,
                           ),
                           child: isLoading
-                              ? const Center(
-                                  child: CircularProgressIndicator.adaptive(),
+                              ?  Center(
+                                  child: CircularProgressIndicator.adaptive(
+                                      backgroundColor:
+                                          CColor.of(context).grey400),
                                 )
                               : MediumText(
                                   color: Colors.white,

@@ -77,7 +77,7 @@ class _WishingPageState extends State<WishingPage> {
                                     SizedBox(width: Dimensions.width2 * 6),
                                     BoldText(
                                       color: cColor.grey500,
-                                      size: Dimensions.height2 * 8,
+                                      size: 16,
                                       text: "UPoint 功能許願池",
                                     ),
                                   ],
@@ -91,7 +91,7 @@ class _WishingPageState extends State<WishingPage> {
                                     bool noMore = value["noMore"];
                                     if (post.isEmpty) {
                                       return CircularProgressIndicator.adaptive(
-                                        backgroundColor: cColor.grey500,
+                                        backgroundColor: cColor.grey400,
                                       );
                                     }
                                     return Column(
@@ -108,15 +108,14 @@ class _WishingPageState extends State<WishingPage> {
                                                   if (noMore)
                                                     MediumText(
                                                       color: cColor.grey500,
-                                                      size: Dimensions.height2 *
-                                                          7,
+                                                      size: 14,
                                                       text: "No More.",
                                                     ),
                                                   if (!noMore)
                                                     CircularProgressIndicator
                                                         .adaptive(
                                                       backgroundColor:
-                                                          cColor.grey500,
+                                                          cColor.grey400,
                                                     )
                                                 ],
                                               ),
