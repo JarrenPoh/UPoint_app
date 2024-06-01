@@ -45,12 +45,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("嗨ㄏㄞ");
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.system,
       theme: lightTheme,
       darkTheme: darkTheme,
-      home: const NavigationContainer(),
+      home: NavigationContainer(uri: uri),
     );
   }
 }
@@ -61,33 +62,35 @@ Future<void> initDynamicLink() async {
   final PendingDynamicLinkData? initialLink =
       await FirebaseDynamicLinks.instance.getInitialLink();
   if (initialLink != null) {
-    final Uri deepLink = initialLink.link;
-    if (deepLink.path == "/post") {
-      final String? postId = deepLink.queryParameters['postId'];
-      if (postId != null) {
-        PostModel _p = await FirestoreMethods().fetchPostById(postId);
-        Get.to(
-          () => PostDetailPage(
-            post: _p,
-            hero: "post${DateTime.now()}",
-          ),
-        );
-      }
-    }
+    uri = initialLink.link;
+    // final Uri deepLink = initialLink.link;
+    // if (deepLink.path == "/post") {
+    //   final String? postId = deepLink.queryParameters['postId'];
+    //   if (postId != null) {
+    //     PostModel _p = await FirestoreMethods().fetchPostById(postId);
+    //     Get.to(
+    //       () => PostDetailPage(
+    //         post: _p,
+    //         hero: "post${DateTime.now()}",
+    //       ),
+    //     );
+    //   }
+    // }
   }
   FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) async {
-    if (dynamicLinkData.link.path == "/post") {
-      final String? postId = dynamicLinkData.link.queryParameters['postId'];
-      if (postId != null) {
-        PostModel _p = await FirestoreMethods().fetchPostById(postId);
-        Get.to(
-          () => PostDetailPage(
-            post: _p,
-            hero: "post${DateTime.now()}",
-          ),
-        );
-      }
-    }
+    uri = dynamicLinkData.link;
+    // if (dynamicLinkData.link.path == "/post") {
+    //   final String? postId = dynamicLinkData.link.queryParameters['postId'];
+    //   if (postId != null) {
+    //     PostModel _p = await FirestoreMethods().fetchPostById(postId);
+    //     Get.to(
+    //       () => PostDetailPage(
+    //         post: _p,
+    //         hero: "post${DateTime.now()}",
+    //       ),
+    //     );
+    //   }
+    // }
   });
 }
 

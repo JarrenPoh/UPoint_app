@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/firebase/firestore_methods.dart';
 import 'package:upoint/globals/custom_messengers.dart';
@@ -15,10 +16,13 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'models/user_model.dart';
 import 'new_version-master/lib/new_version.dart';
+import 'pages/post_detail_page.dart';
 
 class NavigationContainer extends StatefulWidget {
+  final Uri? uri;
   const NavigationContainer({
     super.key,
+    required this.uri,
   });
 
   @override
@@ -49,6 +53,7 @@ class _NavigationContainerState extends State<NavigationContainer>
       launchUrl(Uri.parse(status.appStoreLink));
     }
   }
+
   int _selectedPageIndex = 0;
   void onIconTapped(int index) {
     _pageController.jumpToPage(index);
@@ -62,25 +67,29 @@ class _NavigationContainerState extends State<NavigationContainer>
     );
   }
 
+  openUrl() async {
+    if (widget.uri != null) {
+      if (widget.uri?.path == "/post") {
+        final String? postId = widget.uri?.queryParameters['postId'];
+        if (postId != null) {
+          PostModel _p = await FirestoreMethods().fetchPostById(postId);
+          Get.to(
+            () => PostDetailPage(
+              post: _p,
+              hero: "post${DateTime.now()}",
+            ),
+          );
+        }
+      }
+    }
+  }
+
   late ValueNotifier valueNotifier;
 
   @override
   void initState() {
     super.initState();
-    // Uri? uri = Provider.of<UriBloc>(context, listen: false).uri;
-    // if (uri != null) {
-    //   debugPrint('uri: $uri');
-    //   if (uri.pathSegments.isNotEmpty && uri.pathSegments.first == 'profile') {
-    //     _selectedPageIndex = 0;
-    //   } else if (uri.pathSegments.isNotEmpty &&
-    //       uri.pathSegments.first == 'activity') {
-    //     _selectedPageIndex = 0;
-    //     findAndGoPost(uri.queryParameters['id']);
-    //   }
-    //   WidgetsBinding.instance.addPostFrameCallback((_) {
-    //     Provider.of<UriBloc>(context, listen: false).setUri(null);
-    //   });
-    // }
+    openUrl();
     _pageController = PageController(initialPage: _selectedPageIndex);
     WidgetsBinding.instance.addObserver(this);
   }
