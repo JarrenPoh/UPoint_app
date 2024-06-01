@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -213,6 +214,7 @@ class _PostDetailBodyState extends State<PostDetailBody> {
                       Column(
                         children: [
                           Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Icon(
                                 inform["icon"],
@@ -220,15 +222,19 @@ class _PostDetailBodyState extends State<PostDetailBody> {
                                 color: cColor.grey400,
                               ),
                               SizedBox(width: Dimensions.width5 * 2),
-                              Wrap(
-                                children: [
-                                  MediumText(
-                                    color: cColor.grey500,
-                                    size: 14,
-                                    text: inform["text"],
-                                    maxLines: 2,
+                              Flexible(
+                                child: RichText(
+                                  text: TextSpan(
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontFamily: "NotoSansMedium",
+                                      color: cColor.grey500,
+                                    ),
+                                    children: <TextSpan>[
+                                      TextSpan(text: inform["text"]),
+                                    ],
                                   ),
-                                ],
+                                ),
                               ),
                             ],
                           ),
@@ -250,7 +256,7 @@ class _PostDetailBodyState extends State<PostDetailBody> {
                   ),
                   child: RegularText(
                     color: cColor.grey500,
-                    size: Dimensions.height2 * 7,
+                    size: 14,
                     text: widget.post.introduction!,
                     maxLines: 20,
                   ),
@@ -280,7 +286,8 @@ class _PostDetailBodyState extends State<PostDetailBody> {
                           ? Container()
                           : Column(
                               children: [
-                                Wrap(
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Icon(
                                       inform["icon"],
@@ -288,28 +295,43 @@ class _PostDetailBodyState extends State<PostDetailBody> {
                                       color: cColor.grey400,
                                     ),
                                     SizedBox(width: Dimensions.width5 * 2),
-                                    MediumText(
-                                      color: cColor.grey500,
-                                      size: 14,
-                                      text: inform["title"],
-                                    ),
-                                    inform["index"] == "link"
-                                        ? GestureDetector(
-                                            onTap: () => launchUrl(
-                                              Uri.parse(widget.post.link!),
-                                            ),
-                                            child: RegularText(
-                                              color: cColor.primary,
-                                              size: Dimensions.height2 * 7,
-                                              text: inform["text"],
-                                            ),
-                                          )
-                                        : RegularText(
+                                    Flexible(
+                                      child: RichText(
+                                        text: TextSpan(
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontFamily: "NotoSansMedium",
                                             color: cColor.grey500,
-                                            size: Dimensions.height2 * 7,
-                                            maxLines: 2,
-                                            text: inform["text"],
                                           ),
+                                          children: <TextSpan>[
+                                            TextSpan(text: inform["title"]),
+                                            inform["index"] == "link"
+                                                ? TextSpan(
+                                                    text:
+                                                        inform["text"], 
+                                                    style: TextStyle(
+                                                      color: cColor.primary,
+                                                      decoration: TextDecoration
+                                                          .underline, 
+                                                    ),
+                                                    recognizer:
+                                                        TapGestureRecognizer()
+                                                          ..onTap = () {
+                                                            launchUrl(
+                                                              Uri.parse(widget
+                                                                  .post
+                                                                  .link!), 
+                                                            );
+                                                          },
+                                                  )
+                                                : TextSpan(
+                                                    text:
+                                                        inform["text"], 
+                                                  ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
                                   ],
                                 ),
                                 SizedBox(height: Dimensions.height5 * 2),
