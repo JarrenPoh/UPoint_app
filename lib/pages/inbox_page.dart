@@ -227,7 +227,7 @@ class _InboxPageState extends State<InboxPage>
                   Expanded(
                     child: RichText(
                       text: TextSpan(
-                        style: const TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 14),
                         children: [
                           TextSpan(
                             recognizer: TapGestureRecognizer()

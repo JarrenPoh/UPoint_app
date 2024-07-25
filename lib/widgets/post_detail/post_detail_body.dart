@@ -18,7 +18,7 @@ class PostDetailBody extends StatefulWidget {
   final PostModel post;
   const PostDetailBody({
     super.key,
-    required this.post,
+    required this.post, 
   });
 
   @override
@@ -226,7 +226,7 @@ class _PostDetailBodyState extends State<PostDetailBody> {
                                 child: RichText(
                                   text: TextSpan(
                                     style: TextStyle(
-                                      fontSize: 16,
+                                      fontSize: 14,
                                       fontFamily: "NotoSansMedium",
                                       color: cColor.grey500,
                                     ),
@@ -299,7 +299,7 @@ class _PostDetailBodyState extends State<PostDetailBody> {
                                       child: RichText(
                                         text: TextSpan(
                                           style: TextStyle(
-                                            fontSize: 16,
+                                            fontSize: 14,
                                             fontFamily: "NotoSansMedium",
                                             color: cColor.grey500,
                                           ),
