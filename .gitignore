@@ -10,7 +10,7 @@ pubspec.lock
 ios/Podfile.lock
 ios/Runner/Info.plist
 # Files and directories created by pub
-
+.DS_Store
 Images/
 assets/
 
