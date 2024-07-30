@@ -76,8 +76,13 @@ class TabActBloc {
     FilterModel filter =
         filterList.firstWhere((e) => e.type == ActFilterType.ORGANIZER);
     filter.count.clear();
-    filter.count.addAll({for (var organizer in filter.list) organizer.username: 0});
+    filter.count
+        .addAll({for (var organizer in filter.list) organizer.username: 0});
     _countLen(filter);
+
+    // 照著 count 的大小排序
+    filter.list.sort((a, b) => filter.count[b.username]!.compareTo(filter.count[a.username]!));
+
     return {
       "list": filter.list.map((e) => e.username).toList(),
       "count": filter.count,
@@ -99,8 +104,12 @@ class TabActBloc {
     filter.count.clear();
     filter.count.addAll({for (var reward in rewardList) reward.name: 0});
     _countLen(filter);
+
+    // 照著 count 的大小排序
+    filter.list.sort((a, b) => filter.count[b.name]!.compareTo(filter.count[a.name]!));
+
     return {
-      "list": rewardList.map((e) => e.name).toList(),
+      "list": filter.list.map((e) => e.name).toList(),
       "count": filter.count,
     };
   }
@@ -146,7 +155,8 @@ class TabActBloc {
       _list = _list.where((doc) => doc.organizerUid == model.uid).toList();
     }
     // 活動類別
-    FilterModel typeFilter = filterList.firstWhere((e) => e.type == ActFilterType.TYPE);
+    FilterModel typeFilter =
+        filterList.firstWhere((e) => e.type == ActFilterType.TYPE);
     String _typeFilterText = typeFilter.filter;
     if (_typeFilterText != "全部") {
       _list = _list.where((doc) => doc.postType == _typeFilterText).toList();

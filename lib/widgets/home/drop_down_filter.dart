@@ -68,7 +68,7 @@ class _DropDownFilterState extends State<DropDownFilter> {
       padding: const EdgeInsets.all(0),
       decoration: BoxDecoration(
         color: cColor.white,
-        border: Border.all(color: cColor.grey400),
+        border: Border.all(color: cColor.grey200),
         borderRadius: BorderRadius.circular(10),
         boxShadow: const [
           BoxShadow(
