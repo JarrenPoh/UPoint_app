@@ -62,7 +62,6 @@ class _FilterClubBodyState extends State<FilterClubBody> {
               ),
             ],
           ),
-          SizedBox(height: Dimensions.height2 * 8),
           Expanded(
             child: ListView(
               shrinkWrap: true,
