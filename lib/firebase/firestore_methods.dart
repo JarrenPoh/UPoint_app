@@ -139,6 +139,8 @@ class FirestoreMethods {
       _post.removeWhere((e) => debugId.contains(e.organizerUid));
       _post.removeWhere((e) => e.isVisible == false);
     }
+    // 按 startDateTime 進行排序，最近的日期放在前面
+    _post.sort((a, b) => (b.startDateTime as Timestamp).compareTo(a.startDateTime));
     debugPrint('找了${fetchPost.docs.length}則貼文');
     return _post;
   }

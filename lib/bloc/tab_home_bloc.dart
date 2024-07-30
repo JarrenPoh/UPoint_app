@@ -19,12 +19,14 @@ class TagHomeBloc {
 
   TagHomeBloc(List<PostModel> allPost) {
     _allPost = allPost;
-    _featuredPost = _allPost;
-    _recommandPost = _allPost;
+    // 創建 _featuredPost 和 _recommandPost 的副本
+    _featuredPost = List.from(_allPost);
+    _recommandPost = List.from(_allPost);
+
     init();
   }
+
   init() {
-    _recommandPost.shuffle();
     sortFeatured();
     sortRecommand();
   }
@@ -32,36 +34,39 @@ class TagHomeBloc {
   // featured
   sortFeatured() {
     _featuredPost
-        .sort((a, b) => b.signFormsLength!.compareTo(a.signFormsLength!));
+        .sort((a, b) => (b.signFormsLength ?? 0).compareTo(a.signFormsLength ?? 0));
     int limit = 4;
     int end = _featuredPost.length < limit ? _featuredPost.length : limit;
     featuredPostValue.value["postList"] = _featuredPost.sublist(0, end);
+    featuredPostValue.value["noMore"] = end == _featuredPost.length;
     featuredPostValue.notifyListeners();
   }
 
   moreFeatured() {
     int limit = 10;
-    int end = _featuredPost.length < limit ? _featuredPost.length : limit;
-    (featuredPostValue.value["postList"] as List)
-        .addAll(_featuredPost.sublist(4, end));
-    featuredPostValue.value["noMore"] = true;
+    int start = (featuredPostValue.value["postList"] as List).length;
+    int end = _featuredPost.length < start + limit ? _featuredPost.length : start + limit;
+    (featuredPostValue.value["postList"] as List).addAll(_featuredPost.sublist(start, end));
+    featuredPostValue.value["noMore"] = end == _featuredPost.length;
     featuredPostValue.notifyListeners();
   }
 
   // recommand
   sortRecommand() {
+    _recommandPost.shuffle();
     int limit = 4;
     int end = _recommandPost.length < limit ? _recommandPost.length : limit;
     recommandPostValue.value["postList"] = _recommandPost.sublist(0, end);
+    recommandPostValue.value["noMore"] = end == _recommandPost.length;
     recommandPostValue.notifyListeners();
   }
 
   moreRecommand() {
     int limit = 10;
-    int end = _recommandPost.length < limit ? _recommandPost.length : limit;
-    (recommandPostValue.value["postList"] as List)
-        .addAll(_recommandPost.sublist(4, end));
-    recommandPostValue.value["noMore"] = true;
+    int start = (recommandPostValue.value["postList"] as List).length;
+    int end = _recommandPost.length < start + limit ? _recommandPost.length : start + limit;
+    (recommandPostValue.value["postList"] as List).addAll(_recommandPost.sublist(start, end));
+    recommandPostValue.value["noMore"] = end == _recommandPost.length;
     recommandPostValue.notifyListeners();
   }
 
