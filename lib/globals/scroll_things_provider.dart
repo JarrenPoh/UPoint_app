@@ -26,10 +26,10 @@ class CustomScrollProvider extends StatefulWidget {
   final Widget child;
 
   @override
-  State<CustomScrollProvider> createState() => CustomScrollProviderState();
+  State<CustomScrollProvider> createState() => _CustomScrollProviderState();
 }
 
-class CustomScrollProviderState extends State<CustomScrollProvider> {
+class _CustomScrollProviderState extends State<CustomScrollProvider> {
   late final List<CustomScrollController> scrollControllers;
 
   @override
@@ -46,23 +46,12 @@ class CustomScrollProviderState extends State<CustomScrollProvider> {
           parent: widget.parent,
           debugLabel: 'CustomScrollController/$index',
         );
-
       },
     );
 
-    // for (var i = 0; i < scrollControllers.length; i++) {
-    //   final _scrollController = scrollControllers[i];
-    //   _scrollController.addListenerToParent((offset, index,isActive) {
-    //     // 在這裡處理滑動位移(offset)和當前是第幾個 CustomScrollController
-    //     if(isActive){
-    //       print('滑動位移：$offset，當前是第 $index 個 CustomScrollController');
-    //     }
-    //   }, i);
-    // }
-
     widget.tabController.addListener(() {
-      changeActiveIndex(widget.tabController.index);
-    });
+        changeActiveIndex(widget.tabController.index);
+      });
   }
 
   @override
@@ -143,13 +132,6 @@ class CustomScrollController extends ScrollController {
 
     return parent.createScrollPosition(physics, context, oldPosition);
   }
-
-  // void addListenerToParent(Function(double, int,bool) listener, int index) {
-    
-  //   parent.addListener(() {
-  //     listener(parent.offset, index,isActive);
-  //   });
-  // }
 
   @override
   void attach(ScrollPosition position) {

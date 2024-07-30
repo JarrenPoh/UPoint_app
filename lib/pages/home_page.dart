@@ -13,7 +13,6 @@ import '../models/post_model.dart';
 import '../widgets/home/tab_act_body.dart';
 import '../widgets/home/tab_club_body.dart';
 import '../widgets/home/tab_home_body.dart';
-
 class HomePage extends StatefulWidget {
   final Function(int) searchTapped;
   final List<PostModel> allPost;
@@ -37,6 +36,7 @@ class _HomePageState extends State<HomePage>
   final bool wantKeepAlive = true;
   List tabList = ["精選", "活動", "社團"];
   late TabController tabController;
+
   @override
   void initState() {
     super.initState();
@@ -139,28 +139,10 @@ class _HomePageState extends State<HomePage>
                             allPost: widget.allPost,
                           ),
                           TabClubBody(
-                            index: 1,
+                            index: 2,
                             user: widget.user,
                             allPost: widget.allPost,
                           ),
-                          // TabOrganizerBody(
-                          // index: 1,
-                          // user: widget.user,
-                          // allPost: widget.allPost,
-                          //   allAd: widget.allAd,
-                          // ),
-                          // TabTypeBody(
-                          //   index: 2,
-                          //   user: widget.user,
-                          //   allPost: widget.allPost,
-                          //   allAd: widget.allAd,
-                          // ),
-                          // TabRewardBody(
-                          //   index: 3,
-                          //   user: widget.user,
-                          //   allPost: widget.allPost,
-                          //   allAd: widget.allAd,
-                          // ),
                         ],
                       ),
                     );
@@ -172,34 +154,5 @@ class _HomePageState extends State<HomePage>
         ),
       ),
     );
-  }
-}
-
-class MySliverDelegate extends SliverPersistentHeaderDelegate {
-  MySliverDelegate({
-    required this.minHeight,
-    required this.maxHeight,
-    required this.child,
-  });
-
-  final double minHeight; //最小高度
-  final double maxHeight; //最大高度
-  final Widget child; //子Widget布局
-
-  @override
-  double get minExtent => minHeight;
-
-  @override
-  double get maxExtent => (maxHeight);
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return SizedBox.expand(child: child);
-  }
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return false;
   }
 }
