@@ -53,6 +53,7 @@ class _TabClubBodyState extends State<TabClubBody>
               Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: Dimensions.width5 * 2,
+                  vertical: Dimensions.height2 * 6,
                 ),
                 child: Column(
                   children: [

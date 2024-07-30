@@ -58,6 +58,7 @@ class _TabActBodyState extends State<TabActBody>
                     // 篩選
                     FilterActBody(bloc: _bloc),
                     //文章
+                    SizedBox(height: Dimensions.height2 * 6),
                     ValueListenableBuilder(
                       valueListenable: _bloc.postListNotifier,
                       builder:
