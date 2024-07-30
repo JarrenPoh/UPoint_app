@@ -18,6 +18,8 @@ import 'package:upoint/theme/light_theme.dart';
 import 'package:camera/camera.dart';
 import 'package:provider/provider.dart';
 
+import 'bloc/organizer_fetch_bloc.dart';
+
 late List<CameraDescription> _cameras;
 Uri? uri = Uri();
 
@@ -34,6 +36,7 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => AuthMethods()),
         ChangeNotifierProvider(create: (context) => InboxPageBloc()),
+        ChangeNotifierProvider(create: (context) => OrganzierFetchBloc()),
       ],
       child: MyApp(),
     ),

@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:upoint/bloc/organizer_fetch_bloc.dart';
 import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/firebase/firestore_methods.dart';
 import 'package:upoint/globals/custom_messengers.dart';
@@ -92,6 +93,8 @@ class _NavigationContainerState extends State<NavigationContainer>
     openUrl();
     _pageController = PageController(initialPage: _selectedPageIndex);
     WidgetsBinding.instance.addObserver(this);
+    final ideaCardsBloc = Provider.of<OrganzierFetchBloc>(context, listen: false);
+    ideaCardsBloc.fetchOrganizers();
   }
 
   // findAndGoPost(postId) async {

@@ -5,15 +5,14 @@ import 'package:upoint/globals/colors.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/scroll_things_provider.dart';
 import 'package:upoint/models/user_model.dart';
-import 'package:upoint/widgets/home/tab_organizer_body.dart';
-import 'package:upoint/widgets/home/tab_reward_body.dart';
 import 'package:provider/provider.dart';
 import '../firebase/auth_methods.dart';
 import '../globals/user_simple_preference.dart';
 import '../models/ad_model.dart';
 import '../models/post_model.dart';
+import '../widgets/home/tab_act_body.dart';
+import '../widgets/home/tab_club_body.dart';
 import '../widgets/home/tab_home_body.dart';
-import '../widgets/home/tab_type_body.dart';
 
 class HomePage extends StatefulWidget {
   final Function(int) searchTapped;
@@ -36,7 +35,7 @@ class _HomePageState extends State<HomePage>
     with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   @override
   final bool wantKeepAlive = true;
-  List tabList = ["UPoint", "單位", "類別", "獎勵"];
+  List tabList = ["精選", "活動", "社團"];
   late TabController tabController;
   @override
   void initState() {
@@ -82,7 +81,6 @@ class _HomePageState extends State<HomePage>
                           context),
                       sliver: SliverAppBar(
                         pinned: true,
-                        elevation: 0,
                         backgroundColor: cColor.white,
                         title: PreferredSize(
                           preferredSize: Size(
@@ -135,24 +133,34 @@ class _HomePageState extends State<HomePage>
                             allPost: widget.allPost,
                             allAd: widget.allAd,
                           ),
-                          TabOrganizerBody(
+                          TabActBody(
                             index: 1,
                             user: widget.user,
                             allPost: widget.allPost,
-                            allAd: widget.allAd,
                           ),
-                          TabTypeBody(
-                            index: 2,
+                          TabClubBody(
+                            index: 1,
                             user: widget.user,
                             allPost: widget.allPost,
-                            allAd: widget.allAd,
                           ),
-                          TabRewardBody(
-                            index: 3,
-                            user: widget.user,
-                            allPost: widget.allPost,
-                            allAd: widget.allAd,
-                          ),
+                          // TabOrganizerBody(
+                          // index: 1,
+                          // user: widget.user,
+                          // allPost: widget.allPost,
+                          //   allAd: widget.allAd,
+                          // ),
+                          // TabTypeBody(
+                          //   index: 2,
+                          //   user: widget.user,
+                          //   allPost: widget.allPost,
+                          //   allAd: widget.allAd,
+                          // ),
+                          // TabRewardBody(
+                          //   index: 3,
+                          //   user: widget.user,
+                          //   allPost: widget.allPost,
+                          //   allAd: widget.allAd,
+                          // ),
                         ],
                       ),
                     );
