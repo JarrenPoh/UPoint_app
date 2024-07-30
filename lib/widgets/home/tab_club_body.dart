@@ -7,7 +7,7 @@ import '../../globals/medium_text.dart';
 import '../../globals/scroll_things_provider.dart';
 import '../../models/post_model.dart';
 import '../../models/user_model.dart';
-import 'filter_club_blody.dart';
+import 'filter_club_body.dart';
 import 'post_card.dart';
 import 'package:provider/provider.dart';
 

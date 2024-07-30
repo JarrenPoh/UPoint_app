@@ -88,7 +88,7 @@ class PrivacyPage extends StatelessWidget {
             ),
           ],
         ),
-        iconTheme: IconThemeData(color: onSecondary),
+        iconTheme: IconThemeData(color: onSecondary,size: 20),
       ),
       body: ListView.builder(
         itemCount: values.length,

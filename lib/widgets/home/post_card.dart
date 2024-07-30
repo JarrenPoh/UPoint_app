@@ -79,7 +79,7 @@ class _PostCardState extends State<PostCard> {
           vertical: Dimensions.height2 * 6,
           horizontal: Dimensions.width2 * 6,
         ),
-        child: PostCard(
+        child: postCard(
           widget.post.photo,
           widget.post.title,
           widget.post.organizerName,
@@ -90,7 +90,7 @@ class _PostCardState extends State<PostCard> {
     );
   }
 
-  Widget PostCard(
+  Widget postCard(
     imageUrl,
     title,
     organizerName,
@@ -120,22 +120,6 @@ class _PostCardState extends State<PostCard> {
                           image: imageProvider,
                         ),
                       ),
-                      // child: Container(
-                      //   decoration: BoxDecoration(
-                      //     color: isOver ? Colors.black.withOpacity(0.8) : null,
-                      //     borderRadius: BorderRadius.circular(20),
-                      //     gradient: isOver
-                      //         ? null
-                      //         : LinearGradient(
-                      //             begin: Alignment.bottomRight,
-                      //             stops: const [0.3, 0.9],
-                      //             colors: [
-                      //               Colors.black.withOpacity(.8),
-                      //               Colors.black.withOpacity(.2),
-                      //             ],
-                      //           ),
-                      //   ),
-                      // ),
                     ),
                   ),
                 ],

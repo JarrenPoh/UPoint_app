@@ -102,7 +102,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         backgroundColor: appBarColor,
         appBar: AppBar(
           elevation: 0,
-          iconTheme: IconThemeData(color: onSecondary),
+          iconTheme: IconThemeData(color: onSecondary,size: 20),
           title: MediumText(
             color: onSecondary,
             size: Dimensions.height2 * 8,

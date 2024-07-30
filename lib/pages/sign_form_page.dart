@@ -66,7 +66,7 @@ class _SignFormPageState extends State<SignFormPage> {
             appBar: AppBar(
               backgroundColor: cColor.white,
               elevation: 0,
-              iconTheme: IconThemeData(color: cColor.black),
+              iconTheme: IconThemeData(color: cColor.black,size: 20),
               title: MediumText(
                 color: cColor.grey500,
                 size: Dimensions.height2 * 8,

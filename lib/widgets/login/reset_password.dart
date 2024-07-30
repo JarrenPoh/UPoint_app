@@ -98,7 +98,7 @@ class _ResetPasswordState extends State<ResetPassword> {
             size: Dimensions.height2 * 9,
             text: '重置密碼',
           ),
-          iconTheme: IconThemeData(color: hintColor),
+          iconTheme: IconThemeData(color: hintColor, size: 20),
         ),
         body: Center(
           child: isLoading
@@ -137,7 +137,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                             color: hintColor,
                           ),
                           child: isLoading
-                              ?  Center(
+                              ? Center(
                                   child: CircularProgressIndicator.adaptive(
                                       backgroundColor:
                                           CColor.of(context).grey400),

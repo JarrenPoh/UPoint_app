@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:upoint/globals/colors.dart';
 import 'package:upoint/models/organizer_model.dart';
+import 'package:upoint/pages/all_club_page.dart';
 import '../../bloc/tab_club_bloc.dart';
 import '../../globals/dimension.dart';
 import '../../globals/medium_text.dart';
@@ -44,20 +45,31 @@ class _FilterClubBodyState extends State<FilterClubBody> {
                 text: "中原大學",
               ),
               const Expanded(child: Column(children: [])),
-              Container(
+              SizedBox(
                 height: Dimensions.height2 * 15,
-                padding: EdgeInsets.symmetric(
-                  horizontal: Dimensions.width2 * 4,
-                  vertical: Dimensions.height2 * 3,
-                ),
-                decoration: BoxDecoration(
-                  border: Border.all(color: cColor.primary),
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: MediumText(
-                  color: cColor.primary,
-                  size: 12,
-                  text: "所有社團",
+                child: CupertinoButton(
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      return AllClubPage();
+                    }),
+                  ),
+                  padding: const EdgeInsets.all(0),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Dimensions.width2 * 4,
+                      vertical: Dimensions.height2 * 3,
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: cColor.primary),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: MediumText(
+                      color: cColor.primary,
+                      size: 12,
+                      text: "所有社團",
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -89,7 +101,8 @@ class _FilterClubBodyState extends State<FilterClubBody> {
                                     child: index == 0
                                         ? Container(
                                             decoration: BoxDecoration(
-                                              border: Border.all(color: cColor.grey200),
+                                              border: Border.all(
+                                                  color: cColor.grey200),
                                               borderRadius:
                                                   BorderRadius.circular(30),
                                             ),
@@ -127,7 +140,8 @@ class _FilterClubBodyState extends State<FilterClubBody> {
                                         child: MediumText(
                                           color: Colors.white,
                                           size: Dimensions.height2 * 6,
-                                          text: value[model.username].toString(),
+                                          text:
+                                              value[model.username].toString(),
                                         ),
                                       );
                                     },
@@ -158,11 +172,12 @@ class _FilterClubBodyState extends State<FilterClubBody> {
                                 ),
                                 child: Center(
                                   child: MediumText(
-                                      color: cColor.grey500,
-                                      size: 12,
-                                      text: model.username,
-                                      maxLines: 3,
-                                      textAlign: TextAlign.center),
+                                    color: cColor.grey500,
+                                    size: 12,
+                                    text: model.username,
+                                    maxLines: 3,
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
                               );
                             },
