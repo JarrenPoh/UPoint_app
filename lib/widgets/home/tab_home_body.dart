@@ -77,7 +77,7 @@ class _TabHomeBodyState extends State<TabHomeBody>
                       GestureDetector(
                         onTap: () => index == 0
                             ? Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => WishingPage()))
+                                builder: (context) => const WishingPage()))
                             : Messenger.toast(context, "尚未開放", "尚未開放，敬請期待"),
                         child: SizedBox(
                           width: Dimensions.width5 * 11,

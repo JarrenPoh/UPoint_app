@@ -10,6 +10,7 @@ import '../../models/organizer_model.dart';
 class ClubCard extends StatefulWidget {
   final String hero;
   final OrganizerModel club;
+
   const ClubCard({
     super.key,
     required this.hero,

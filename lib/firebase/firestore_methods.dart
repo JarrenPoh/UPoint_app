@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:upoint/firebase/storage_methods.dart';
 import 'package:upoint/globals/user_simple_preference.dart';
 import 'package:upoint/models/ad_model.dart';
+import 'package:upoint/models/announce_model.dart';
 import 'package:upoint/models/post_model.dart';
 import 'package:upoint/models/sign_form_model.dart';
 import 'package:upoint/models/user_model.dart';
@@ -123,9 +124,59 @@ class FirestoreMethods {
             )
             .get();
     PostModel _post = PostModel.fromSnap(fetchPost.docs.toList().first);
+
     return _post;
   }
 
+  //找指定處室文
+  Future<List<PostModel>> fetchOrganizePost(
+      {required String organizerUid}) async {
+    QuerySnapshot<Map<String, dynamic>> fetchPost =
+        await FirebaseFirestore.instance
+            .collection('posts')
+            .where(
+              'organizerUid',
+              isEqualTo: organizerUid,
+            )
+            .get();
+    // 獲取文檔列表並排序
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> sortedDocs =
+        fetchPost.docs.toList()
+          ..sort((a, b) {
+            Timestamp timeA = a['datePublished'];
+            Timestamp timeB = b['datePublished'];
+            return timeB.compareTo(timeA); // 從新到舊排序
+          });
+    List<PostModel> _post =
+        sortedDocs.map((e) => PostModel.fromSnap(e)).toList();
+    return _post;
+  }
+
+  //找指定處公告
+  Future<List<AnnounceModel>> fetchOrganizeAnnounce(
+      {required String organizerUid}) async {
+    QuerySnapshot<Map<String, dynamic>> fetchPost =
+        await FirebaseFirestore.instance
+            .collection('announcements')
+            .where(
+              'organizerUid',
+              isEqualTo: organizerUid,
+            )
+            .get();
+    // 獲取文檔列表並排序
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> sortedDocs =
+        fetchPost.docs.toList()
+          ..sort((a, b) {
+            Timestamp timeA = a['datePublished'];
+            Timestamp timeB = b['datePublished'];
+            return timeB.compareTo(timeA); // 從新到舊排序
+          });
+    List<AnnounceModel> announcements =
+        sortedDocs.map((e) => AnnounceModel.fromSnap(e)).toList();
+    return announcements;
+  }
+
+  // 找所有文
   Future<List<PostModel>> fetchAllPost() async {
     QuerySnapshot<Map<String, dynamic>> fetchPost = await FirebaseFirestore
         .instance
@@ -140,7 +191,8 @@ class FirestoreMethods {
       _post.removeWhere((e) => e.isVisible == false);
     }
     // 按 startDateTime 進行排序，最近的日期放在前面
-    _post.sort((a, b) => (b.startDateTime as Timestamp).compareTo(a.startDateTime));
+    _post.sort(
+        (a, b) => (b.startDateTime as Timestamp).compareTo(a.startDateTime));
     debugPrint('找了${fetchPost.docs.length}則貼文');
     return _post;
   }

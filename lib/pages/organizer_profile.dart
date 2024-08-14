@@ -5,6 +5,11 @@ import 'package:upoint/globals/colors.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/models/organizer_model.dart';
+import 'package:upoint/overscroll_pop-main/lib/overscroll_pop.dart';
+import 'package:upoint/widgets/organizer_profile/organizer_profile_announce.dart';
+import 'package:upoint/widgets/organizer_profile/organizer_profile_inform.dart';
+import 'package:upoint/widgets/organizer_profile/organizer_profile_post.dart';
+import '../globals/scroll_things_provider.dart';
 import 'profile_page.dart';
 
 class OrganizerProfile extends StatefulWidget {
@@ -23,117 +28,114 @@ class OrganizerProfile extends StatefulWidget {
 class _OrganizerProfileState extends State<OrganizerProfile>
     with TickerProviderStateMixin {
   late CColor cColor = CColor.of(context);
-  final List tabList = ["基本資料", "所有活動", "貼文公告"];
+  final List<String> tabList = ["基本資料", "所有活動", "貼文公告"];
   late final TabController _tabController =
       TabController(length: tabList.length, vsync: this, initialIndex: 0);
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: cColor.white,
-      body: NestedScrollView(
-        floatHeaderSlivers: true,
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return [
-            SliverOverlapAbsorber(
-              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-              sliver: SliverAppBar(
-                iconTheme: const IconThemeData(color: Colors.white, size: 20),
-                backgroundColor: cColor.primary,
-                title: MediumText(
-                  color: Colors.white,
-                  size: Dimensions.height2 * 8,
-                  text: widget.organizer.username,
-                ),
-                forceElevated: innerBoxIsScrolled,
-                // expandedHeight: 160,
-                pinned: false,
-                floating: true,
-                // bottom: PreferredSize(
-                //   preferredSize:
-                //       Size(Dimensions.screenWidth, Dimensions.height5 * 16),
-                //   child: Padding(
-                //     padding: EdgeInsets.symmetric(
-                //       vertical: Dimensions.height2 * 8,
-                //       horizontal: Dimensions.width2 * 8,
-                //     ),
-                //     child: Column(
-                //       children: [
-                //         // 概覽
-                //         preview(),
-                //         SizedBox(height: Dimensions.height2 * 4),
-                //       ],
-                //     ),
-                //   ),
-                // ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: Dimensions.height2 * 8,
-                  horizontal: Dimensions.width2 * 8,
-                ),
-                child: Column(
-                  children: [
-                    // 概覽
-                    preview(),
-                  ],
+    return OverscrollPop(
+      scrollToPopOption: ScrollToPopOption.start,
+      dragToPopDirection: DragToPopDirection.horizontal,
+      child: Scaffold(
+        backgroundColor: cColor.white,
+        body: NestedScrollView(
+          floatHeaderSlivers: true,
+          headerSliverBuilder: (context, innerBoxIsScrolled) {
+            return [
+              SliverOverlapAbsorber(
+                handle:
+                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                sliver: SliverAppBar(
+                  iconTheme: const IconThemeData(color: Colors.white, size: 20),
+                  backgroundColor: cColor.primary,
+                  title: MediumText(
+                    color: Colors.white,
+                    size: Dimensions.height2 * 8,
+                    text: widget.organizer.username,
+                  ),
+                  forceElevated: innerBoxIsScrolled,
+                  pinned: true,
+                  floating: true,
                 ),
               ),
-            ),
-            SliverPersistentHeader(
-              pinned: true,
-              delegate: MySliverDelegate(
-                maxHeight: Dimensions.height2 * 26,
-                minHeight: Dimensions.height2 * 26,
-                child: Column(
-                  children: [
-                    SizedBox(height: Dimensions.height2 * 4),
-                    Container(
-                      height: Dimensions.height2 * 22,
-                      color: cColor.white,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: Dimensions.width2 * 14,
-                        vertical: Dimensions.height2 * 4,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: List.generate(
-                          tabList.length,
-                          (index) => switchTab(text: tabList[index]),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: Dimensions.height2 * 8,
+                    horizontal: Dimensions.width2 * 8,
+                  ),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 100),
+                      preview(),
+                    ],
+                  ),
+                ),
+              ),
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: MySliverDelegate(
+                  maxHeight: Dimensions.height2 * 26,
+                  minHeight: Dimensions.height2 * 26,
+                  child: Container(
+                    color: cColor.white,
+                    child: Column(
+                      children: [
+                        TabBar(
+                          controller: _tabController,
+                          labelColor: cColor.primary,
+                          unselectedLabelColor: cColor.grey500,
+                          indicatorColor: Colors.transparent,
+                          dividerColor: Colors.transparent,
+                          labelStyle:
+                              const TextStyle(fontFamily: "NotoSansMedium"),
+                          tabs: List.generate(
+                            tabList.length,
+                            (index) => Tab(text: tabList[index]),
+                          ),
                         ),
-                      ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Dimensions.width2 * 13),
+                          child: Divider(
+                            color: cColor.grey200, // 設置灰色線條顏色
+                            thickness: 1, // 設置線條厚度
+                            height: 1, // 設置線條高度
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ];
-        },
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(width: 20, height: 600, color: Colors.amber),
-              Container(width: 20, height: 600, color: Colors.black),
-              Container(width: 20, height: 600, color: Colors.red),
-              Container(width: 20, height: 600, color: Colors.amber),
-            ],
-          ),
+            ];
+          },
+          body: Builder(builder: (context) {
+            return CustomScrollProvider(
+              tabController: _tabController,
+              parent: PrimaryScrollController.of(context),
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  OrganizerProfileInform(
+                    organizer: widget.organizer,
+                    index: 0,
+                  ),
+                  OrganizerProfilePost(
+                    organizer: widget.organizer,
+                    index: 1,
+                  ),
+                  OrganizerProfileAnnounce(
+                    organizer: widget.organizer,
+                    index: 2,
+                  ),
+                ],
+              ),
+            );
+          }),
         ),
       ),
-    );
-  }
-
-  Widget switchTab({required String text}) {
-    return Container(
-      width: Dimensions.width5 * 18,
-      height: Dimensions.height2 * 14,
-      padding: EdgeInsets.symmetric(
-        vertical: Dimensions.height2 * 2,
-        horizontal: Dimensions.width2 * 6,
-      ),
-      alignment: Alignment.center,
-      child: MediumText(color: cColor.primary, size: 14, text: text),
     );
   }
 
@@ -146,27 +148,21 @@ class _OrganizerProfileState extends State<OrganizerProfile>
       ),
       child: Row(
         children: [
-          Column(
-            children: [
-              Expanded(
-                child: AspectRatio(
-                  aspectRatio: 1 / 1,
-                  child: Hero(
-                    transitionOnUserGestures: true,
-                    tag: widget.hero,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: NetworkImage(widget.organizer.pic),
-                        ),
-                      ),
-                    ),
+          AspectRatio(
+            aspectRatio: 1 / 1,
+            child: Hero(
+              transitionOnUserGestures: true,
+              tag: widget.hero,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(widget.organizer.pic),
                   ),
                 ),
               ),
-            ],
+            ),
           ),
           SizedBox(width: Dimensions.width2 * 8),
           Expanded(
@@ -201,11 +197,9 @@ class _OrganizerProfileState extends State<OrganizerProfile>
                 ),
                 decoration: BoxDecoration(
                   color: cColor.primary,
-                  // border: Border.all(color: cColor.primary),
                   borderRadius: BorderRadius.circular(5),
                 ),
                 child: const MediumText(
-                  // color: cColor.primary,
                   color: Colors.white,
                   size: 12,
                   text: "追蹤",
