@@ -25,7 +25,7 @@ class _ClubCardState extends State<ClubCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapUp: (d) {
+      onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(

@@ -7,6 +7,7 @@ import 'package:upoint/pages/all_club_page.dart';
 import '../../bloc/tab_club_bloc.dart';
 import '../../globals/dimension.dart';
 import '../../globals/medium_text.dart';
+import '../../pages/organizer_profile.dart';
 
 class FilterClubBody extends StatefulWidget {
   final TabClubBloc bloc;
@@ -51,7 +52,7 @@ class _FilterClubBodyState extends State<FilterClubBody> {
                   onPressed: () => Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) {
-                      return AllClubPage();
+                      return const AllClubPage();
                     }),
                   ),
                   padding: const EdgeInsets.all(0),
@@ -82,6 +83,7 @@ class _FilterClubBodyState extends State<FilterClubBody> {
                 widget.bloc.organizerList.length,
                 (index) {
                   OrganizerModel model = widget.bloc.organizerList[index];
+                  String hero = "filter_club_body${model.uid.toString()}";
                   return SizedBox(
                     width: Dimensions.width2 * 32,
                     height: Dimensions.height2 * 51,
@@ -92,66 +94,86 @@ class _FilterClubBodyState extends State<FilterClubBody> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Stack(
-                                alignment: const Alignment(1, -1),
-                                children: [
-                                  SizedBox(
-                                    height: Dimensions.height2 * 24,
-                                    width: Dimensions.width2 * 24,
-                                    child: index == 0
-                                        ? Container(
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: cColor.grey200),
-                                              borderRadius:
-                                                  BorderRadius.circular(30),
-                                            ),
-                                            child: Icon(
-                                              Icons.add,
-                                              color: cColor.black,
-                                            ),
-                                          )
-                                        : Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(30),
-                                              image: DecorationImage(
-                                                fit: BoxFit.cover,
-                                                image: NetworkImage(
-                                                  model.pic,
+                              // 社團照片
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => OrganizerProfile(
+                                        organizer: model,
+                                        hero: hero,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Stack(
+                                  alignment: const Alignment(1, -1),
+                                  children: [
+                                    SizedBox(
+                                      height: Dimensions.height2 * 24,
+                                      width: Dimensions.width2 * 24,
+                                      child: index == 0
+                                          ? Container(
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: cColor.grey200),
+                                                borderRadius:
+                                                    BorderRadius.circular(30),
+                                              ),
+                                              child: Icon(
+                                                Icons.add,
+                                                color: cColor.black,
+                                              ),
+                                            )
+                                          : Hero(
+                                              transitionOnUserGestures: true,
+                                              tag: hero,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(30),
+                                                  image: DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                    image: NetworkImage(
+                                                      model.pic,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             ),
+                                    ),
+                                    ValueListenableBuilder(
+                                      valueListenable:
+                                          widget.bloc.countNotifier,
+                                      builder: (context, dynamic value,
+                                          Widget? child) {
+                                        return Container(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: Dimensions.width5,
                                           ),
-                                  ),
-                                  ValueListenableBuilder(
-                                    valueListenable: widget.bloc.countNotifier,
-                                    builder: (context, dynamic value,
-                                        Widget? child) {
-                                      return Container(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: Dimensions.width5,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: cColor.primary,
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                        ),
-                                        child: MediumText(
-                                          color: Colors.white,
-                                          size: Dimensions.height2 * 6,
-                                          text:
-                                              value[model.username].toString(),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ],
+                                          decoration: BoxDecoration(
+                                            color: cColor.primary,
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                          child: MediumText(
+                                            color: Colors.white,
+                                            size: Dimensions.height2 * 6,
+                                            text: value[model.username]
+                                                .toString(),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
                         ),
                         const SizedBox(height: 4),
+                        // 篩選文字
                         GestureDetector(
                           onTap: () =>
                               widget.bloc.filterPostsByOrganizer(index),
