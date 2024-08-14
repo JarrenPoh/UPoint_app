@@ -5,7 +5,6 @@ import 'package:upoint/globals/colors.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/models/organizer_model.dart';
-
 import 'profile_page.dart';
 
 class OrganizerProfile extends StatefulWidget {

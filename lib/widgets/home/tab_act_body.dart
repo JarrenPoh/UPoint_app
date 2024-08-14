@@ -95,7 +95,7 @@ class _TabActBodyState extends State<TabActBody>
                                       post: postList[index],
                                       organizer: null,
                                       hero:
-                                          "type${postList[index].datePublished.toString()}",
+                                          "act${postList[index].datePublished.toString()}",
                                       isOrganizer: false,
                                       user: widget.user,
                                     );
