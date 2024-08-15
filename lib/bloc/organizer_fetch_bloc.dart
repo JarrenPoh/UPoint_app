@@ -31,6 +31,8 @@ class OrganzierFetchBloc with ChangeNotifier {
         unit: "",
         contact: "",
         postLength: 0,
+        followers: [],
+        followersFcm: [],
       ),
     );
     _organizerList = _repeatHandle(_organizerList);
@@ -57,6 +59,8 @@ class OrganzierFetchBloc with ChangeNotifier {
           unit: model.unit,
           contact: model.contact,
           postLength: model.postLength,
+          followers: model.followers,
+          followersFcm: model.followersFcm,
         );
       } else {
         return OrganizerModel(
@@ -69,6 +73,8 @@ class OrganzierFetchBloc with ChangeNotifier {
           unit: model.unit,
           contact: model.contact,
           postLength: model.postLength,
+          followers: model.followers,
+          followersFcm: model.followersFcm,
         );
       }
     }).toList();

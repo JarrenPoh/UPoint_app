@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
+import 'package:upoint/firebase/firestore_methods.dart';
 import 'package:upoint/globals/colors.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
@@ -9,7 +11,11 @@ import 'package:upoint/overscroll_pop-main/lib/overscroll_pop.dart';
 import 'package:upoint/widgets/organizer_profile/organizer_profile_announce.dart';
 import 'package:upoint/widgets/organizer_profile/organizer_profile_inform.dart';
 import 'package:upoint/widgets/organizer_profile/organizer_profile_post.dart';
+import '../firebase/auth_methods.dart';
+import '../globals/custom_messengers.dart';
 import '../globals/scroll_things_provider.dart';
+import '../models/user_model.dart';
+import 'login_page.dart';
 import 'profile_page.dart';
 
 class OrganizerProfile extends StatefulWidget {
@@ -139,76 +145,106 @@ class _OrganizerProfileState extends State<OrganizerProfile>
     );
   }
 
+  follow({required UserModel? user}) async {
+    if (user == null) {
+      String res = await Messenger.dialog(
+        '請先登入',
+        '您尚未登入帳戶',
+        context,
+      );
+      if (res == "success") {
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const LoginPage(),
+          ),
+        );
+      }
+    } else {
+      await FirestoreMethods().followOrganizer(
+        user: user,
+        organizerUid: widget.organizer.uid,
+      );
+      await Provider.of<AuthMethods>(context, listen: false).getUserDetails();
+    }
+  }
+
   Widget preview() {
-    return Container(
-      height: Dimensions.height5 * 16,
-      padding: EdgeInsets.symmetric(
-        vertical: Dimensions.height2 * 4,
-        horizontal: Dimensions.width2 * 6,
-      ),
-      child: Row(
-        children: [
-          AspectRatio(
-            aspectRatio: 1 / 1,
-            child: Hero(
-              transitionOnUserGestures: true,
-              tag: widget.hero,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(widget.organizer.pic),
+    return Consumer<AuthMethods>(builder: (context, userNotifier, child) {
+      UserModel? user = userNotifier.user;
+      bool isFollow = user?.followings?.contains(widget.organizer.uid) ?? false;
+      return Container(
+        height: Dimensions.height5 * 16,
+        padding: EdgeInsets.symmetric(
+          vertical: Dimensions.height2 * 4,
+          horizontal: Dimensions.width2 * 6,
+        ),
+        child: Row(
+          children: [
+            AspectRatio(
+              aspectRatio: 1 / 1,
+              child: Hero(
+                transitionOnUserGestures: true,
+                tag: widget.hero,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(widget.organizer.pic),
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          SizedBox(width: Dimensions.width2 * 8),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                MediumText(
-                  color: cColor.grey500,
-                  size: 16,
-                  text: widget.organizer.username,
-                ),
-                MediumText(
-                  color: cColor.grey500,
-                  size: 12,
-                  text: "${widget.organizer.postLength}場活動",
-                ),
-              ],
-            ),
-          ),
-          SizedBox(width: Dimensions.width2 * 8),
-          SizedBox(
-            height: Dimensions.height2 * 12.5,
-            child: CupertinoButton(
-              onPressed: () {},
-              padding: const EdgeInsets.all(0),
-              child: Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.symmetric(
-                  horizontal: Dimensions.width2 * 4,
-                  vertical: Dimensions.height2 * 2,
-                ),
-                decoration: BoxDecoration(
-                  color: cColor.primary,
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: const MediumText(
-                  color: Colors.white,
-                  size: 12,
-                  text: "追蹤",
-                ),
+            SizedBox(width: Dimensions.width2 * 8),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  MediumText(
+                    color: cColor.grey500,
+                    size: 16,
+                    text: widget.organizer.username,
+                  ),
+                  MediumText(
+                    color: cColor.grey500,
+                    size: 12,
+                    text: "${widget.organizer.postLength}場活動",
+                  ),
+                ],
               ),
             ),
-          ),
-        ],
-      ),
-    );
+            SizedBox(width: Dimensions.width2 * 8),
+            if (!(user?.uuid == widget.organizer.uid))
+              SizedBox(
+                height: Dimensions.height2 * 13,
+                child: CupertinoButton(
+                  onPressed: () => follow(user: user),
+                  padding: const EdgeInsets.all(0),
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Dimensions.width2 * 8,
+                      vertical: Dimensions.height2 * 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: isFollow ? cColor.white : cColor.primary,
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(color: cColor.primary),
+                    ),
+                    child: MediumText(
+                      color: Colors.white,
+                      size: 12,
+                      text: isFollow ? "取消追蹤" : "追蹤",
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      );
+    });
   }
 }

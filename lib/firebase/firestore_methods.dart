@@ -131,6 +131,7 @@ class FirestoreMethods {
   //找指定處室文
   Future<List<PostModel>> fetchOrganizePost(
       {required String organizerUid}) async {
+    print("搜尋指定單位貼文");
     QuerySnapshot<Map<String, dynamic>> fetchPost =
         await FirebaseFirestore.instance
             .collection('posts')
@@ -152,9 +153,10 @@ class FirestoreMethods {
     return _post;
   }
 
-  //找指定處公告
+  //找指定處試公告
   Future<List<AnnounceModel>> fetchOrganizeAnnounce(
       {required String organizerUid}) async {
+    print("搜尋指定單位公告");
     QuerySnapshot<Map<String, dynamic>> fetchPost =
         await FirebaseFirestore.instance
             .collection('announcements')
@@ -286,6 +288,51 @@ class FirestoreMethods {
       });
     } catch (e) {
       print("error: ${e.toString()}");
+    }
+  }
+
+  //追蹤
+  Future<void> followOrganizer(
+      {required UserModel user, required String organizerUid}) async {
+    try {
+      DocumentSnapshot snap =
+          await _firestore.collection('users').doc(user.uuid).get();
+      List followings = (snap.data()! as dynamic)['followings'] ?? [];
+
+      if (followings.contains(organizerUid)) {
+        // 已經追蹤過
+        // 刪除處室追蹤列表的我的uid
+        await _firestore.collection('organizers').doc(organizerUid).update({
+          'followers': FieldValue.arrayRemove([user.uuid]),
+        });
+        // 刪除處室追蹤列表的我的fcm
+        if (user.fcmToken != null || user.fcmToken!.isNotEmpty) {
+          await _firestore.collection('organizers').doc(organizerUid).update({
+            'followersFcm': FieldValue.arrayRemove(user.fcmToken!),
+          });
+        }
+        // 刪除我的蹤列表的處室uid
+        await _firestore.collection('users').doc(user.uuid).update({
+          'followings': FieldValue.arrayRemove([organizerUid]),
+        });
+      } else {
+        // 增加處室追蹤列表的我的uid
+        await _firestore.collection('organizers').doc(organizerUid).update({
+          'followers': FieldValue.arrayUnion([user.uuid]),
+        });
+        // 增加處室追蹤列表的我的fcm
+        if (user.fcmToken != null || user.fcmToken!.isNotEmpty) {
+          await _firestore.collection('organizers').doc(organizerUid).update({
+            'followersFcm': FieldValue.arrayUnion(user.fcmToken!),
+          });
+        }
+        // 增加我的蹤列表的處室uid
+        await _firestore.collection('users').doc(user.uuid).update({
+          'followings': FieldValue.arrayUnion([organizerUid]),
+        });
+      }
+    } catch (e) {
+      print(e.toString());
     }
   }
 }

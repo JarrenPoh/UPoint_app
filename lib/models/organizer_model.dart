@@ -10,6 +10,8 @@ class OrganizerModel {
   String contact;
   String email;
   int postLength;
+  List? followers;
+  List? followersFcm;
 
   OrganizerModel({
     required this.username,
@@ -21,6 +23,8 @@ class OrganizerModel {
     required this.unit,
     required this.contact,
     required this.postLength,
+    required this.followers,
+    required this.followersFcm,
   });
 
   static Map toMap(OrganizerModel cart) {
@@ -33,6 +37,9 @@ class OrganizerModel {
       "bio": cart.bio,
       "unit": cart.unit,
       "contact": cart.contact,
+      "followers":cart.followers,
+      "followersFcm":cart.followersFcm,
+
     };
   }
 
@@ -49,6 +56,8 @@ class OrganizerModel {
       unit: snapshot['unit'],
       contact: snapshot['contact'],
       postLength: snapshot['postLength'],
+      followers: snapshot["followers"],
+      followersFcm:snapshot["followersFcm"],
     );
   }
 
@@ -62,6 +71,8 @@ class OrganizerModel {
         "unit": unit,
         "contact": contact,
         "postLength": postLength,
+        "followers":followers,
+        "followersFcm":followersFcm,
       };
 
   static OrganizerModel? fromMap(Map? map) {
@@ -78,6 +89,8 @@ class OrganizerModel {
         unit: map['unit'],
         contact: map['contact'],
         postLength: map['postLength'],
+        followers:map["followers"],
+        followersFcm:map["followersFcm"],
       );
     }
   }

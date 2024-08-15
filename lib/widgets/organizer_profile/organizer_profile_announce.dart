@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:upoint/globals/colors.dart';
 import 'package:upoint/models/announce_model.dart';
+import 'package:upoint/models/user_model.dart';
+import '../../firebase/auth_methods.dart';
 import '../../firebase/firestore_methods.dart';
 import '../../globals/date_time_transfer.dart';
 import '../../globals/dimension.dart';
@@ -64,123 +67,135 @@ class _OrganizerProfileAnnounceState extends State<OrganizerProfileAnnounce>
                       padding: EdgeInsets.symmetric(
                         horizontal: Dimensions.width2 * 8,
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: List.generate(
-                          announcements.length,
-                          (index) {
-                            AnnounceModel announce = announcements[index];
-                            return Container(
-                              padding: EdgeInsets.symmetric(
-                                vertical: Dimensions.height2 * 6,
-                                horizontal: Dimensions.width2 * 8,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  // 頭像名字
-                                  Row(
-                                    children: [
-                                      Container(
-                                        width: Dimensions.width2 * 12,
-                                        height: Dimensions.height2 * 12,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(100),
-                                          image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: NetworkImage(
-                                                announce.organizerPic),
+                      child: Consumer<AuthMethods>(
+                          builder: (context, userNotifier, child) {
+                        UserModel? user = userNotifier.user;
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: List.generate(
+                            announcements.length,
+                            (index) {
+                              AnnounceModel announce = announcements[index];
+                              bool isLike = user == null
+                                  ? false
+                                  : announce.likes.contains(user.uuid);
+                              return Container(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: Dimensions.height2 * 6,
+                                  horizontal: Dimensions.width2 * 8,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // 頭像名字
+                                    Row(
+                                      children: [
+                                        Container(
+                                          width: Dimensions.width2 * 12,
+                                          height: Dimensions.height2 * 12,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(100),
+                                            image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: NetworkImage(
+                                                  announce.organizerPic),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      SizedBox(width: Dimensions.width2 * 6),
-                                      MediumText(
-                                        color: cColor.grey500,
-                                        size: 14,
-                                        text: announce.organizerName,
-                                      ),
-                                      const Expanded(
-                                          child: Column(
-                                        children: [],
-                                      )),
-                                      // pin
-                                      if (announce.isPin)
-                                        SizedBox(
-                                          height: 18,
-                                          width: 18,
-                                          child: SvgPicture.asset(
-                                            "assets/pin.svg",
-                                            fit: BoxFit.cover,
-                                          ),
+                                        SizedBox(width: Dimensions.width2 * 6),
+                                        MediumText(
+                                          color: cColor.grey500,
+                                          size: 14,
+                                          text: announce.organizerName,
                                         ),
-                                    ],
-                                  ),
-                                  // 照片
-                                  if (announce.photo != null)
-                                    SizedBox(height: Dimensions.height2 * 6),
-                                  if (announce.photo != null)
-                                    AspectRatio(
-                                      aspectRatio: 16 / 9,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image:
-                                                NetworkImage(announce.photo!),
+                                        const Expanded(
+                                            child: Column(
+                                          children: [],
+                                        )),
+                                        // pin
+                                        if (announce.isPin)
+                                          SizedBox(
+                                            height: 18,
+                                            width: 18,
+                                            child: SvgPicture.asset(
+                                              "assets/pin.svg",
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
-                                        ),
-                                      ),
+                                      ],
                                     ),
-                                  SizedBox(height: Dimensions.height2 * 6),
-                                  // 內容&發布日期
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      // 內容
-                                      MediumText(
-                                        color: cColor.grey500,
-                                        size: 16,
-                                        text: announce.content,
-                                        maxLines: 100,
-                                      ),
-                                      SizedBox(height: Dimensions.height2),
-                                      // 發布日期
-                                      MediumText(
-                                        color: cColor.grey400,
-                                        size: 12,
-                                        text: TimeTransfer.timeTrans06(
-                                          announce.datePublished,
+                                    // 照片
+                                    if (announce.photo != null)
+                                      SizedBox(height: Dimensions.height2 * 6),
+                                    if (announce.photo != null)
+                                      AspectRatio(
+                                        aspectRatio: 16 / 9,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image:
+                                                  NetworkImage(announce.photo!),
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                  SizedBox(height: Dimensions.height2 * 6),
-                                  // 點讚留言
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.favorite_outline_rounded,
-                                        color: cColor.grey400,
-                                        size: 20,
-                                      ),
-                                      SizedBox(width: Dimensions.width2),
-                                      MediumText(
-                                        color: cColor.grey400,
-                                        size: 14,
-                                        text: announce.likes.length.toString(),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      ),
+                                    SizedBox(height: Dimensions.height2 * 6),
+                                    // 內容&發布日期
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        // 內容
+                                        MediumText(
+                                          color: cColor.grey500,
+                                          size: 16,
+                                          text: announce.content,
+                                          maxLines: 100,
+                                        ),
+                                        SizedBox(height: Dimensions.height2),
+                                        // 發布日期
+                                        MediumText(
+                                          color: cColor.grey400,
+                                          size: 12,
+                                          text: TimeTransfer.timeTrans06(
+                                            announce.datePublished,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: Dimensions.height2 * 6),
+                                    // 點讚留言
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          isLike
+                                              ? Icons.favorite_rounded
+                                              : Icons.favorite_outline_rounded,
+                                          color: isLike
+                                              ? cColor.primary
+                                              : cColor.grey400,
+                                          size: 20,
+                                        ),
+                                        SizedBox(width: Dimensions.width2),
+                                        MediumText(
+                                          color: cColor.grey400,
+                                          size: 14,
+                                          text:
+                                              announce.likes.length.toString(),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      }),
                     ),
                   ],
                 );

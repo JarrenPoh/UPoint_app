@@ -10,6 +10,7 @@ class UserModel {
   List? fcmToken;
   List? signList;
   String? pic;
+  List? followings;
 
   UserModel({
     required this.email,
@@ -21,6 +22,7 @@ class UserModel {
     this.fcmToken,
     this.signList,
     this.pic,
+    this.followings,
   });
 
   Map<String, dynamic> toJson() => {
@@ -33,6 +35,7 @@ class UserModel {
         "fcmToken": fcmToken,
         "signList": signList,
         "pic": pic,
+        "followings":followings,
       };
 
   static UserModel fromSnap(DocumentSnapshot snap) {
@@ -47,6 +50,7 @@ class UserModel {
       fcmToken: snapshot['fcmToken'],
       signList: snapshot['signList'],
       pic: snapshot['pic'],
+      followings:snapshot["followings"],
     );
   }
 
@@ -64,6 +68,7 @@ class UserModel {
       fcmToken: map['fcmToken'],
       signList: map['signList'],
       pic: map['pic'],
+      followings: map['followings'],
       );
     }
   }
