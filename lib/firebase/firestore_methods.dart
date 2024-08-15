@@ -291,6 +291,30 @@ class FirestoreMethods {
     }
   }
 
+  //按讚貼文
+  Future<void> likeAnnouncement(
+      {required AnnounceModel announce, required String uid}) async {
+    try {
+      if (announce.likes.contains(uid)) {
+        await _firestore
+            .collection('announcements')
+            .doc(announce.announceId)
+            .update({
+          'likes': FieldValue.arrayRemove([uid]),
+        });
+      } else {
+        await _firestore
+            .collection('announcements')
+            .doc(announce.announceId)
+            .update({
+          'likes': FieldValue.arrayUnion([uid])
+        });
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   //追蹤
   Future<void> followOrganizer(
       {required UserModel user, required String organizerUid}) async {

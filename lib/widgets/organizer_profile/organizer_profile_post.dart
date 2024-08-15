@@ -30,6 +30,15 @@ class _OrganizerProfilePostState extends State<OrganizerProfilePost>
   @override
   final bool wantKeepAlive = true;
   late CColor cColor = CColor.of(context);
+  Future<List<PostModel>>? _postFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    // 初始化Future，只會執行一次
+    _postFuture = FirestoreMethods()
+        .fetchOrganizePost(organizerUid: widget.organizer.uid);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +49,7 @@ class _OrganizerProfilePostState extends State<OrganizerProfilePost>
       slivers: [
         SliverToBoxAdapter(
           child: FutureBuilder<List<PostModel>>(
-            future: FirestoreMethods()
-                .fetchOrganizePost(organizerUid: widget.organizer.uid),
+            future: _postFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const CustomLoadong2();

@@ -16,6 +16,19 @@ class PostFetchBloc with ChangeNotifier {
     // notifyListeners();
   }
 
+  Future<List<PostModel>?> update(PostModel update) async {
+    debugPrint('更新post資料');
+    int index = _post.indexWhere((e) => e.postId == update.postId);
+
+    if (index != -1) {
+      _post[index] = update; // 替換舊的 PostModel
+      setpost(_post);
+    } else {
+      debugPrint('PostModel not found with postId: ${update.postId}');
+    }
+    return _post;
+  }
+
   void setpost(List<PostModel> post) {
     _post = post;
     notifyListeners();
