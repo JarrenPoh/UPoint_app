@@ -61,110 +61,116 @@ class _OrganizerProfilePostState extends State<OrganizerProfilePost>
                 return Column(
                   children: [
                     SizedBox(height: Dimensions.height2 * 4),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: List.generate(postList.length, (index) {
-                        PostModel post = postList[index];
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return PostDetailPage(
-                                  post: post,
-                                  hero: "organizer_profile_post${post.postId}");
-                            }));
-                          },
-                          child: Container(
-                            height: Dimensions.height2 * 56.5,
-                            padding: EdgeInsets.symmetric(
-                              vertical: Dimensions.height2 * 6,
-                              horizontal: Dimensions.width2 * 16,
-                            ),
-                            child: Row(
-                              children: [
-                                Hero(
-                                  tag: "organizer_profile_post${post.postId}",
-                                  child: SizedBox(
-                                    width: Dimensions.width2 * 74,
-                                    child: AspectRatio(
-                                      aspectRatio: 16 / 9,
-                                      child: Container(
-                                        width: Dimensions.width2 * 74,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: NetworkImage(post.photo!),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Dimensions.width2 * 8,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: List.generate(postList.length, (index) {
+                          PostModel post = postList[index];
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return PostDetailPage(
+                                    post: post,
+                                    hero:
+                                        "organizer_profile_post${post.postId}");
+                              }));
+                            },
+                            child: Container(
+                              height: Dimensions.height2 * 56.5,
+                              padding: EdgeInsets.symmetric(
+                                vertical: Dimensions.height2 * 6,
+                                horizontal: Dimensions.width2 * 8,
+                              ),
+                              child: Row(
+                                children: [
+                                  Hero(
+                                    tag: "organizer_profile_post${post.postId}",
+                                    child: SizedBox(
+                                      width: Dimensions.width2 * 74,
+                                      child: AspectRatio(
+                                        aspectRatio: 16 / 9,
+                                        child: Container(
+                                          width: Dimensions.width2 * 74,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: NetworkImage(post.photo!),
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                SizedBox(width: Dimensions.width2 * 4),
-                                Expanded(
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      // 標題
-                                      MediumText(
-                                        color: cColor.grey500,
-                                        size: 14,
-                                        text: post.title!,
-                                        maxLines: 2,
-                                      ),
-                                      // 時間
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons.calendar_month,
-                                            size: Dimensions.height2 * 9,
-                                            color: cColor.grey400,
-                                          ),
-                                          SizedBox(
-                                              width: Dimensions.width2 * 4),
-                                          MediumText(
-                                            color: cColor.grey500,
-                                            size: 13,
-                                            text: TimeTransfer.timeTrans05(
-                                              post.startDateTime,
-                                              post.endDateTime,
+                                  SizedBox(width: Dimensions.width2 * 4),
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        // 標題
+                                        MediumText(
+                                          color: cColor.grey500,
+                                          size: 14,
+                                          text: post.title!,
+                                          maxLines: 2,
+                                        ),
+                                        // 時間
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.calendar_month,
+                                              size: Dimensions.height2 * 9,
+                                              color: cColor.grey400,
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      // 獎勵
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons.local_play,
-                                            size: Dimensions.height2 * 9,
-                                            color: cColor.grey400,
-                                          ),
-                                          SizedBox(
-                                              width: Dimensions.width2 * 4),
-                                          SizedBox(
-                                            width: Dimensions.width2 * 65,
-                                            child: MediumText(
+                                            SizedBox(
+                                                width: Dimensions.width2 * 4),
+                                            MediumText(
                                               color: cColor.grey500,
                                               size: 13,
-                                              text: post.reward ?? "無",
+                                              text: TimeTransfer.timeTrans05(
+                                                post.startDateTime,
+                                                post.endDateTime,
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
+                                          ],
+                                        ),
+                                        // 獎勵
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.local_play,
+                                              size: Dimensions.height2 * 9,
+                                              color: cColor.grey400,
+                                            ),
+                                            SizedBox(
+                                                width: Dimensions.width2 * 4),
+                                            SizedBox(
+                                              width: Dimensions.width2 * 65,
+                                              child: MediumText(
+                                                color: cColor.grey500,
+                                                size: 13,
+                                                text: post.reward ?? "無",
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      }),
+                          );
+                        }),
+                      ),
                     ),
                   ],
                 );
