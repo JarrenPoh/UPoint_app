@@ -15,6 +15,7 @@ import 'package:upoint/widgets/custom_bottom_naviagation_bar.dart';
 import 'package:upoint/pages/profile_page.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'bloc/post_fetch_bloc.dart';
 import 'models/user_model.dart';
 import 'new_version-master/lib/new_version.dart';
 import 'pages/post_detail_page.dart';
@@ -93,7 +94,8 @@ class _NavigationContainerState extends State<NavigationContainer>
     openUrl();
     _pageController = PageController(initialPage: _selectedPageIndex);
     WidgetsBinding.instance.addObserver(this);
-    final ideaCardsBloc = Provider.of<OrganzierFetchBloc>(context, listen: false);
+    final ideaCardsBloc =
+        Provider.of<OrganzierFetchBloc>(context, listen: false);
     ideaCardsBloc.fetchOrganizers();
   }
 
@@ -129,15 +131,13 @@ class _NavigationContainerState extends State<NavigationContainer>
     // 其他生命周期变化...
   }
 
-  Future<Map> getUserAndPost() async {
+  Future<List<AdModel>> getUserAndPost() async {
     final userAccountManager = Provider.of<AuthMethods>(context, listen: false);
     await userAccountManager.getUserDetails();
-    List<PostModel> post = await FirestoreMethods().fetchAllPost();
+    final postManager = Provider.of<PostFetchBloc>(context, listen: false);
+    await postManager.fetch();
     List<AdModel> ad = await FirestoreMethods().fetchAllAd();
-    return {
-      "post": post,
-      "ad": ad,
-    };
+    return ad;
   }
 
   @override
@@ -188,18 +188,22 @@ class _NavigationContainerState extends State<NavigationContainer>
             // }
             return Consumer<AuthMethods>(
               builder: (context, userNotifier, child) {
-                List<PostModel> post = snapshot.data?["post"] ?? [];
-                List<AdModel> ad = snapshot.data?["ad"] ?? [];
+                List<AdModel> ad = snapshot.data ?? [];
                 UserModel? user = userNotifier.user;
-                print('這裡有改');
-                return PageView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  controller: _pageController,
-                  itemCount: _pages(user, post, ad).length,
-                  itemBuilder: (context, index) {
-                    return _pages(user, post, ad)[index];
-                  },
-                );
+                print('刷新用戶');
+                return Consumer<PostFetchBloc>(
+                    builder: (context, postNotifier, child) {
+                  List<PostModel> post = postNotifier.post;
+                  print('刷新貼文');
+                  return PageView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    controller: _pageController,
+                    itemCount: _pages(user, post, ad).length,
+                    itemBuilder: (context, index) {
+                      return _pages(user, post, ad)[index];
+                    },
+                  );
+                });
               },
             );
           },

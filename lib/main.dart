@@ -19,6 +19,7 @@ import 'package:camera/camera.dart';
 import 'package:provider/provider.dart';
 
 import 'bloc/organizer_fetch_bloc.dart';
+import 'bloc/post_fetch_bloc.dart';
 
 late List<CameraDescription> _cameras;
 Uri? uri = Uri();
@@ -37,6 +38,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (context) => AuthMethods()),
         ChangeNotifierProvider(create: (context) => InboxPageBloc()),
         ChangeNotifierProvider(create: (context) => OrganzierFetchBloc()),
+        ChangeNotifierProvider(create: (context) => PostFetchBloc()),
       ],
       child: MyApp(),
     ),

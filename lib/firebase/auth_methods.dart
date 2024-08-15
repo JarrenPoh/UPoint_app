@@ -31,6 +31,14 @@ class AuthMethods with ChangeNotifier {
     // notifyListeners();
   }
 
+  Future<UserModel?> updateUserDetails(UserModel update) async {
+    debugPrint('更新user資料');
+    _user = update;
+    setUser(_user);
+    return _user;
+    // notifyListeners();
+  }
+
   void setUser(UserModel? user) {
     _user = user;
     notifyListeners();

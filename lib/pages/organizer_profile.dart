@@ -165,7 +165,14 @@ class _OrganizerProfileState extends State<OrganizerProfile>
         user: user,
         organizerUid: widget.organizer.uid,
       );
-      await Provider.of<AuthMethods>(context, listen: false).getUserDetails();
+      UserModel _update = UserModel.fromMap(user.toJson())!;
+      if (_update.followings?.contains(widget.organizer.uid) ?? false) {
+        _update.followings?.removeWhere((e) => e == widget.organizer.uid);
+      } else {
+        _update.followings?.add(widget.organizer.uid);
+      }
+      await Provider.of<AuthMethods>(context, listen: false)
+          .updateUserDetails(_update);
     }
   }
 

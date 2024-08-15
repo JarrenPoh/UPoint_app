@@ -76,9 +76,7 @@ class _OrganizerProfileAnnounceState extends State<OrganizerProfileAnnounce>
                             announcements.length,
                             (index) {
                               AnnounceModel announce = announcements[index];
-                              bool isLike = user == null
-                                  ? false
-                                  : announce.likes.contains(user.uuid);
+                              bool isLike = announce.likes.contains(user?.uuid);
                               return Container(
                                 padding: EdgeInsets.symmetric(
                                   vertical: Dimensions.height2 * 6,
