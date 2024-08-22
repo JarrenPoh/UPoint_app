@@ -6,5 +6,4 @@ bool isDebugging = true;
 List<String> debugId = [
   "tvRc40ekeeY5UTiPist8qVRm0m92",
   "yhc5utqU8jgHprx3iCaRtJ70HRy1",
-  "d6nR95xCn6dGjBGmDEEA3N8f1Ci1"
 ];

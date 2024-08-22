@@ -36,6 +36,9 @@ class OrganzierFetchBloc with ChangeNotifier {
       ),
     );
     _organizerList = _repeatHandle(_organizerList);
+    if (!isDebugging) {
+      _organizerList.removeWhere((e) => debugId.contains(e.uid));
+    }
     notifyListeners();
   }
 

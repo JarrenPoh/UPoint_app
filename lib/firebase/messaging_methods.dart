@@ -2,7 +2,6 @@ import "dart:convert";
 import "package:http/http.dart" as http;
 import "package:upoint/firebase/access_firebase_token.dart";
 import "package:upoint/models/user_model.dart";
-
 import "../secret.dart";
 
 class MessagingMethod {

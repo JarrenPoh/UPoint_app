@@ -102,7 +102,7 @@ class _OrganizerProfileAnnounceState extends State<OrganizerProfileAnnounce>
                   AnnounceModel announce = announcements[index];
                   bool isLike = announce.likes.contains(user?.uuid);
                   return GestureDetector(
-                    onTap: () => _toggleLike(announce, user),
+                    onDoubleTap: () => _toggleLike(announce, user),
                     child: Container(
                       padding: EdgeInsets.symmetric(
                         vertical: Dimensions.height2 * 6,
@@ -130,7 +130,7 @@ class _OrganizerProfileAnnounceState extends State<OrganizerProfileAnnounce>
                           SizedBox(height: Dimensions.height2 * 6),
                           _buildContent(announce),
                           SizedBox(height: Dimensions.height2 * 6),
-                          _buildLikeSection(announce, isLike),
+                          _buildLikeSection(announce, isLike,user),
                         ],
                       ),
                     ),
@@ -200,21 +200,24 @@ class _OrganizerProfileAnnounceState extends State<OrganizerProfileAnnounce>
     );
   }
 
-  Widget _buildLikeSection(AnnounceModel announce, bool isLike) {
-    return Row(
-      children: [
-        Icon(
-          isLike ? Icons.favorite_rounded : Icons.favorite_outline_rounded,
-          color: isLike ? cColor.primary : cColor.grey400,
-          size: 20,
-        ),
-        SizedBox(width: Dimensions.width2),
-        MediumText(
-          color: cColor.grey400,
-          size: 14,
-          text: announce.likes.length.toString(),
-        ),
-      ],
+  Widget _buildLikeSection(AnnounceModel announce, bool isLike,UserModel? user) {
+    return GestureDetector(
+      onTap: () => _toggleLike(announce, user),
+      child: Row(
+        children: [
+          Icon(
+            isLike ? Icons.favorite_rounded : Icons.favorite_outline_rounded,
+            color: isLike ? cColor.primary : cColor.grey400,
+            size: 20,
+          ),
+          SizedBox(width: Dimensions.width2),
+          MediumText(
+            color: cColor.grey400,
+            size: 14,
+            text: announce.likes.length.toString(),
+          ),
+        ],
+      ),
     );
   }
 

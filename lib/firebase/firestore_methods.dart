@@ -150,6 +150,7 @@ class FirestoreMethods {
           });
     List<PostModel> _post =
         sortedDocs.map((e) => PostModel.fromSnap(e)).toList();
+    _post.removeWhere((e) => e.isVisible == false);
     return _post;
   }
 
@@ -190,8 +191,8 @@ class FirestoreMethods {
     List<PostModel> _post = _list.map((e) => PostModel.fromSnap(e)).toList();
     if (!isDebugging) {
       _post.removeWhere((e) => debugId.contains(e.organizerUid));
-      _post.removeWhere((e) => e.isVisible == false);
     }
+    _post.removeWhere((e) => e.isVisible == false);
     // 按 startDateTime 進行排序，最近的日期放在前面
     _post.sort(
         (a, b) => (b.startDateTime as Timestamp).compareTo(a.startDateTime));
