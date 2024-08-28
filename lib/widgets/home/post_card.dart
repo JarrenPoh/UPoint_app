@@ -72,7 +72,7 @@ class _PostCardState extends State<PostCard> {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: cColor.div,
+          color: cColor.card,
           borderRadius: BorderRadius.circular(10),
         ),
         padding: EdgeInsets.symmetric(

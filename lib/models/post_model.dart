@@ -169,4 +169,22 @@ class PostModel {
       isVisible: map["isVisible"],
     );
   }
+
+  static Map<DateTime, List<PostModel>> toEvent(List<PostModel> list) {
+    Map<DateTime, List<PostModel>> transformedMap = {};
+    for (PostModel i in list) {
+      PostModel r = PostModel.fromMap(i.toJson());
+      DateTime utcDateTime = DateTime.utc(
+        r.startDateTime.toDate().year,
+        r.startDateTime.toDate().month,
+        r.startDateTime.toDate().day,
+      );
+      if (transformedMap.containsKey(utcDateTime)) {
+        transformedMap[utcDateTime]!.add(r);
+      } else {
+        transformedMap[utcDateTime] = [r];
+      }
+    }
+    return transformedMap;
+  }
 }

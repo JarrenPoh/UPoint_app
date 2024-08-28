@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 
 ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
-  appBarTheme: AppBarTheme(
+  appBarTheme: const AppBarTheme(
     foregroundColor: Color(0xFFF8F8F8),
-    backgroundColor: Colors.white,
+    backgroundColor: Color(0xFFF8F8F8),
   ),
+  cardTheme: CardTheme(color: Colors.white),
   primaryColor: Color(0xFF011e2d),
   hintColor: Color(0xFFF8791D),
   scaffoldBackgroundColor: Color.fromRGBO(244, 243, 243, 1),

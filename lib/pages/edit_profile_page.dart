@@ -17,7 +17,7 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  List _list = ["姓名", "系級", "學號", "聯絡電話", "電子郵件"];
+  final List _list = ["姓名", "系級", "學號", "聯絡電話", "電子郵件"];
   List initList = [];
   late List<TextEditingController> controllers = List.generate(
       _list.length, (index) => TextEditingController(text: initList[index]));

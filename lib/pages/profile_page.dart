@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:upoint/bloc/profile_page_bloc.dart';
 import 'package:upoint/globals/bold_text.dart';
 import 'package:upoint/globals/colors.dart';
@@ -25,186 +27,180 @@ class _ProfilePageState extends State<ProfilePage>
     with AutomaticKeepAliveClientMixin {
   @override
   final bool wantKeepAlive = true;
-  ProfilePageBloc _bloc = ProfilePageBloc();
-
+  late final ProfilePageBloc _bloc = ProfilePageBloc(widget.user);
   @override
   Widget build(BuildContext context) {
-    _bloc.initInform(widget.user);
     super.build(context);
     CColor cColor = CColor.of(context);
     return Scaffold(
-      backgroundColor: cColor.white,
-      body: NestedScrollView(
-        floatHeaderSlivers: true,
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return <Widget>[
-            SliverPersistentHeader(
-              pinned: true,
-              delegate: MySliverDelegate(
-                minHeight: Dimensions.height5 * 35,
-                maxHeight: Dimensions.height5 * 35,
-                child: firstContainer(),
-              ),
-            ),
-          ];
+      backgroundColor: cColor.div,
+      appBar: AppBar(
+        backgroundColor: cColor.primary,
+        title: const MediumText(
+          color: Colors.white,
+          size: 16,
+          text: "會員中心",
+        ),
+      ),
+      body: RefreshIndicator(
+        displacement: Dimensions.height5 * 3,
+        backgroundColor: cColor.white,
+        color: cColor.black,
+        onRefresh: () async {
+          _bloc.refresh(context);
         },
-        body: RefreshIndicator(
-          displacement: Dimensions.height5 * 3,
-          backgroundColor: cColor.div,
-          color: cColor.black,
-          onRefresh: () async {
-            _bloc.refresh(widget.user, context);
-          },
-          child: ListView(
-            padding: EdgeInsets.symmetric(
-              vertical: Dimensions.height5 * 4,
-              horizontal: Dimensions.width2 * 12,
-            ),
-            children: [
-              Row(
+        child: ListView(
+          padding: EdgeInsets.symmetric(
+            vertical: Dimensions.height2 * 6,
+            horizontal: Dimensions.width2 * 8,
+          ),
+          children: [
+            // 第一排 - 個人簡介
+            Container(
+              height: Dimensions.height2 * 60,
+              padding: EdgeInsets.all(Dimensions.height2 * 8),
+              decoration: BoxDecoration(
+                color: cColor.card,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
                 children: [
-                  // Upoints coin
-                  scnContainer(0, "0"),
+                  ProfilePic(),
                   SizedBox(width: Dimensions.width2 * 8),
-                  ValueListenableBuilder(
-                    valueListenable: _bloc.countNotifier,
-                    builder: (context, value, child) {
-                      return scnContainer(
-                        1,
-                        '${value.toString()} 次',
-                      );
-                    },
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      MediumText(
+                        color: cColor.grey500,
+                        size: 16,
+                        text: "Hi~ ${widget.user?.username??"訪客"}",
+                      ),
+                      MediumText(
+                          color: cColor.grey500,
+                          size: 12,
+                          text: widget.user?.email ?? "尚未登入"),
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () => _bloc.editProfile(context),
+                            child: Container(
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.symmetric(
+                                vertical: Dimensions.height2 * 2,
+                                horizontal: Dimensions.width2 * 4,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: cColor.primary,
+                              ),
+                              child: const MediumText(
+                                color: Colors.white,
+                                size: 12,
+                                text: "設定自動帶入資料",
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: Dimensions.width5),
+                          const CustomToolTip(text: "報名時自動填入"),
+                        ],
+                      ),
+                    ],
                   ),
                 ],
               ),
-              // 表單預留資料
-              if (widget.user != null)
-                _block(
-                  "表單預填資料",
-                  ValueListenableBuilder(
-                    valueListenable: _bloc.personNotifier,
-                    builder: (context, value, child) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: List.generate(
-                          value.length,
-                          (index) {
-                            return profileRow(
-                                '${value[index]["title"]}：${value[index]["value"]}');
-                          },
-                        ),
-                      );
-                    },
+            ),
+            const SizedBox(height: 12),
+            // 第二排 - UPoints和活動紀錄
+            Row(
+              children: [
+                scnContainer(0, "0"),
+                SizedBox(width: Dimensions.width2 * 8),
+                scnContainer(1, '${widget.user?.signList?.length ?? 0} 次'),
+              ],
+            ),
+            const SizedBox(height: 12),
+            // 常用功能
+            if (widget.user != null)
+              Column(
+                children: [
+                  _block(
+                    "常用功能",
+                    _bloc.commonUseList(context, widget.user!),
                   ),
+                  const SizedBox(height: 12),
+                  _block(
+                    "帳號管理",
+                    _bloc.accountList(context, widget.user!),
+                  ),
+                  const SizedBox(height: 12),
+                ],
+              ),
+            // 沒登入的畫面
+            if (widget.user == null)
+              Container(
+                // height: Dimensions.width2 * 85,
+                decoration: BoxDecoration(
+                  color: cColor.card,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color.fromRGBO(0, 0, 0, 0.05),
+                      offset: Offset(2, 2),
+                      blurRadius: 3,
+                      spreadRadius: 0,
+                    )
+                  ],
                 ),
-              // 常用功能
-              if (widget.user != null)
-                _block(
-                  "常用功能",
-                  Column(
-                    children: List.generate(
-                      _bloc.commonUseList(context, widget.user!).length,
-                      (index) {
-                        return InkWell(
-                          onTap: _bloc.commonUseList(
-                            context,
-                            widget.user!,
-                          )[index]["onTap"],
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: Dimensions.width2 * 8,
-                              vertical: Dimensions.height2 * 4,
-                            ),
-                            child: Row(
-                              children: [
-                                SizedBox(width: Dimensions.width2 * 5),
-                                _bloc.commonUseList(
-                                    context, widget.user!)[index]["icon"],
-                                SizedBox(width: Dimensions.width5 * 2),
-                                RegularText(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: RegularText(
                                   color: cColor.grey500,
                                   size: Dimensions.height2 * 7,
-                                  text: _bloc.commonUseList(
-                                    context,
-                                    widget.user!,
-                                  )[index]["title"],
+                                  text: "歡迎登入，查看更多資訊",
                                 ),
-                              ],
-                            ),
+                              ),
+                              MaterialButton(
+                                onPressed: () {
+                                  _bloc.logInOrOut(context);
+                                },
+                                child: MediumText(
+                                  color: cColor.grey500,
+                                  size: Dimensions.height2 * 8,
+                                  text: "登入",
+                                ),
+                              ),
+                            ],
                           ),
-                        );
-                      },
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              const SizedBox(height: 16),
-              // 沒登入的畫面
-              if (widget.user == null)
-                Container(
-                  // height: Dimensions.width2 * 85,
-                  decoration: BoxDecoration(
-                    color: cColor.div,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color.fromRGBO(0, 0, 0, 0.05),
-                        offset: Offset(2, 2),
-                        blurRadius: 3,
-                        spreadRadius: 0,
-                      )
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    child: Center(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Center(
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8.0),
-                                  child: RegularText(
-                                    color: cColor.grey500,
-                                    size: Dimensions.height2 * 7,
-                                    text: "歡迎登入，查看更多資訊",
-                                  ),
-                                ),
-                                MaterialButton(
-                                  onPressed: () {
-                                    _bloc.logInOrOut(widget.user, context);
-                                  },
-                                  child: MediumText(
-                                    color: cColor.grey500,
-                                    size: Dimensions.height2 * 8,
-                                    text: "登入",
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              const SizedBox(height: 16),
-            ],
-          ),
+              ),
+            const SizedBox(height: 16),
+          ],
         ),
       ),
     );
   }
 
-  Widget _block(String title, Widget child) {
+  Widget _block(String title, List list) {
     CColor cColor = CColor.of(context);
     return Container(
-      margin: EdgeInsets.only(top: Dimensions.height2 * 8),
       padding: EdgeInsets.symmetric(vertical: Dimensions.height2 * 4),
       decoration: BoxDecoration(
-        color: cColor.div,
+        color: cColor.card,
         borderRadius: BorderRadius.circular(16),
         boxShadow: const [
           BoxShadow(
@@ -218,74 +214,60 @@ class _ProfilePageState extends State<ProfilePage>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // 標題
           Padding(
             padding: EdgeInsets.symmetric(
-              vertical: Dimensions.height2 * 4,
+              vertical: Dimensions.height2 * 6,
               horizontal: Dimensions.width2 * 8,
             ),
-            child: title == "表單預填資料"
-                ? Row(
-                    children: [
-                      BoldText(
-                        color: cColor.grey500,
-                        size: Dimensions.height2 * 8,
-                        text: title,
-                      ),
-                      SizedBox(width: Dimensions.width5 * 2),
-                      const CustomToolTip(text: "表單預填資料在您填寫報名表單時會自動帶入資料"),
-                      const Expanded(child: Column(children: [])),
-                      GestureDetector(
-                        onTap: () {
-                          _bloc.editProfile(widget.user, context);
-                        },
-                        child: Icon(
-                          Icons.edit,
-                          color: cColor.grey300,
-                          size: Dimensions.height5 * 4,
-                        ),
-                      )
-                    ],
-                  )
-                : Row(
-                    children: [
-                      BoldText(
-                        color: cColor.grey500,
-                        size: Dimensions.height2 * 8,
-                        text: title,
-                      ),
-                    ],
-                  ),
+            child: MediumText(
+              color: cColor.grey500,
+              size: 14,
+              text: "常用功能",
+            ),
           ),
-          Divider(thickness: 1, color: cColor.div),
-          child,
+          // 內容
+          Column(
+            children: List.generate(
+              list.length,
+              (index) {
+                return rowArea(
+                  icon: list[index]["icon"],
+                  title: list[index]["title"],
+                  onTap: list[index]["onTap"],
+                );
+              },
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget profileRow(str) {
+  Widget rowArea({
+    required Widget icon,
+    required String title,
+    required Function onTap,
+  }) {
     CColor cColor = CColor.of(context);
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: Dimensions.width2 * 8,
-        vertical: Dimensions.height2 * 4,
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              SizedBox(width: Dimensions.width2 * 5),
-              Flexible(
-                child: RegularText(
-                  color: cColor.grey500,
-                  size: Dimensions.height2 * 7,
-                  text: str,
-                  maxLines: 3,
-                ),
-              ),
-            ],
-          ),
-        ],
+    return InkWell(
+      onTap: () => onTap(),
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          vertical: Dimensions.height2 * 6,
+        ),
+        child: Row(
+          children: [
+            SizedBox(width: Dimensions.width2 * 12),
+            icon,
+            SizedBox(width: Dimensions.width2 * 4),
+            MediumText(
+              color: cColor.grey500,
+              size: Dimensions.height2 * 7,
+              text: title,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -296,9 +278,9 @@ class _ProfilePageState extends State<ProfilePage>
       child: Container(
         // width: Dimensions.width2 * 20,
         decoration: BoxDecoration(
-          color: cColor.div,
+          color: cColor.card,
           borderRadius: BorderRadius.circular(16),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Color.fromRGBO(0, 0, 0, 0.05),
               offset: Offset(2, 2),
@@ -309,119 +291,43 @@ class _ProfilePageState extends State<ProfilePage>
         ),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                MediumText(
-                  color: cColor.grey500,
-                  size: Dimensions.height2 * 7,
-                  text: index == 0 ? "UPoints" : "活動紀錄",
-                ),
-                if (index == 0) const CustomToolTip(text: "敬請期待"),
-              ],
-            ),
-            SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                index == 0
-                    ? Image.asset(
-                        "assets/Upoint.png",
-                        width: Dimensions.width2 * 10,
-                      )
-                    : Container(),
-                SizedBox(width: index == 0 ? 8 : 0),
-                BoldText(
-                  color: cColor.grey500,
-                  size: Dimensions.height2 * 9,
-                  text: str,
-                ),
-              ],
-            )
-          ]),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  MediumText(
+                    color: cColor.grey500,
+                    size: Dimensions.height2 * 7,
+                    text: index == 0 ? "UPoints" : "活動紀錄",
+                  ),
+                  if (index == 0) const CustomToolTip(text: "敬請期待"),
+                ],
+              ),
+              SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  index == 0
+                      ? Image.asset(
+                          "assets/Upoint.png",
+                          width: Dimensions.width2 * 10,
+                        )
+                      : Container(),
+                  SizedBox(width: index == 0 ? 8 : 0),
+                  BoldText(
+                    color: cColor.grey500,
+                    size: Dimensions.height2 * 9,
+                    text: str,
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
-  }
-
-  Widget firstContainer() {
-    CColor cColor = CColor.of(context);
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        ClipPath(
-          clipper: MyClipper(),
-          child: Container(
-            height: Dimensions.height2 * 85,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [cColor.color, cColor.primary],
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Color.fromRGBO(0, 0, 0, 0.14),
-                  offset: Offset(0, 2),
-                  blurRadius: 5,
-                  spreadRadius: 1,
-                )
-              ],
-            ),
-          ),
-        ),
-        ProfilePic(),
-      ],
-    );
-  }
-}
-
-class MyClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    var path = Path();
-    path.lineTo(0, size.height / 2);
-    path.quadraticBezierTo(
-        size.width / 2, size.height, size.width, size.height / 2);
-    path.lineTo(size.width, 0);
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) {
-    return false;
-  }
-}
-
-class MySliverDelegate extends SliverPersistentHeaderDelegate {
-  MySliverDelegate({
-    required this.minHeight,
-    required this.maxHeight,
-    required this.child,
-  });
-
-  final double minHeight; //最小高度
-  final double maxHeight; //最大高度
-  final Widget child; //子Widget布局
-
-  @override
-  double get minExtent => minHeight;
-
-  @override
-  double get maxExtent => (maxHeight);
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return SizedBox.expand(child: child);
-  }
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return false;
   }
 }

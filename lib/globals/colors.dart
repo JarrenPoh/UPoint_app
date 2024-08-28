@@ -13,6 +13,8 @@ class CColor {
   final Color color;
   final Color sub;
   final Color div;
+  final Color card;
+  final Color bgColor;
 
   CColor({
     required this.white,
@@ -27,6 +29,8 @@ class CColor {
     required this.color,
     required this.sub,
     required this.div,
+    required this.card,
+    required this.bgColor,
   });
 
   factory CColor.of(BuildContext context) {
@@ -43,6 +47,8 @@ class CColor {
       color: const Color(0xFFFF9F18),
       sub: Theme.of(context).colorScheme.onPrimaryContainer,
       div: Theme.of(context).appBarTheme.foregroundColor!,
+      card: Theme.of(context).cardTheme.color!,
+      bgColor: Theme.of(context).appBarTheme.backgroundColor!,
     );
   }
 }

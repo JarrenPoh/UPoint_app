@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 ThemeData darkTheme = ThemeData(
   brightness: Brightness.light,
   appBarTheme: AppBarTheme(
-    foregroundColor: Color(0xFF212121),
+    foregroundColor: Color.fromARGB(255, 25, 25, 25),
     backgroundColor: Color.fromARGB(255, 25, 25, 25),
   ),
+  cardTheme: CardTheme(color: Color(0xFF212121)),
   primaryColor: Color(0xFF0a2e3f),
   hintColor: Color(0xFFF8791D),
   scaffoldBackgroundColor: Color.fromARGB(255, 38, 38, 38),

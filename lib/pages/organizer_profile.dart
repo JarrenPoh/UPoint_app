@@ -16,7 +16,6 @@ import '../globals/custom_messengers.dart';
 import '../globals/scroll_things_provider.dart';
 import '../models/user_model.dart';
 import 'login_page.dart';
-import 'profile_page.dart';
 
 class OrganizerProfile extends StatefulWidget {
   final OrganizerModel organizer;
@@ -253,5 +252,34 @@ class _OrganizerProfileState extends State<OrganizerProfile>
         ),
       );
     });
+  }
+}
+
+class MySliverDelegate extends SliverPersistentHeaderDelegate {
+  MySliverDelegate({
+    required this.minHeight,
+    required this.maxHeight,
+    required this.child,
+  });
+
+  final double minHeight; //最小高度
+  final double maxHeight; //最大高度
+  final Widget child; //子Widget布局
+
+  @override
+  double get minExtent => minHeight;
+
+  @override
+  double get maxExtent => (maxHeight);
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return SizedBox.expand(child: child);
+  }
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return false;
   }
 }

@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:upoint/models/post_model.dart';
+import 'package:upoint/pages/calendar_page.dart';
+import 'package:upoint/pages/wishing_page.dart';
 
 class TagHomeBloc {
   final ValueNotifier<int> pageNotifier = ValueNotifier(0);
@@ -33,8 +35,8 @@ class TagHomeBloc {
 
   // featured
   sortFeatured() {
-    _featuredPost
-        .sort((a, b) => (b.signFormsLength ?? 0).compareTo(a.signFormsLength ?? 0));
+    _featuredPost.sort(
+        (a, b) => (b.signFormsLength ?? 0).compareTo(a.signFormsLength ?? 0));
     int limit = 4;
     int end = _featuredPost.length < limit ? _featuredPost.length : limit;
     featuredPostValue.value["postList"] = _featuredPost.sublist(0, end);
@@ -45,8 +47,11 @@ class TagHomeBloc {
   moreFeatured() {
     int limit = 10;
     int start = (featuredPostValue.value["postList"] as List).length;
-    int end = _featuredPost.length < start + limit ? _featuredPost.length : start + limit;
-    (featuredPostValue.value["postList"] as List).addAll(_featuredPost.sublist(start, end));
+    int end = _featuredPost.length < start + limit
+        ? _featuredPost.length
+        : start + limit;
+    (featuredPostValue.value["postList"] as List)
+        .addAll(_featuredPost.sublist(start, end));
     featuredPostValue.value["noMore"] = end == _featuredPost.length;
     featuredPostValue.notifyListeners();
   }
@@ -64,8 +69,11 @@ class TagHomeBloc {
   moreRecommand() {
     int limit = 10;
     int start = (recommandPostValue.value["postList"] as List).length;
-    int end = _recommandPost.length < start + limit ? _recommandPost.length : start + limit;
-    (recommandPostValue.value["postList"] as List).addAll(_recommandPost.sublist(start, end));
+    int end = _recommandPost.length < start + limit
+        ? _recommandPost.length
+        : start + limit;
+    (recommandPostValue.value["postList"] as List)
+        .addAll(_recommandPost.sublist(start, end));
     recommandPostValue.value["noMore"] = end == _recommandPost.length;
     recommandPostValue.notifyListeners();
   }
@@ -78,37 +86,44 @@ class TagHomeBloc {
     {
       "title": "功能許願池",
       "icon": "assets/fountain.svg",
-      "color": Color(0xFFFFBC7D),
+      "color": Color(0xFF4EB7FF),
+      "page": const WishingPage()
+    },
+    {
+      "title": "活動行事曆",
+      "icon": "assets/calendar.svg",
+      "color": Color(0xFFFF7D7D),
+      "page": const CalendarPage()
     },
     {
       "title": "最新消息(尚未開放)",
       "icon": "assets/new-box.svg",
       "color": Color(0xFFD19EEA),
+      "page": null,
     },
     {
       "title": "APP更新資訊(尚未開放)",
       "icon": "assets/rocket-launch.svg",
-      "color": Color(0xFFFF7D7D),
+      "color": Color(0xFFFFBC7D),
+      "page": null,
     },
     {
       "title": "工讀徵才(尚未開放)",
       "icon": "assets/briefcase-variant.svg",
       "color": Color(0xFF80CE88),
+      "page": null,
     },
     {
       "title": "(尚未開放)",
       "icon": "assets/bow-arrow.svg",
       "color": Color(0xFFFE9669),
+      "page": null,
     },
     {
       "title": "(尚未開放)",
       "icon": "assets/bow-arrow.svg",
       "color": Color(0xFFFE9669),
-    },
-    {
-      "title": "(尚未開放)",
-      "icon": "assets/bow-arrow.svg",
-      "color": Color(0xFFFE9669),
+      "page": null,
     },
   ];
 }

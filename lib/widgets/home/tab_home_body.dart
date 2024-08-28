@@ -6,7 +6,6 @@ import 'package:upoint/globals/custom_messengers.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/models/ad_model.dart';
-import 'package:upoint/pages/wishing_page.dart';
 import 'package:upoint/widgets/home/ad_layout.dart';
 import '../../globals/colors.dart';
 import '../../globals/scroll_things_provider.dart';
@@ -75,10 +74,14 @@ class _TabHomeBodyState extends State<TabHomeBody>
                     children: [
                       SizedBox(width: Dimensions.width5 * 4),
                       GestureDetector(
-                        onTap: () => index == 0
-                            ? Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const WishingPage()))
-                            : Messenger.toast(context, "尚未開放", "尚未開放，敬請期待"),
+                        onTap: () => _bloc.buttonList[index]["page"] == null
+                            ? Messenger.toast(context, "尚未開放", "尚未開放，敬請期待")
+                            : Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      _bloc.buttonList[index]["page"],
+                                ),
+                              ),
                         child: SizedBox(
                           width: Dimensions.width5 * 11,
                           child: Column(
