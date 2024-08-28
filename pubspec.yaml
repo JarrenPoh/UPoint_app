@@ -71,7 +71,7 @@ dependencies:
   new_version:
      path: lib/new_version-master
   dots_indicator: ^3.0.0
-
+  table_calendar: ^3.0.9
 
 # dart run flutter_native_splash:remove
 # dart run flutter_native_splash:create

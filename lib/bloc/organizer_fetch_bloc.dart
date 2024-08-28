@@ -33,6 +33,10 @@ class OrganzierFetchBloc with ChangeNotifier {
         postLength: 0,
         followers: [],
         followersFcm: [],
+        actBio: "",
+        actLocation: "",
+        actTime: "",
+        links: [],
       ),
     );
     _organizerList = _repeatHandle(_organizerList);
@@ -64,6 +68,10 @@ class OrganzierFetchBloc with ChangeNotifier {
           postLength: model.postLength,
           followers: model.followers,
           followersFcm: model.followersFcm,
+          actBio: model.actBio,
+          actLocation: model.actLocation,
+          actTime: model.actTime,
+          links: model.links,
         );
       } else {
         return OrganizerModel(
@@ -78,6 +86,10 @@ class OrganzierFetchBloc with ChangeNotifier {
           postLength: model.postLength,
           followers: model.followers,
           followersFcm: model.followersFcm,
+          actBio: model.actBio,
+          actLocation: model.actLocation,
+          actTime: model.actTime,
+          links: model.links,
         );
       }
     }).toList();

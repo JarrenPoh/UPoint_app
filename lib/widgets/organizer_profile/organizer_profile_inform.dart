@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:upoint/globals/colors.dart';
 import 'package:upoint/globals/dimension.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../globals/medium_text.dart';
 import '../../globals/scroll_things_provider.dart';
@@ -27,15 +28,15 @@ class _OrganizerProfileInformState extends State<OrganizerProfileInform>
   late CColor cColor = CColor.of(context);
   late List<Map> informList = [
     {
-      "index": "location",
+      "index": "actLocation",
       "title": "社課地點",
-      "text": "活動中心 404",
+      "text": widget.organizer.actLocation,
       "icon": Icons.location_on,
     },
     {
-      "index": "duration",
+      "index": "actTime",
       "title": "社課時間",
-      "text": "每週五 17:00~18:00",
+      "text": widget.organizer.actTime,
       "icon": Icons.access_time,
     },
     {
@@ -51,12 +52,18 @@ class _OrganizerProfileInformState extends State<OrganizerProfileInform>
       "icon": Icons.phone,
     },
     {
-      "index": "link",
+      "index": "links",
       "title": "相關連結",
-      "text": "活動中心 404",
+      "links": widget.organizer.links ?? [],
       "icon": Icons.link,
     },
   ];
+  List links = [];
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -117,11 +124,55 @@ class _OrganizerProfileInformState extends State<OrganizerProfileInform>
                                 color: cColor.grey400,
                               ),
                               SizedBox(width: Dimensions.width2 * 4),
-                              MediumText(
-                                color: cColor.grey500,
-                                size: 13,
-                                text: inform["text"] ?? "無",
-                              ),
+                              if (inform["index"] != "links")
+                                MediumText(
+                                  color: cColor.grey500,
+                                  size: 13,
+                                  text: inform["text"] ?? "無",
+                                ),
+                              if (inform["index"] == "links")
+                                Wrap(
+                                  spacing: 5,
+                                  runSpacing: 10,
+                                  children: [
+                                    if (inform["links"].isEmpty ||
+                                        inform["links"] == null)
+                                      MediumText(
+                                        color: cColor.grey500,
+                                        size: 13,
+                                        text: "無",
+                                      ),
+                                    for (var i in inform["links"])
+                                      SizedBox(
+                                        height: Dimensions.height2 * 10,
+                                        child: CupertinoButton(
+                                          padding: const EdgeInsets.all(0),
+                                          onPressed: () async {
+                                            if (i["url"] != null) {
+                                              final String url = i["url"];
+                                              try {
+                                                if (await canLaunch(url)) {
+                                                  await launch(url);
+                                                }
+                                              } catch (e) {
+                                                print(e.toString());
+                                              }
+                                            }
+                                          },
+                                          child: Text(
+                                            i["text"],
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              color: cColor.primary,
+                                              fontFamily: "NotoSansMedium",
+                                              decoration:
+                                                  TextDecoration.underline,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                                ),
                             ],
                           ),
                         ),
@@ -214,8 +265,7 @@ class _OrganizerProfileInformState extends State<OrganizerProfileInform>
                           color: cColor.grey500,
                           size: 13,
                           maxLines: 20,
-                          text:
-                              "中原大學秉持「全人教育」及「生命關懷」理念，以「服務學習」之實作教育，結合系所專業，具體實踐「生命成長、專業服務、知識責任及社會貢獻」等四大標的，因此於2007年3月設置「服務學習中心」，透過有系統、持續地推動「服務學習」課程與專案，讓中原教職員工生可以透過專業發揮創意，針對「服務」工作，提出解決方案，並透過「從做中學」、「身體力行」，來充分體會如何以專業技能來關懷社會，具體實踐中原大學「全人教育」、以「愛」立校的精神。",
+                          text: widget.organizer.actBio ?? "無",
                         ),
                       ),
                     ],

@@ -12,6 +12,10 @@ class OrganizerModel {
   int postLength;
   List? followers;
   List? followersFcm;
+  String? actTime; // 主要活動時間
+  String? actLocation; // 主要活動舉辦地點
+  String? actBio; // 主要活動內容介紹
+  List? links; // 相關連結
 
   OrganizerModel({
     required this.username,
@@ -25,6 +29,10 @@ class OrganizerModel {
     required this.postLength,
     required this.followers,
     required this.followersFcm,
+    required this.actBio,
+    required this.actLocation,
+    required this.actTime,
+    required this.links,
   });
 
   static Map toMap(OrganizerModel cart) {
@@ -37,9 +45,12 @@ class OrganizerModel {
       "bio": cart.bio,
       "unit": cart.unit,
       "contact": cart.contact,
-      "followers":cart.followers,
-      "followersFcm":cart.followersFcm,
-
+      "followers": cart.followers,
+      "followersFcm": cart.followersFcm,
+      "actTime": cart.actTime,
+      "actLocation": cart.actLocation,
+      "links": cart.links,
+      "actBio": cart.actBio,
     };
   }
 
@@ -57,7 +68,11 @@ class OrganizerModel {
       contact: snapshot['contact'],
       postLength: snapshot['postLength'],
       followers: snapshot["followers"],
-      followersFcm:snapshot["followersFcm"],
+      followersFcm: snapshot["followersFcm"],
+      actTime: snapshot["actTime"],
+      actLocation: snapshot["actLocation"],
+      links: snapshot["links"],
+      actBio: snapshot["actBio"],
     );
   }
 
@@ -71,8 +86,12 @@ class OrganizerModel {
         "unit": unit,
         "contact": contact,
         "postLength": postLength,
-        "followers":followers,
-        "followersFcm":followersFcm,
+        "followers": followers,
+        "followersFcm": followersFcm,
+        "actTime": actTime,
+        "actLocation": actLocation,
+        "links": links,
+        "actBio": actBio,
       };
 
   static OrganizerModel? fromMap(Map? map) {
@@ -89,8 +108,12 @@ class OrganizerModel {
         unit: map['unit'],
         contact: map['contact'],
         postLength: map['postLength'],
-        followers:map["followers"],
-        followersFcm:map["followersFcm"],
+        followers: map["followers"],
+        followersFcm: map["followersFcm"],
+        actTime: map["actTime"],
+        actLocation: map["actLocation"],
+        links: map["links"],
+        actBio: map["actBio"],
       );
     }
   }
