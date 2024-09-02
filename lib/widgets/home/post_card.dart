@@ -10,6 +10,7 @@ import 'package:upoint/models/organizer_model.dart';
 import 'package:upoint/models/post_model.dart';
 import 'package:upoint/models/user_model.dart';
 import 'package:upoint/pages/post_detail_page.dart';
+import 'package:upoint/widgets/custom_loading2.dart';
 
 class PostCard extends StatefulWidget {
   final PostModel post;
@@ -129,9 +130,7 @@ class _PostCardState extends State<PostCard> {
           placeholder: (context, url) => SizedBox(
             height: Dimensions.height5 * 3,
             width: Dimensions.height5 * 3,
-            child:  CircularProgressIndicator.adaptive(
-              backgroundColor: cColor.grey400,
-            ),
+            child:  CustomLoadong2(),
           ),
           errorWidget: (context, url, error) => Icon(Icons.error),
         ),

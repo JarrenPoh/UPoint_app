@@ -6,6 +6,7 @@ import 'package:upoint/widgets/login/verfify_email.dart';
 
 import '../../globals/colors.dart';
 import '../../globals/custom_messengers.dart';
+import '../custom_loading2.dart';
 
 class RegisterPanel extends StatefulWidget {
   final Function() onTap;
@@ -266,9 +267,7 @@ class _RegisterPanelState extends State<RegisterPanel> {
                     color: primary,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: CircularProgressIndicator.adaptive(
-                    backgroundColor: CColor.of(context).grey400,
-                  ),
+                  child: CustomLoadong2(),
                 )
               : Container()
         ],

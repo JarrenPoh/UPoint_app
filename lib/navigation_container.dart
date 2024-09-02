@@ -14,6 +14,7 @@ import 'package:upoint/pages/search_page.dart';
 import 'package:upoint/widgets/custom_bottom_naviagation_bar.dart';
 import 'package:upoint/pages/profile_page.dart';
 import 'package:provider/provider.dart';
+import 'package:upoint/widgets/custom_loading2.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'bloc/post_fetch_bloc.dart';
 import 'models/user_model.dart';
@@ -161,9 +162,8 @@ class _NavigationContainerState extends State<NavigationContainer>
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(
-                  child: CircularProgressIndicator.adaptive(
-                backgroundColor: onErrorContainer,
-              ));
+                child: CustomLoadong2(),
+              );
             }
             _pages =
                 (UserModel? _user, List<PostModel> _post, List<AdModel> ad) => [

@@ -6,6 +6,7 @@ import 'package:upoint/globals/medium_text.dart';
 
 import '../../globals/colors.dart';
 import '../../globals/custom_messengers.dart';
+import '../custom_loading2.dart';
 
 class ResetPassword extends StatefulWidget {
   const ResetPassword({super.key});
@@ -102,8 +103,7 @@ class _ResetPasswordState extends State<ResetPassword> {
         ),
         body: Center(
           child: isLoading
-              ? CircularProgressIndicator.adaptive(
-                  backgroundColor: CColor.of(context).grey400)
+              ? CustomLoadong2()
               : Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40),
                   child: Column(
@@ -138,9 +138,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                           ),
                           child: isLoading
                               ? Center(
-                                  child: CircularProgressIndicator.adaptive(
-                                      backgroundColor:
-                                          CColor.of(context).grey400),
+                                  child: CustomLoadong2(),
                                 )
                               : MediumText(
                                   color: Colors.white,

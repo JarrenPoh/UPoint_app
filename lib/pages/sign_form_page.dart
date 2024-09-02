@@ -9,6 +9,7 @@ import 'package:upoint/models/user_model.dart';
 import '../bloc/sign_form_bloc.dart';
 import '../models/form_model.dart';
 import '../models/post_model.dart';
+import '../widgets/custom_loading2.dart';
 import '../widgets/sign_form/signform_body.dart';
 
 class SignFormPage extends StatefulWidget {
@@ -66,7 +67,7 @@ class _SignFormPageState extends State<SignFormPage> {
             appBar: AppBar(
               backgroundColor: cColor.white,
               elevation: 0,
-              iconTheme: IconThemeData(color: cColor.black,size: 20),
+              iconTheme: IconThemeData(color: cColor.black, size: 20),
               title: MediumText(
                 color: cColor.grey500,
                 size: Dimensions.height2 * 8,
@@ -117,9 +118,7 @@ class _SignFormPageState extends State<SignFormPage> {
             ),
           ),
         ),
-        if (isLoading)
-          CircularProgressIndicator.adaptive(
-              backgroundColor: CColor.of(context).grey400),
+        if (isLoading) CustomLoadong2(),
       ],
     );
   }

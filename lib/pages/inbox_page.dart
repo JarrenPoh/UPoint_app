@@ -19,6 +19,7 @@ import 'package:upoint/secret.dart';
 import 'package:provider/provider.dart';
 
 import '../bloc/organizer_fetch_bloc.dart';
+import '../widgets/custom_loading2.dart';
 
 class InboxPage extends StatefulWidget {
   final UserModel? user;
@@ -133,9 +134,7 @@ class _InboxPageState extends State<InboxPage>
                       return _isLoading
                           //shimmer
                           ? Center(
-                              child: CircularProgressIndicator.adaptive(
-                                backgroundColor: onErrorContainer,
-                              ),
+                              child: CustomLoadong2(),
                             )
                           : Column(
                               children: [
@@ -183,10 +182,7 @@ class _InboxPageState extends State<InboxPage>
                                       ),
                                     )),
                                   ),
-                                if (_noMore == false)
-                                  CircularProgressIndicator.adaptive(
-                                    backgroundColor: onErrorContainer,
-                                  ),
+                                if (_noMore == false) CustomLoadong2(),
                               ],
                             );
                     },

@@ -12,6 +12,7 @@ import 'package:upoint/widgets/wish/wishing_card.dart';
 
 import '../firebase/auth_methods.dart';
 import '../models/user_model.dart';
+import '../widgets/custom_loading2.dart';
 
 class WishingPage extends StatefulWidget {
   const WishingPage({super.key});
@@ -94,10 +95,7 @@ class _WishingPageState extends State<WishingPage> {
                                       List<WishModel> post = value["post"];
                                       bool noMore = value["noMore"];
                                       if (post.isEmpty) {
-                                        return CircularProgressIndicator
-                                            .adaptive(
-                                          backgroundColor: cColor.grey400,
-                                        );
+                                        return CustomLoadong2();
                                       }
                                       return Column(
                                         children: List.generate(
@@ -117,11 +115,7 @@ class _WishingPageState extends State<WishingPage> {
                                                         text: "No More.",
                                                       ),
                                                     if (!noMore)
-                                                      CircularProgressIndicator
-                                                          .adaptive(
-                                                        backgroundColor:
-                                                            cColor.grey400,
-                                                      )
+                                                      CustomLoadong2(),
                                                   ],
                                                 ),
                                               );

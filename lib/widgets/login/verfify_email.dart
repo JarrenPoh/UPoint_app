@@ -11,6 +11,7 @@ import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/pages/login_page.dart';
 import '../../globals/colors.dart';
 import '../../globals/custom_messengers.dart';
+import '../custom_loading2.dart';
 
 class VerifyEmail extends StatefulWidget {
   final String email;
@@ -172,8 +173,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                     ),
                     child: isLoading
                         ? Center(
-                            child: CircularProgressIndicator.adaptive(
-                                backgroundColor: CColor.of(context).grey400),
+                            child: CustomLoadong2(),
                           )
                         : MediumText(
                             color: Colors.white,
@@ -194,9 +194,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                     color: primary,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: CircularProgressIndicator.adaptive(
-                    backgroundColor: CColor.of(context).grey400,
-                  ),
+                  child: CustomLoadong2(),
                 )
               : Container()
         ],
