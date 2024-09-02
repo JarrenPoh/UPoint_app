@@ -5,6 +5,7 @@ import 'package:upoint/globals/colors.dart';
 import 'package:upoint/globals/custom_messengers.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
+import 'package:upoint/widgets/custom_loading2.dart';
 import 'package:upoint/widgets/login/reset_password.dart';
 import 'package:provider/provider.dart';
 
@@ -351,9 +352,7 @@ class _LoginPanelState extends State<LoginPanel> {
                     color: primary,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: CircularProgressIndicator.adaptive(
-                    backgroundColor: CColor.of(context).grey400,
-                  ),
+                  child: const CustomLoadong2()
                 )
               : Container()
         ],

@@ -225,7 +225,7 @@ class _OrganizerProfileState extends State<OrganizerProfile>
             SizedBox(width: Dimensions.width2 * 8),
             if (!(user?.uuid == widget.organizer.uid))
               SizedBox(
-                height: Dimensions.height2 * 13,
+                height: Dimensions.height2 * 14,
                 child: CupertinoButton(
                   onPressed: () => follow(user: user),
                   padding: const EdgeInsets.all(0),
@@ -241,7 +241,7 @@ class _OrganizerProfileState extends State<OrganizerProfile>
                       border: Border.all(color: cColor.primary),
                     ),
                     child: MediumText(
-                      color: Colors.white,
+                      color:isFollow ? cColor.primary:Colors.white,
                       size: 12,
                       text: isFollow ? "取消追蹤" : "追蹤",
                     ),
