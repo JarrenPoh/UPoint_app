@@ -37,7 +37,10 @@ class _FilterClubBodyState extends State<FilterClubBody> {
               SizedBox(
                 height: Dimensions.height5 * 4,
                 width: Dimensions.width5 * 4,
-                child: Icon(Icons.location_on, color: cColor.grey500),
+                child: Icon(
+                  Icons.location_on,
+                  color: cColor.grey500,
+                ),
               ),
               SizedBox(width: Dimensions.width2 * 4),
               MediumText(
@@ -97,15 +100,17 @@ class _FilterClubBodyState extends State<FilterClubBody> {
                               // 社團照片
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => OrganizerProfile(
-                                        organizer: model,
-                                        hero: hero,
+                                  if (index != 0) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => OrganizerProfile(
+                                          organizer: model,
+                                          hero: hero,
+                                        ),
                                       ),
-                                    ),
-                                  );
+                                    );
+                                  }
                                 },
                                 child: Stack(
                                   alignment: const Alignment(1, -1),
