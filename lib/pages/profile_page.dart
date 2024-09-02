@@ -65,7 +65,7 @@ class _ProfilePageState extends State<ProfilePage>
               ),
               child: Row(
                 children: [
-                  ProfilePic(),
+                  ProfilePic(user:widget.user),
                   SizedBox(width: Dimensions.width2 * 8),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

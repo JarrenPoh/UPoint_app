@@ -328,9 +328,9 @@ class _PostDetailBodyState extends State<PostDetailBody> {
     return TextSpan(
       text: inform["text"],
       style: TextStyle(
-        color: (inform["index"] == "link" || inform["index"] == "organizer")
-            ? cColor.primary
-            : cColor.grey500,
+        fontFamily:
+            inform["index"] == "organizer" ? "NotoSansBold" : "NotoSansMedium",
+        color: inform["index"] == "link" ? cColor.primary : cColor.grey500,
         decoration:
             (inform["index"] == "link" || inform["index"] == "organizer")
                 ? TextDecoration.underline

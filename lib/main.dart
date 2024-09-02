@@ -17,7 +17,6 @@ import 'package:upoint/theme/dark_theme.dart';
 import 'package:upoint/theme/light_theme.dart';
 import 'package:camera/camera.dart';
 import 'package:provider/provider.dart';
-
 import 'bloc/organizer_fetch_bloc.dart';
 import 'bloc/post_fetch_bloc.dart';
 

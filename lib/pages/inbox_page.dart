@@ -9,12 +9,16 @@ import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/globals/regular_text.dart';
 import 'package:upoint/models/inbox_model.dart';
+import 'package:upoint/models/organizer_model.dart';
 import 'package:upoint/models/post_model.dart';
 import 'package:upoint/models/user_model.dart';
+import 'package:upoint/pages/organizer_profile.dart';
 import 'package:upoint/pages/post_detail_page.dart';
 import 'package:upoint/pages/login_page.dart';
 import 'package:upoint/secret.dart';
 import 'package:provider/provider.dart';
+
+import '../bloc/organizer_fetch_bloc.dart';
 
 class InboxPage extends StatefulWidget {
   final UserModel? user;
@@ -32,6 +36,8 @@ class _InboxPageState extends State<InboxPage>
   @override
   bool get wantKeepAlive => true;
   late final bloc = Provider.of<InboxPageBloc>(context, listen: false);
+  late List<OrganizerModel> organizerList =
+      Provider.of<OrganzierFetchBloc>(context, listen: false).organizerList;
 
   init() {
     if (widget.user != null) {
@@ -47,18 +53,24 @@ class _InboxPageState extends State<InboxPage>
     }
   }
 
-  gotoProfile() {
+  gotoProfile({
+    required String organizerUid,
+    required String heroTag,
+  }) {
+    OrganizerModel _org =
+        organizerList.firstWhere((e) => e.uid == organizerUid);
     print('前往處室頁面');
-    //  Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (context) {
-    //       return ProfilePage(
-    //         user: ,
-    //       );
-    //     },
-    //   ),
-    // );
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return OrganizerProfile(
+            organizer: _org,
+            hero: heroTag,
+          );
+        },
+      ),
+    );
   }
 
   findAndGoPost(postId) async {
@@ -195,6 +207,8 @@ class _InboxPageState extends State<InboxPage>
       itemCount: _list[lindex].inboxModel.length,
       itemBuilder: (context, index) {
         InboxModel inboxModel = _list[lindex].inboxModel[index];
+        final String heroTag =
+            "inbox_page_${lindex}_${index}: ${inboxModel.uid}";
         return Padding(
           padding: EdgeInsets.symmetric(
             horizontal: Dimensions.width5 * 4,
@@ -206,19 +220,26 @@ class _InboxPageState extends State<InboxPage>
               Row(
                 children: [
                   GestureDetector(
-                    onTap: () => gotoProfile(),
+                    onTap: () => gotoProfile(
+                      organizerUid: inboxModel.uid,
+                      heroTag: heroTag,
+                    ),
                     child: CircleAvatar(
                       backgroundColor: cColor.grey200,
                       radius: 20,
                       child: CircleAvatar(
                         backgroundColor: cColor.grey200,
                         radius: 18,
-                        child: CircleAvatar(
-                          backgroundColor: Colors.grey,
-                          backgroundImage: NetworkImage(
-                            inboxModel.pic ?? defaultUserPic,
+                        child: Hero(
+                          transitionOnUserGestures: true,
+                          tag: heroTag,
+                          child: CircleAvatar(
+                            backgroundColor: Colors.grey,
+                            backgroundImage: NetworkImage(
+                              inboxModel.pic ?? defaultUserPic,
+                            ),
+                            radius: 22,
                           ),
-                          radius: 22,
                         ),
                       ),
                     ),
@@ -231,7 +252,10 @@ class _InboxPageState extends State<InboxPage>
                         children: [
                           TextSpan(
                             recognizer: TapGestureRecognizer()
-                              ..onTap = () => gotoProfile(),
+                              ..onTap = () => gotoProfile(
+                                    organizerUid: inboxModel.uid,
+                                    heroTag: heroTag,
+                                  ),
                             text: inboxModel.name,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
@@ -324,7 +348,7 @@ class _InboxPageState extends State<InboxPage>
                             await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => LoginPage(),
+                                builder: (context) => const LoginPage(),
                               ),
                             );
                           },
