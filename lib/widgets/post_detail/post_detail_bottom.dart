@@ -136,9 +136,7 @@ class _PostDetailBottomBarState extends State<PostDetailBottomBar> {
       if (post.form?.substring(0, 4) == "http") {
         debugPrint("前進外部報名");
         final String url = post.form!;
-        if (await canLaunch(url)) {
-          await launch(url);
-        }
+        await launch(url);
       } else {
         if (user == null) {
           String res = await Messenger.dialog(
@@ -181,9 +179,7 @@ class _PostDetailBottomBarState extends State<PostDetailBottomBar> {
     } else {
       if (post.link != null) {
         final String url = post.link!;
-        if (await canLaunch(url)) {
-          await launch(url);
-        }
+        await launch(url);
       }
     }
   }

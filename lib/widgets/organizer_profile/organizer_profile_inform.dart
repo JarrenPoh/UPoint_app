@@ -150,10 +150,9 @@ class _OrganizerProfileInformState extends State<OrganizerProfileInform>
                                           onPressed: () async {
                                             if (i["url"] != null) {
                                               final String url = i["url"];
+                                              final Uri uri = Uri.parse(url);
                                               try {
-                                                if (await canLaunch(url)) {
-                                                  await launch(url);
-                                                }
+                                                await launchUrl(uri, mode: LaunchMode.externalApplication);
                                               } catch (e) {
                                                 print(e.toString());
                                               }
