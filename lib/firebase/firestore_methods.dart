@@ -11,6 +11,7 @@ import 'package:upoint/models/user_model.dart';
 import 'package:uuid/uuid.dart';
 
 import '../globals/global.dart';
+import '../models/rag_message_model.dart';
 import '../models/wish_model.dart';
 
 class FirestoreMethods {
@@ -358,6 +359,25 @@ class FirestoreMethods {
       }
     } catch (e) {
       print(e.toString());
+    }
+  }
+
+  // 上傳RAG
+  Future<void> sendRagMessage({
+    required UserModel user,
+    required RagMessageModel ragMessageModel,
+  }) async {
+    try {
+      debugPrint("發送至firestore");
+      await _firestore
+          .collection("users")
+          .doc(user.uuid)
+          .collection("rag_messages")
+          .add(
+            ragMessageModel.toJson(),
+          );
+    } catch (e) {
+      debugPrint("error when sendRagMessage: ${e.toString()}");
     }
   }
 }

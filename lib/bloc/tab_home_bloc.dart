@@ -1,9 +1,15 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:upoint/models/post_model.dart';
+import 'package:upoint/models/user_model.dart';
 import 'package:upoint/pages/calendar_page.dart';
 import 'package:upoint/pages/wishing_page.dart';
+
+import '../globals/custom_messengers.dart';
+import '../pages/login_page.dart';
+import '../pages/rag_page.dart';
 
 class TagHomeBloc {
   final ValueNotifier<int> pageNotifier = ValueNotifier(0);
@@ -82,48 +88,99 @@ class TagHomeBloc {
     pageNotifier.value = v;
   }
 
-  List<Map> buttonList = [
-    {
-      "title": "功能許願池",
-      "icon": "assets/fountain.svg",
-      "color": Color(0xFF4EB7FF),
-      "page": const WishingPage()
-    },
-    {
-      "title": "活動行事曆",
-      "icon": "assets/calendar.svg",
-      "color": Color(0xFFFF7D7D),
-      "page": const CalendarPage()
-    },
-    {
-      "title": "最新消息(尚未開放)",
-      "icon": "assets/new-box.svg",
-      "color": Color(0xFFD19EEA),
-      "page": null,
-    },
-    {
-      "title": "APP更新資訊(尚未開放)",
-      "icon": "assets/rocket-launch.svg",
-      "color": Color(0xFFFFBC7D),
-      "page": null,
-    },
-    {
-      "title": "工讀徵才(尚未開放)",
-      "icon": "assets/briefcase-variant.svg",
-      "color": Color(0xFF80CE88),
-      "page": null,
-    },
-    {
-      "title": "(尚未開放)",
-      "icon": "assets/bow-arrow.svg",
-      "color": Color(0xFFFE9669),
-      "page": null,
-    },
-    {
-      "title": "(尚未開放)",
-      "icon": "assets/bow-arrow.svg",
-      "color": Color(0xFFFE9669),
-      "page": null,
-    },
-  ];
+  List<Map> buttonList({
+    required BuildContext context,
+    required UserModel? user,
+  }) {
+    return [
+      {
+        "title": "RAG智能小助理",
+        "icon": "assets/robot.svg",
+        "color": const Color(0xFFF8791D),
+        "tap": () async {
+          if (user == null) {
+            String res = await Messenger.dialog(
+              '請先登入',
+              '您尚未登入帳戶',
+              context,
+            );
+            if (res == "success") {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const LoginPage(),
+                ),
+              );
+            }
+          } else {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return RagPage(
+                    hero: "rag",
+                    user: user,
+                  );
+                },
+              ),
+            );
+          }
+        },
+      },
+      {
+        "title": "活動行事曆",
+        "icon": "assets/calendar.svg",
+        "color": Color(0xFFFF7D7D),
+        "tap": () {
+          Navigator.push(context, MaterialPageRoute(
+            builder: (context) {
+              return const CalendarPage();
+            },
+          ));
+        }
+      },
+      {
+        "title": "功能許願池",
+        "icon": "assets/fountain.svg",
+        "color": Color(0xFF4EB7FF),
+        "tap": () {
+          Navigator.push(context, MaterialPageRoute(
+            builder: (context) {
+              return const WishingPage();
+            },
+          ));
+        }
+      },
+      {
+        "title": "最新消息(尚未開放)",
+        "icon": "assets/new-box.svg",
+        "color": Color(0xFFD19EEA),
+        "tap": null,
+      },
+      {
+        "title": "APP更新資訊(尚未開放)",
+        "icon": "assets/rocket-launch.svg",
+        "color": Color(0xFFFFBC7D),
+        "tap": null,
+      },
+      {
+        "title": "工讀徵才(尚未開放)",
+        "icon": "assets/briefcase-variant.svg",
+        "color": Color(0xFF80CE88),
+        "tap": null,
+      },
+      {
+        "title": "(尚未開放)",
+        "icon": "assets/bow-arrow.svg",
+        "color": Color(0xFFFE9669),
+        "tap": null,
+      },
+      {
+        "title": "(尚未開放)",
+        "icon": "assets/bow-arrow.svg",
+        "color": Color(0xFFFE9669),
+        "tap": null,
+      },
+    ];
+  }
 }

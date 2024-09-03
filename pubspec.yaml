@@ -71,6 +71,7 @@ dependencies:
   dots_indicator: ^3.0.0
   table_calendar: ^3.0.9
   dismissible_page: ^1.0.2
+  flutter_chat_ui: ^1.6.15
 
 # dart run flutter_native_splash:remove
 # dart run flutter_native_splash:create

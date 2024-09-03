@@ -1,15 +1,19 @@
 // ignore_for_file: use_build_context_synchronously
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:upoint/bloc/organizer_fetch_bloc.dart';
 import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/firebase/firestore_methods.dart';
+import 'package:upoint/globals/colors.dart';
 import 'package:upoint/globals/custom_messengers.dart';
 import 'package:upoint/models/ad_model.dart';
 import 'package:upoint/models/post_model.dart';
 import 'package:upoint/pages/home_page.dart';
 import 'package:upoint/pages/inbox_page.dart';
 import 'package:upoint/pages/logo_page.dart';
+import 'package:upoint/pages/rag_page.dart';
 import 'package:upoint/pages/search_page.dart';
 import 'package:upoint/widgets/custom_bottom_naviagation_bar.dart';
 import 'package:upoint/pages/profile_page.dart';
@@ -17,8 +21,10 @@ import 'package:provider/provider.dart';
 import 'package:upoint/widgets/custom_loading2.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'bloc/post_fetch_bloc.dart';
+import 'globals/dimension.dart';
 import 'models/user_model.dart';
 import 'new_version-master/lib/new_version.dart';
+import 'pages/login_page.dart';
 import 'pages/post_detail_page.dart';
 
 class NavigationContainer extends StatefulWidget {
@@ -39,6 +45,8 @@ class _NavigationContainerState extends State<NavigationContainer>
   List<Widget> Function(UserModel?, List<PostModel>, List<AdModel>) _pages =
       (u, p, a) => [];
   PageController _pageController = PageController();
+  late CColor cColor = CColor.of(context);
+  UserModel? user;
 
   Future<void> _initPackageInfo() async {
     final newVersion = NewVersion(
@@ -145,7 +153,6 @@ class _NavigationContainerState extends State<NavigationContainer>
   Widget build(BuildContext context) {
     super.build(context);
     _initPackageInfo();
-    Color onErrorContainer = Theme.of(context).colorScheme.onErrorContainer;
     Color scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
     return WillPopScope(
       onWillPop: () async {
@@ -189,7 +196,7 @@ class _NavigationContainerState extends State<NavigationContainer>
             return Consumer<AuthMethods>(
               builder: (context, userNotifier, child) {
                 List<AdModel> ad = snapshot.data ?? [];
-                UserModel? user = userNotifier.user;
+                user = userNotifier.user;
                 print('刷新用戶');
                 return Consumer<PostFetchBloc>(
                     builder: (context, postNotifier, child) {
@@ -207,6 +214,54 @@ class _NavigationContainerState extends State<NavigationContainer>
               },
             );
           },
+        ),
+        floatingActionButton: CupertinoButton(
+          onPressed: () async {
+            if (user == null) {
+              String res = await Messenger.dialog(
+                '請先登入',
+                '您尚未登入帳戶',
+                context,
+              );
+              if (res == "success") {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LoginPage(),
+                  ),
+                );
+              }
+            } else {
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return RagPage(
+                    hero: "rag",
+                    user: user!,
+                  );
+                },
+              ));
+            }
+          },
+          child: Hero(
+            tag: "rag",
+            transitionOnUserGestures: true,
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: cColor.primary,
+                borderRadius: BorderRadius.circular(100),
+              ),
+              width: Dimensions.height2 * 26,
+              height: Dimensions.height2 * 26,
+              child: SvgPicture.asset(
+                color: Colors.white,
+                width: Dimensions.height2 * 16,
+                height: Dimensions.height2 * 16,
+                "assets/robot.svg",
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
         ),
         bottomNavigationBar: CustomBottomNavigationBar(
           onIconTap: onIconTapped,

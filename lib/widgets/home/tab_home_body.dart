@@ -68,20 +68,17 @@ class _TabHomeBodyState extends State<TabHomeBody>
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: List.generate(
-                _bloc.buttonList.length,
+                _bloc.buttonList(context: context, user: widget.user).length,
                 (index) {
+                  List<Map<dynamic, dynamic>> buttonList =
+                      _bloc.buttonList(context: context, user: widget.user);
                   return Row(
                     children: [
                       SizedBox(width: Dimensions.width5 * 4),
                       GestureDetector(
-                        onTap: () => _bloc.buttonList[index]["page"] == null
+                        onTap: () => buttonList[index]["tap"] == null
                             ? Messenger.toast(context, "尚未開放", "尚未開放，敬請期待")
-                            : Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      _bloc.buttonList[index]["page"],
-                                ),
-                              ),
+                            : buttonList[index]["tap"]?.call(),
                         child: SizedBox(
                           width: Dimensions.width5 * 11,
                           child: Column(
@@ -94,7 +91,7 @@ class _TabHomeBodyState extends State<TabHomeBody>
                                     height: Dimensions.height2 * 20,
                                     width: Dimensions.height2 * 20,
                                     decoration: BoxDecoration(
-                                      color: _bloc.buttonList[index]["color"],
+                                      color: buttonList[index]["color"],
                                       borderRadius: BorderRadius.circular(
                                         Dimensions.height2 * 10,
                                       ),
@@ -104,7 +101,7 @@ class _TabHomeBodyState extends State<TabHomeBody>
                                     color: Colors.white,
                                     width: Dimensions.height2 * 12,
                                     height: Dimensions.height2 * 12,
-                                    "${_bloc.buttonList[index]["icon"]}",
+                                    "${buttonList[index]["icon"]}",
                                     fit: BoxFit.cover,
                                   ),
                                 ],
@@ -113,8 +110,9 @@ class _TabHomeBodyState extends State<TabHomeBody>
                               MediumText(
                                 color: cColor.grey500,
                                 size: 10,
-                                text: _bloc.buttonList[index]["title"],
+                                text: buttonList[index]["title"],
                                 maxLines: 2,
+                                textAlign: TextAlign.center,
                               ),
                             ],
                           ),

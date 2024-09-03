@@ -25,7 +25,7 @@ class _FilterClubBodyState extends State<FilterClubBody> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: Dimensions.height5 * 33,
+      height: Dimensions.height5 * 30,
       padding: EdgeInsets.symmetric(
         vertical: Dimensions.height2 * 3,
         horizontal: Dimensions.width2 * 4,
@@ -177,7 +177,6 @@ class _FilterClubBodyState extends State<FilterClubBody> {
                             ],
                           ),
                         ),
-                        const SizedBox(height: 4),
                         // 篩選文字
                         GestureDetector(
                           onTap: () =>
