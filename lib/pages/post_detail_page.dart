@@ -41,8 +41,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
       onDismissed: () {
         Navigator.of(context).pop();
       },
-      direction: DismissiblePageDismissDirection.multi,
-      isFullScreen: false,
+      direction: DismissiblePageDismissDirection.horizontal,
+      isFullScreen: true,
       child: Scaffold(
         body: Container(
           color: cColor.white,

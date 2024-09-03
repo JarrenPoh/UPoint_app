@@ -44,8 +44,8 @@ class _OrganizerProfileState extends State<OrganizerProfile>
       onDismissed: () {
         Navigator.of(context).pop();
       },
-      direction: DismissiblePageDismissDirection.multi,
-      isFullScreen: false,
+      direction: DismissiblePageDismissDirection.horizontal,
+      isFullScreen: true,
       child: Scaffold(
         backgroundColor: cColor.white,
         body: NestedScrollView(

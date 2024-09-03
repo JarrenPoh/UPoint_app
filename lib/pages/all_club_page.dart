@@ -28,8 +28,8 @@ class _AllClubPageState extends State<AllClubPage> {
       onDismissed: () {
         Navigator.of(context).pop();
       },
-      direction: DismissiblePageDismissDirection.multi,
-      isFullScreen: false,
+      direction: DismissiblePageDismissDirection.horizontal,
+      isFullScreen: true,
       child: Scaffold(
         backgroundColor: cColor.white,
         appBar: AppBar(
