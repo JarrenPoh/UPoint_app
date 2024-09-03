@@ -1,3 +1,4 @@
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -7,9 +8,7 @@ import 'package:upoint/globals/colors.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/models/wish_model.dart';
-import 'package:upoint/overscroll_pop-main/lib/overscroll_pop.dart';
 import 'package:upoint/widgets/wish/wishing_card.dart';
-
 import '../firebase/auth_methods.dart';
 import '../models/user_model.dart';
 import '../widgets/custom_loading2.dart';
@@ -27,9 +26,13 @@ class _WishingPageState extends State<WishingPage> {
   @override
   Widget build(BuildContext context) {
     CColor cColor = CColor.of(context);
-    return OverscrollPop(
-      scrollToPopOption: ScrollToPopOption.start,
-      dragToPopDirection: DragToPopDirection.horizontal,
+    return DismissiblePage(
+      backgroundColor: Colors.transparent,
+      onDismissed: () {
+        Navigator.of(context).pop();
+      },
+      direction: DismissiblePageDismissDirection.multi,
+      isFullScreen: false,
       child: Scaffold(
         body: Container(
           color: cColor.white,

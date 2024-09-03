@@ -1,8 +1,8 @@
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:upoint/bloc/organizer_fetch_bloc.dart';
 import 'package:upoint/globals/colors.dart';
-import 'package:upoint/overscroll_pop-main/lib/overscroll_pop.dart';
 import 'package:upoint/widgets/home/club_card.dart';
 import '../globals/dimension.dart';
 import '../globals/medium_text.dart';
@@ -23,9 +23,13 @@ class _AllClubPageState extends State<AllClubPage> {
   late CColor cColor = CColor.of(context);
   @override
   Widget build(BuildContext context) {
-    return OverscrollPop(
-      scrollToPopOption: ScrollToPopOption.start,
-      dragToPopDirection: DragToPopDirection.horizontal,
+    return DismissiblePage(
+      backgroundColor: Colors.transparent,
+      onDismissed: () {
+        Navigator.of(context).pop();
+      },
+      direction: DismissiblePageDismissDirection.multi,
+      isFullScreen: false,
       child: Scaffold(
         backgroundColor: cColor.white,
         appBar: AppBar(

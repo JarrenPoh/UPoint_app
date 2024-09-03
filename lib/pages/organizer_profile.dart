@@ -1,3 +1,4 @@
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -7,7 +8,6 @@ import 'package:upoint/globals/colors.dart';
 import 'package:upoint/globals/dimension.dart';
 import 'package:upoint/globals/medium_text.dart';
 import 'package:upoint/models/organizer_model.dart';
-import 'package:upoint/overscroll_pop-main/lib/overscroll_pop.dart';
 import 'package:upoint/widgets/organizer_profile/organizer_profile_announce.dart';
 import 'package:upoint/widgets/organizer_profile/organizer_profile_inform.dart';
 import 'package:upoint/widgets/organizer_profile/organizer_profile_post.dart';
@@ -39,9 +39,13 @@ class _OrganizerProfileState extends State<OrganizerProfile>
 
   @override
   Widget build(BuildContext context) {
-    return OverscrollPop(
-      scrollToPopOption: ScrollToPopOption.start,
-      dragToPopDirection: DragToPopDirection.horizontal,
+    return DismissiblePage(
+      backgroundColor: Colors.transparent,
+      onDismissed: () {
+        Navigator.of(context).pop();
+      },
+      direction: DismissiblePageDismissDirection.multi,
+      isFullScreen: false,
       child: Scaffold(
         backgroundColor: cColor.white,
         body: NestedScrollView(
