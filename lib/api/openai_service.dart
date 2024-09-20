@@ -20,7 +20,7 @@ class OpenAIService {
         'messages': [
           {
             "role": "user",
-            "content": userQuestion + " 請列點回答",
+            "content": userQuestion + " 根據檔案內容請列點回答。在回答任何事情前都加上「U碰所知道的，」，不要回答根據檔案內容。沒有相關內容的話就回我「您的提問已超出U碰的知識外，很抱歉沒辦法回答你．」",
           }
         ]
       }),
@@ -89,6 +89,8 @@ class OpenAIService {
         final messagesData = jsonDecode(decodedBody);
         final latestMessage = messagesData['data'];
         responseText = latestMessage[0]["content"][0]["text"]["value"];
+        responseText = responseText.replaceAll(RegExp(r'【[^】]*†source】'), '');
+        print("responseText: $responseText");
       } else {
         await Future.delayed(Duration(seconds: 5)); // 延遲幾秒再重試
       }

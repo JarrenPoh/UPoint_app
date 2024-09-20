@@ -105,7 +105,7 @@ class _RagPageState extends State<RagPage> with SingleTickerProviderStateMixin {
             backgroundColor: const Color(0xFF1B202D),
             title: Hero(
               tag: widget.hero,
-              child: BoldText(color: cColor.grey500, size: 18, text: "智能小助手"),
+              child: BoldText(color: Colors.white, size: 18, text: "U碰智能小助手"),
             ),
             centerTitle: true,
             iconTheme: const IconThemeData(
@@ -127,13 +127,13 @@ class _RagPageState extends State<RagPage> with SingleTickerProviderStateMixin {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(height: Dimensions.height5 * 4),
-                          Center(
-                            child: MediumText(
-                              color: cColor.grey500,
-                              size: 12,
-                              text: "1 FEB 12:00",
-                            ),
-                          ),
+                          // Center(
+                          //   child: MediumText(
+                          //     color: Colors.white,
+                          //     size: 12,
+                          //     text: "1 FEB 12:00",
+                          //   ),
+                          // ),
                           SizedBox(height: Dimensions.height2 * 4),
                           ValueListenableBuilder<List<types.Message>>(
                             valueListenable: _bloc.messagesNotifier,
@@ -169,6 +169,7 @@ class _RagPageState extends State<RagPage> with SingleTickerProviderStateMixin {
                         children: [
                           Expanded(
                             child: TextField(
+                              cursorColor: Colors.grey.shade500,
                               controller: _textController,
                               style: const TextStyle(
                                 color: Colors.white,
@@ -177,7 +178,7 @@ class _RagPageState extends State<RagPage> with SingleTickerProviderStateMixin {
                               ),
                               decoration: InputDecoration(
                                 hintText: 'Type your message...',
-                                hintStyle: TextStyle(color: cColor.grey500),
+                                hintStyle: TextStyle(color: Colors.white),
                                 border: InputBorder.none,
                                 contentPadding: EdgeInsets.only(
                                   left: Dimensions.width2 * 8,
@@ -230,10 +231,10 @@ class _RagPageState extends State<RagPage> with SingleTickerProviderStateMixin {
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12), color: Color(0xFF7A8194)),
-        padding: EdgeInsets.all(12),
+        padding: EdgeInsets.all(10),
         margin: EdgeInsets.only(left: 20),
         child: MediumText(
-          color: cColor.grey500,
+          color: Colors.white,
           maxLines: 100,
           size: 14,
           text: text, // 使用傳遞進來的文本
@@ -267,10 +268,10 @@ class _RagPageState extends State<RagPage> with SingleTickerProviderStateMixin {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                   color: Color(0xFF373E4E)),
-              padding: EdgeInsets.all(12),
+              padding: EdgeInsets.all(10),
               margin: EdgeInsets.only(right: Dimensions.width2 * 10),
               child: MediumText(
-                color: cColor.grey500,
+                color: Colors.white,
                 maxLines: 100,
                 size: 14,
                 text: text, // 使用傳遞進來的文本
@@ -295,7 +296,7 @@ class _RagPageState extends State<RagPage> with SingleTickerProviderStateMixin {
             String dotsText = '.' * dots; // 動態生成點點
             return Text(
               "正在搜尋資料$dotsText",
-              style: TextStyle(color: cColor.grey500, fontSize: 14),
+              style: TextStyle(color: Colors.white, fontSize: 14),
             );
           },
         ),

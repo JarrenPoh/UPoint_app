@@ -140,14 +140,29 @@ class _NavigationContainerState extends State<NavigationContainer>
     // 其他生命周期变化...
   }
 
-  Future<List<AdModel>> getUserAndPost() async {
+Future<List<AdModel>> getUserAndPost() async {
+  try {
+    print("Fetching user details...");
     final userAccountManager = Provider.of<AuthMethods>(context, listen: false);
     await userAccountManager.getUserDetails();
+    print("User details fetched.");
+
     final postManager = Provider.of<PostFetchBloc>(context, listen: false);
     await postManager.fetch();
+    print("Posts fetched.");
+
+    print("Fetching ads...");
     List<AdModel> ad = await FirestoreMethods().fetchAllAd();
+    print("Ads fetched successfully, returning ad list.");
+
+    print("這粒啊啊啊");
     return ad;
+  } catch (e) {
+    print("Error in getUserAndPost: $e");
+    rethrow;
   }
+}
+
 
   @override
   Widget build(BuildContext context) {

@@ -94,7 +94,7 @@ class TagHomeBloc {
   }) {
     return [
       {
-        "title": "RAG智能小助理",
+        "title": "U碰智能小助理",
         "icon": "assets/robot.svg",
         "color": const Color(0xFFF8791D),
         "tap": () async {

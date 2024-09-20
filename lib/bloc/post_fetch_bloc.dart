@@ -8,8 +8,8 @@ class PostFetchBloc with ChangeNotifier {
 
   fetch() async {
     if (_post.isEmpty) {
-      debugPrint('拿了post from 資料');
       List<PostModel> _post = await FirestoreMethods().fetchAllPost();
+      debugPrint('拿了${_post.length}筆貼文');
       setpost(_post);
     }
     return _post;

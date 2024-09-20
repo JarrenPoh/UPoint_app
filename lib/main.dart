@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
-// import 'package:uni_links/uni_links.dart';
 import 'package:upoint/bloc/inbox_page_bloc.dart';
 import 'package:upoint/firebase/auth_methods.dart';
 import 'package:upoint/firebase/firestore_methods.dart';

@@ -202,6 +202,7 @@ class FirestoreMethods {
   }
 
   Future<List<AdModel>> fetchAllAd() async {
+    print("1111");
     QuerySnapshot<Map<String, dynamic>> fetchPost = await FirebaseFirestore
         .instance
         .collection('ads')
@@ -209,7 +210,7 @@ class FirestoreMethods {
         .get();
     List<QueryDocumentSnapshot> _list = fetchPost.docs.toList();
     List<AdModel> _ads = _list.map((e) => AdModel.fromMap(e)).toList();
-    debugPrint('找了${fetchPost.docs.length}則貼文');
+    debugPrint('找了${fetchPost.docs.length}則廣告');
     return _ads;
   }
 
