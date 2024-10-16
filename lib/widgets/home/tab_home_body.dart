@@ -109,7 +109,7 @@ class _TabHomeBodyState extends State<TabHomeBody>
                               SizedBox(height: Dimensions.height5 * 1),
                               MediumText(
                                 color: cColor.grey500,
-                                size: 10,
+                                size: 11,
                                 text: buttonList[index]["title"],
                                 maxLines: 2,
                                 textAlign: TextAlign.center,

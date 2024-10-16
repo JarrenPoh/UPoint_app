@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage>
     with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   @override
   final bool wantKeepAlive = true;
-  List tabList = ["精選", "活動", "社團"];
+  List tabList = ["精選", "活動", "單位"];
   late TabController tabController;
 
   @override

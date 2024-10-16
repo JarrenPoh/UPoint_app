@@ -8,6 +8,7 @@ class OpenAIService {
   OpenAIService(this._apiKey, this._assistantId);
 
   Future<String> createThreadAndFetchResponse(String userQuestion) async {
+    print("userQuestion: $userQuestion");
     // Step 1: Create a new thread
     final threadResponse = await http.post(
       Uri.parse('https://api.openai.com/v1/threads'),
@@ -20,7 +21,7 @@ class OpenAIService {
         'messages': [
           {
             "role": "user",
-            "content": userQuestion + " 根據檔案內容請列點回答。在回答任何事情前都加上「U碰所知道的，」，不要回答根據檔案內容。沒有相關內容的話就回我「您的提問已超出U碰的知識外，很抱歉沒辦法回答你．」",
+            "content": userQuestion + " 根據檔案內容請列點回答。在回答任何事情前都加上「U碰所知道的如下：」然後直接接回答。沒有相關內容的話就回我「您的提問已超出U碰的知識外，很抱歉沒辦法回答你．」",
           }
         ]
       }),

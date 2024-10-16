@@ -53,7 +53,7 @@ class _AllClubPageState extends State<AllClubPage> {
                 Consumer<OrganzierFetchBloc>(
                   builder: (BuildContext context, OrganzierFetchBloc value,
                       Widget? child) {
-                    List<OrganizerModel> clubList = value.organizerList;
+                    List<OrganizerModel> clubList = List.from(value.organizerList);
                     clubList.removeWhere((element) => element.username == "全部");
                     return clubList.isEmpty
                         ? Column(

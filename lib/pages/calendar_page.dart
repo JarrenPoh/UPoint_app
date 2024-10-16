@@ -130,8 +130,6 @@ class _CalendarPageState extends State<CalendarPage> {
                                 ),
                                 child: Container(
                                   width: Dimensions.screenWidth,
-                                  height: Dimensions.height2 * 30,
-                                  alignment: Alignment.center,
                                   padding: EdgeInsets.symmetric(
                                     vertical: Dimensions.height2 * 6,
                                     horizontal: Dimensions.width2 * 8,
@@ -140,11 +138,13 @@ class _CalendarPageState extends State<CalendarPage> {
                                     border: Border.all(color: color),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
-                                  child: Row(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       MediumText(
                                         color: color,
                                         size: 14,
+                                        maxLines: 5,
                                         text: value[index].title ?? "",
                                       ),
                                     ],
